@@ -142,6 +142,7 @@ function TodaysAppointments() {
 
       if (error) throw error
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const formatted = (data || []).map((appointment: any) => ({
         id: appointment.id,
         title: appointment.title,

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import AIStatusIndicator from '@/components/ui/AIStatusIndicator'
 import ShareSaveModal from '@/components/ui/ShareSaveModal'
@@ -21,7 +21,7 @@ interface RoadmapSection {
   priority: number
 }
 
-export default function RoadmapPage() {
+function RoadmapContent() {
   const searchParams = useSearchParams()
   const [userResponses, setUserResponses] = useState<UserResponses>({})
   const [roadmapSections, setRoadmapSections] = useState<RoadmapSection[]>([])
@@ -109,21 +109,9 @@ export default function RoadmapPage() {
 
   // フォールバック用のクライアントサイド生成
   const generateRoadmapFallback = (responses: UserResponses) => {
-    // 個別化ロジック：Step4の回答に基づいて優先度を決定
-    const priorityMap: { [key: string]: number } = {
-      'treatment_flow': 1,
-      'money': 2,
-      'hospital_selection': 3,
-      'family_support': 4,
-      'clinical_trials': 5,
-      'work_balance': 6,
-      'dont_know': 7
-    }
-
     // Step5の回答に基づいて表示方法を調整
     const emotionalState = responses.step5?.map(r => r.value) || []
     const isAnxious = emotionalState.includes('anxious')
-    const wantsInformation = emotionalState.includes('want_information')
 
     // 基本的なロードマップセクションを生成
     const sections: RoadmapSection[] = []
@@ -131,7 +119,7 @@ export default function RoadmapPage() {
     // Step4で選択された項目に基づいてセクションを追加
     if (responses.step4) {
       responses.step4.forEach(interest => {
-        const section = createSection(interest.value, responses, isAnxious, wantsInformation)
+        const section = createSection(interest.value, responses, isAnxious)
         if (section) {
           sections.push(section)
         }
@@ -147,8 +135,7 @@ export default function RoadmapPage() {
   const createSection = (
     interestType: string, 
     responses: UserResponses, 
-    isAnxious: boolean, 
-    wantsInformation: boolean
+    isAnxious: boolean
   ): RoadmapSection | null => {
     const cancerType = responses.step2?.label || 'がん'
     const region = responses.step3?.label || 'お住まいの地域'
@@ -269,7 +256,7 @@ export default function RoadmapPage() {
   const roadmapData = {
     title: `${userResponses.step2?.label || 'がん'}・${userResponses.step3?.label || 'お住まいの地域'}の方向け - あなた専用ガイド`,
     content: roadmapSections.map(section => `${section.title}: ${section.content.join(' ')}`).join('\n\n'),
-    url: window.location.href,
+    url: typeof window !== 'undefined' ? window.location.href : '',
     userResponses: userResponses
   }
 
@@ -457,5 +444,20 @@ export default function RoadmapPage() {
         roadmapData={roadmapData}
       />
     </div>
+  )
+}
+
+export default function RoadmapPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-soft-peach-50 via-white to-deep-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-deep-blue-200 border-t-deep-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-deep-blue-600">ページを読み込み中...</p>
+        </div>
+      </div>
+    }>
+      <RoadmapContent />
+    </Suspense>
   )
 } 

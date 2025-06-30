@@ -43,9 +43,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, onToggleMode }) => {
         if (error) throw error
         setMessage('ログインしました。')
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Auth error:', error)
-      setMessage(error.message || 'エラーが発生しました。')
+      setMessage(error instanceof Error ? error.message : 'エラーが発生しました。')
     } finally {
       setLoading(false)
     }

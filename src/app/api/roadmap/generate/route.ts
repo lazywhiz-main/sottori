@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { AI_CONFIG, isAIFeatureEnabled, getAIErrorMessage, logAIUsage } from '@/lib/config/ai'
+import { AI_CONFIG, isAIFeatureEnabled, logAIUsage } from '@/lib/config/ai'
 
 interface UserResponses {
   step1?: { value: string; label: string }
@@ -174,25 +174,14 @@ function buildPromptFromResponses(responses: UserResponses): string {
 
 // 既存のレガシー実装（フォールバック用）
 function generateRoadmapLegacy(responses: UserResponses): RoadmapSection[] {
-  const priorityMap: { [key: string]: number } = {
-    'treatment_flow': 1,
-    'money': 2,
-    'hospital_selection': 3,
-    'family_support': 4,
-    'clinical_trials': 5,
-    'work_balance': 6,
-    'dont_know': 7
-  }
-
   const emotionalState = responses.step5?.map(r => r.value) || []
   const isAnxious = emotionalState.includes('anxious')
-  const wantsInformation = emotionalState.includes('want_information')
 
   const sections: RoadmapSection[] = []
 
   if (responses.step4) {
     responses.step4.forEach(interest => {
-      const section = createSectionLegacy(interest.value, responses, isAnxious, wantsInformation)
+      const section = createSectionLegacy(interest.value, responses, isAnxious)
       if (section) {
         sections.push(section)
       }
@@ -206,8 +195,7 @@ function generateRoadmapLegacy(responses: UserResponses): RoadmapSection[] {
 function createSectionLegacy(
   interestType: string, 
   responses: UserResponses, 
-  isAnxious: boolean, 
-  wantsInformation: boolean
+  isAnxious: boolean
 ): RoadmapSection | null {
   const cancerType = responses.step2?.label || 'がん'
   const region = responses.step3?.label || 'お住まいの地域'
@@ -310,4 +298,4 @@ function createSectionLegacy(
   }
 }
 
-export { generateRoadmapWithAI } 
+// export { generateRoadmapWithAI } // 現在は未使用 

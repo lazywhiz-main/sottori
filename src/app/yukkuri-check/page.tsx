@@ -147,8 +147,6 @@ export default function YukkuriCheckPage() {
     
     setIsInitialized(true)
     
-    let timeoutId1: ReturnType<typeof setTimeout>, timeoutId2: ReturnType<typeof setTimeout>, timeoutId3: ReturnType<typeof setTimeout>;
-    
     // 最初の挨拶メッセージ
     showTypingThenMessage(
       'こんにちは。Sottoriです。\n\n今日はお疲れさまでした。\n少しお話ししませんか？',
@@ -156,7 +154,7 @@ export default function YukkuriCheckPage() {
     )
 
     // 安心メッセージ（最初のメッセージ表示後、2秒後に開始）
-    timeoutId1 = setTimeout(() => {
+    const timeoutId1 = setTimeout(() => {
       showTypingThenMessage(
         '無理をする必要はありません。\n途中で止めてもOKです。\n\nあなたのペースで、大丈夫です。',
         1200
@@ -164,11 +162,11 @@ export default function YukkuriCheckPage() {
     }, 2000)
 
     // 質問への移行（安心メッセージ表示後、1.5秒後）
-    timeoutId2 = setTimeout(() => {
+    const timeoutId2 = setTimeout(() => {
       setCurrentStep('question1')
     }, 4700)
     
-    timeoutId3 = setTimeout(() => {
+    const timeoutId3 = setTimeout(() => {
       showTypingThenMessage(
         '今、どんな状況でしょうか？\n\nだいたいで構いませんので、教えてください。',
         1200

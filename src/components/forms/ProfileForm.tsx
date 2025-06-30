@@ -6,19 +6,19 @@ import { useAuth } from '@/lib/hooks/useAuth'
 import Button from '@/components/ui/Button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
 
-interface Profile {
-  id: string
-  full_name: string | null
-  date_of_birth: string | null
-  phone: string | null
-  emergency_contact_name: string | null
-  emergency_contact_phone: string | null
-  medical_conditions: string[] | null
-}
+// interface Profile { // 現在未使用
+//   id: string
+//   full_name: string | null
+//   date_of_birth: string | null
+//   phone: string | null
+//   emergency_contact_name: string | null
+//   emergency_contact_phone: string | null
+//   medical_conditions: string[] | null
+// }
 
 const ProfileForm: React.FC = () => {
   const { user } = useAuth()
-  const [profile, setProfile] = useState<Profile | null>(null)
+  // const [profile, setProfile] = useState<Profile | null>(null) // 現在未使用
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
@@ -57,7 +57,7 @@ const ProfileForm: React.FC = () => {
       }
 
       if (data) {
-        setProfile(data)
+        // setProfile(data) // 現在profile変数は未使用
         setFormData({
           full_name: data.full_name || '',
           date_of_birth: data.date_of_birth || '',
@@ -67,7 +67,7 @@ const ProfileForm: React.FC = () => {
           medical_conditions: data.medical_conditions || []
         })
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Profile fetch error:', error)
       setMessage('プロフィール情報の取得に失敗しました。')
     } finally {
@@ -95,7 +95,7 @@ const ProfileForm: React.FC = () => {
 
       setMessage('プロフィールを更新しました。')
       await fetchProfile()
-    } catch (error: any) {
+    } catch (error) {
       console.error('Profile update error:', error)
       setMessage('プロフィールの更新に失敗しました。')
     } finally {

@@ -10,7 +10,7 @@ interface ShareSaveModalProps {
     title: string
     content: string
     url: string
-    userResponses: any
+    userResponses: unknown
   }
 }
 
