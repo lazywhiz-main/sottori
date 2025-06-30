@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  
+  /* Sottori カラーパレット */
+  --color-deep-blue-50: #f0f2ff;
+  --color-deep-blue-100: #e6eaff;
+  --color-deep-blue-200: #d1d9ff;
+  --color-deep-blue-300: #b3c0ff;
+  --color-deep-blue-400: #8a9eff;
+  --color-deep-blue-500: #556AAB;
+  --color-deep-blue-600: #4a5f9f;
+  --color-deep-blue-700: #3d4e85;
+  --color-deep-blue-800: #334070;
+  --color-deep-blue-900: #2d365e;
+  
+  --color-warm-coral-50: #fef7f3;
+  --color-warm-coral-100: #fdeee6;
+  --color-warm-coral-200: #fbd9cc;
+  --color-warm-coral-300: #f7bea8;
+  --color-warm-coral-400: #E69974;
+  --color-warm-coral-500: #df7a5a;
+  --color-warm-coral-600: #d35d4a;
+  --color-warm-coral-700: #b14834;
+  --color-warm-coral-800: #933e2e;
+  --color-warm-coral-900: #7a372c;
+  
+  --color-soft-peach-50: #fefcf9;
+  --color-soft-peach-100: #fef7f0;
+  --color-soft-peach-200: #fdeee1;
+  --color-soft-peach-300: #fbe0c8;
+  --color-soft-peach-400: #FAD8C5;
+  --color-soft-peach-500: #f5c5a8;
+  --color-soft-peach-600: #eda882;
+  --color-soft-peach-700: #e18a5c;
+  --color-soft-peach-800: #d16d3a;
+  --color-soft-peach-900: #b8572b;
+  
+  --color-golden-yellow-50: #fefcf0;
+  --color-golden-yellow-100: #fef7d9;
+  --color-golden-yellow-200: #fdecb3;
+  --color-golden-yellow-300: #fbdc82;
+  --color-golden-yellow-400: #F4CB88;
+  --color-golden-yellow-500: #edb355;
+  --color-golden-yellow-600: #e19834;
+  --color-golden-yellow-700: #bc7a28;
+  --color-golden-yellow-800: #976025;
+  --color-golden-yellow-900: #7a4f22;
+  
+  /* フォント設定 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "ヒラギノ角ゴシック ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+  
+  /* カスタムスペーシング */
+  --spacing-18: 4.5rem;
+  --spacing-88: 22rem;
+  
+  /* カスタム角丸 */
+  --radius-4xl: 2rem;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Sottori カスタムカラークラス */
+.bg-deep-blue-50 { background-color: #f0f2ff; }
+.bg-deep-blue-100 { background-color: #e6eaff; }
+.bg-deep-blue-200 { background-color: #d1d9ff; }
+.bg-deep-blue-300 { background-color: #b3c0ff; }
+.bg-deep-blue-400 { background-color: #8a9eff; }
+.bg-deep-blue-500 { background-color: #556AAB; }
+.bg-deep-blue-600 { background-color: #4a5f9f; }
+.bg-deep-blue-700 { background-color: #3d4e85; }
+.bg-deep-blue-800 { background-color: #334070; }
+.bg-deep-blue-900 { background-color: #2d365e; }
+
+.bg-warm-coral-50 { background-color: #fef7f3; }
+.bg-warm-coral-100 { background-color: #fdeee6; }
+.bg-warm-coral-200 { background-color: #fbd9cc; }
+.bg-warm-coral-300 { background-color: #f7bea8; }
+.bg-warm-coral-400 { background-color: #E69974; }
+.bg-warm-coral-500 { background-color: #df7a5a; }
+.bg-warm-coral-600 { background-color: #d35d4a; }
+.bg-warm-coral-700 { background-color: #b14834; }
+.bg-warm-coral-800 { background-color: #933e2e; }
+.bg-warm-coral-900 { background-color: #7a372c; }
+
+.bg-soft-peach-50 { background-color: #fefcf9; }
+.bg-soft-peach-100 { background-color: #fef7f0; }
+.bg-soft-peach-200 { background-color: #fdeee1; }
+.bg-soft-peach-300 { background-color: #fbe0c8; }
+.bg-soft-peach-400 { background-color: #FAD8C5; }
+.bg-soft-peach-500 { background-color: #f5c5a8; }
+.bg-soft-peach-600 { background-color: #eda882; }
+.bg-soft-peach-700 { background-color: #e18a5c; }
+.bg-soft-peach-800 { background-color: #d16d3a; }
+.bg-soft-peach-900 { background-color: #b8572b; }
+
+.bg-golden-yellow-50 { background-color: #fefcf0; }
+.bg-golden-yellow-100 { background-color: #fef7d9; }
+.bg-golden-yellow-200 { background-color: #fdecb3; }
+.bg-golden-yellow-300 { background-color: #fbdc82; }
+.bg-golden-yellow-400 { background-color: #F4CB88; }
+.bg-golden-yellow-500 { background-color: #edb355; }
+.bg-golden-yellow-600 { background-color: #e19834; }
+.bg-golden-yellow-700 { background-color: #bc7a28; }
+.bg-golden-yellow-800 { background-color: #976025; }
+.bg-golden-yellow-900 { background-color: #7a4f22; }
+
+/* テキストカラー */
+.text-deep-blue-50 { color: #f0f2ff; }
+.text-deep-blue-100 { color: #e6eaff; }
+.text-deep-blue-200 { color: #d1d9ff; }
+.text-deep-blue-300 { color: #b3c0ff; }
+.text-deep-blue-400 { color: #8a9eff; }
+.text-deep-blue-500 { color: #556AAB; }
+.text-deep-blue-600 { color: #4a5f9f; }
+.text-deep-blue-700 { color: #3d4e85; }
+.text-deep-blue-800 { color: #334070; }
+.text-deep-blue-900 { color: #2d365e; }
+
+.text-warm-coral-50 { color: #fef7f3; }
+.text-warm-coral-100 { color: #fdeee6; }
+.text-warm-coral-200 { color: #fbd9cc; }
+.text-warm-coral-300 { color: #f7bea8; }
+.text-warm-coral-400 { color: #E69974; }
+.text-warm-coral-500 { color: #df7a5a; }
+.text-warm-coral-600 { color: #d35d4a; }
+.text-warm-coral-700 { color: #b14834; }
+.text-warm-coral-800 { color: #933e2e; }
+.text-warm-coral-900 { color: #7a372c; }
+
+/* ボーダーカラー */
+.border-deep-blue-50 { border-color: #f0f2ff; }
+.border-deep-blue-100 { border-color: #e6eaff; }
+.border-deep-blue-200 { border-color: #d1d9ff; }
+.border-deep-blue-300 { border-color: #b3c0ff; }
+.border-deep-blue-400 { border-color: #8a9eff; }
+.border-deep-blue-500 { border-color: #556AAB; }
+.border-deep-blue-600 { border-color: #4a5f9f; }
+.border-deep-blue-700 { border-color: #3d4e85; }
+.border-deep-blue-800 { border-color: #334070; }
+.border-deep-blue-900 { border-color: #2d365e; }
+
+/* Soft Peach追加クラス */
+.bg-soft-peach-100 { background-color: #fef7f0; }
+.text-soft-peach-800 { color: #d16d3a; }
+.text-soft-peach-600 { color: #eda882; }
+.text-soft-peach-800:hover { color: #d16d3a; }
+
+/* ホバー効果 */
+.hover\:bg-deep-blue-600:hover { background-color: #4a5f9f; }
+.hover\:bg-deep-blue-500:hover { background-color: #556AAB; }
+.hover\:bg-warm-coral-500:hover { background-color: #df7a5a; }
+.hover\:text-white:hover { color: white; }
+
+/* フォーカス効果 */
+.focus\:ring-deep-blue-500:focus { 
+  --tw-ring-color: #556AAB; 
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+}
+.focus\:ring-warm-coral-400:focus { 
+  --tw-ring-color: #E69974; 
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+}
+
+/* カスタムユーティリティクラス */
+.gentle-hover {
+  transition: all 0.3s ease;
+}
+
+.gentle-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(85, 106, 171, 0.15);
+}
+
+.floating-gentle {
+  animation: float-gentle 8s ease-in-out infinite;
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

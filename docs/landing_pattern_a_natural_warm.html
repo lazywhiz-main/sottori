@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sottori - 迷っても、頼ってもいい。次の一歩は、あなたのペースで。</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #fdfcfa 0%, #f7f5f1 100%);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        :root {
+            /* そっとりブランドカラー（デザインシステム準拠） */
+            --brand-primary: #5a8a6b;
+            --brand-primary-light: #9bb5a6;
+            --brand-primary-dark: #4a6d5a;
+            --brand-accent: #6ba3d6;
+            --brand-warm: #c29768;
+            
+            /* セマンティックカラー */
+            --success: #2d7d52;
+            --info: #4a7ba7;
+            --neutral: #7a8b8c;
+            
+            /* テキストハイアラキー */
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --text-soft: #8e9aab;
+            
+            /* 背景システム */
+            --bg-primary: #fdfcfa;
+            --bg-soft: #f7f5f1;
+            --bg-card: #ffffff;
+            --bg-subtle: #f0ede9;
+            
+            /* ボーダー */
+            --border-primary: #e6e2dc;
+            --border-soft: #f0ede9;
+            --border-accent: #d4d8dc;
+            
+            /* スペーシング（黄金比ベース） */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.618rem;
+            --space-xl: 2.618rem;
+            --space-xxl: 4.236rem;
+            --space-xxxl: 6.854rem;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: rgba(253, 252, 250, 0.95);
+            backdrop-filter: blur(10px);
+            padding: var(--space-lg) 0;
+            border-bottom: 1px solid var(--border-soft);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(90, 138, 107, 0.2);
+        }
+        
+        .logo-text {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--brand-primary);
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: var(--space-xl);
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .nav-link:hover {
+            color: var(--brand-primary);
+        }
+        
+        .header-cta {
+            background: var(--brand-primary);
+            color: white;
+            padding: var(--space-md) var(--space-xl);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(90, 138, 107, 0.2);
+        }
+        
+        .header-cta:hover {
+            background: var(--brand-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(90, 138, 107, 0.3);
+        }
+        
+        /* ヒーローセクション */
+        .hero {
+            padding: var(--space-xxxl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(155, 181, 166, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xxxl);
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text {
+            max-width: 500px;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(90, 138, 107, 0.1);
+            color: var(--brand-primary);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .hero-title {
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: var(--space-xl);
+            letter-spacing: -0.5px;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-xxl);
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: var(--space-lg);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .primary-cta {
+            background: var(--brand-primary);
+            color: white;
+            padding: var(--space-lg) var(--space-xxl);
+            border-radius: 32px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            box-shadow: 0 6px 20px rgba(90, 138, 107, 0.2);
+        }
+        
+        .primary-cta:hover {
+            background: var(--brand-primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(90, 138, 107, 0.3);
+        }
+        
+        .secondary-cta {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            transition: color 0.3s ease;
+        }
+        
+        .secondary-cta:hover {
+            color: var(--brand-primary);
+        }
+        
+        .hero-visual {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: var(--space-xxl);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-primary);
+            position: relative;
+        }
+        
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .visual-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-soft);
+        }
+        
+        .visual-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .visual-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .progress-demo {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .progress-label {
+            font-size: 14px;
+            color: var(--text-soft);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-subtle);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+            width: 60%;
+            border-radius: 4px;
+            animation: progressGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes progressGlow {
+            0% { 
+                width: 40%; 
+                box-shadow: 0 0 8px rgba(90, 138, 107, 0.3);
+            }
+            100% { 
+                width: 80%; 
+                box-shadow: 0 0 16px rgba(90, 138, 107, 0.5);
+            }
+        }
+        
+        .demo-questions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .demo-question {
+            background: var(--bg-soft);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            font-size: 14px;
+            color: var(--text-secondary);
+            position: relative;
+        }
+        
+        .demo-question::before {
+            content: '';
+            position: absolute;
+            left: var(--space-lg);
+            top: -4px;
+            width: 8px;
+            height: 8px;
+            background: var(--brand-accent);
+            border-radius: 50%;
+        }
+        
+        /* 特徴セクション */
+        .features {
+            padding: var(--space-xxxl) 0;
+            background: var(--bg-primary);
+        }
+        
+        .features-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            text-align: center;
+        }
+        
+        .features-header {
+            margin-bottom: var(--space-xxxl);
+        }
+        
+        .features-title {
+            font-size: 44px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.5px;
+        }
+        
+        .features-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-xxl);
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-xxl);
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(90, 138, 107, 0.15);
+        }
+        
+        .feature-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(90, 138, 107, 0.1), rgba(107, 163, 214, 0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: var(--space-xl);
+            border: 2px solid var(--border-soft);
+        }
+        
+        .feature-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-benefit {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--success);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        /* 体験の流れセクション */
+        .journey {
+            background: var(--bg-soft);
+            padding: var(--space-xxxl) 0;
+        }
+        
+        .journey-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+        
+        .journey-title {
+            font-size: 40px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--space-xxl);
+        }
+        
+        .journey-steps {
+            display: grid;
+            gap: var(--space-xxl);
+        }
+        
+        .journey-step {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: var(--space-xl);
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: var(--space-xxl);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-primary);
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .step-content h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-md);
+        }
+        
+        .step-note {
+            background: rgba(90, 138, 107, 0.05);
+            border-left: 4px solid var(--brand-primary);
+            padding: var(--space-lg);
+            margin-top: var(--space-lg);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        /* 信頼性セクション */
+        .trust {
+            background: var(--bg-primary);
+            padding: var(--space-xxxl) 0;
+        }
+        
+        .trust-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            text-align: center;
+        }
+        
+        .trust-title {
+            font-size: 40px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .trust-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xxxl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-xxl);
+        }
+        
+        .trust-item {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: var(--space-xxl);
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .trust-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .trust-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin: 0 auto var(--space-xl);
+        }
+        
+        .trust-item-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .trust-item-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* 最終CTA */
+        .final-cta {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+            color: white;
+            padding: var(--space-xxxl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><defs><pattern id="dots" width="60" height="60" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="60" height="60" fill="url(%23dots)"/></svg>') repeat;
+        }
+        
+        .final-cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .final-cta-title {
+            font-size: 44px;
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.5px;
+        }
+        
+        .final-cta-subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: var(--space-xxl);
+            line-height: 1.6;
+        }
+        
+        .final-cta-button {
+            background: white;
+            color: var(--brand-primary);
+            padding: var(--space-lg) var(--space-xxl);
+            border-radius: 32px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-md);
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+        }
+        
+        .final-cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* フッター */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: var(--space-xxxl) 0 var(--space-xxl);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--space-xxl);
+        }
+        
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: var(--space-lg);
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: var(--space-md);
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: var(--space-xxl);
+            padding-top: var(--space-xl);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-xxl);
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .journey-step {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-xxl);
+            }
+            
+            .nav-actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">そ</div>
+                <div class="logo-text">Sottori</div>
+            </a>
+            <nav class="nav-actions">
+                <a href="#" class="nav-link">サービスについて</a>
+                <a href="#" class="nav-link">よくある質問</a>
+                <a href="#" class="nav-link">運営者について</a>
+                <button class="header-cta">ゆっくり始める</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    🌿 医学的根拠に基づく・やさしい情報整理
+                </div>
+                <h1 class="hero-title">迷っても、頼ってもいい。<br>次の一歩は、あなたのペースで。</h1>
+                <p class="hero-subtitle">
+                    がん治療の情報を、あなたの状況に合わせて整理します。医学的根拠に基づいた信頼できる情報で、家族と一緒に次のステップを考えませんか。
+                </p>
+                <div class="hero-cta">
+                    <a href="#" class="primary-cta">
+                        🌸 ゆっくりチェックを始める
+                        <span>→</span>
+                    </a>
+                    <a href="#" class="secondary-cta">
+                        📖 体験の流れを見る
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-header">
+                    <div class="visual-icon">🤗</div>
+                    <div class="visual-title">ゆっくりチェック体験</div>
+                </div>
+                <div class="progress-demo">
+                    <div class="progress-label">あなたのペースで進行中...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="demo-questions">
+                    <div class="demo-question">
+                        💭 今、どんな状況でしょうか？
+                        <br><small style="color: var(--text-soft);">「わからない」も大切な選択肢です</small>
+                    </div>
+                    <div class="demo-question">
+                        🎯 一番知りたいことはなんですか？
+                        <br><small style="color: var(--text-soft);">複数選択も可能です</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特徴セクション -->
+    <section class="features">
+        <div class="features-content">
+            <div class="features-header">
+                <h2 class="features-title">あなたらしく、情報と向き合う</h2>
+                <p class="features-subtitle">完璧を求めず、今の気持ちのまま。信頼できる医学情報を、やさしく整理します</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌸</div>
+                    <h3 class="feature-title">5つの質問で状況整理</h3>
+                    <p class="feature-description">「わからない」も正当な選択肢として用意。医療用語には簡単な説明を併記し、途中保存や中断も可能です。</p>
+                    <div class="feature-benefit">
+                        ✓ あなたのペースで進められます
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">個別化された治療ガイド</h3>
+                    <p class="feature-description">あなたのがん種・地域・関心事に合わせて、標準治療の流れ、費用概算、専門医情報を整理してお届けします。</p>
+                    <div class="feature-benefit">
+                        ✓ 医学ガイドライン準拠の信頼性
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍👩‍👧‍👦</div>
+                    <h3 class="feature-title">家族との情報共有</h3>
+                    <p class="feature-description">専用URLとQRコードで簡単共有。家族向け「やさしい日本語」版も自動生成され、みんなで理解を深められます。</p>
+                    <div class="feature-benefit">
+                        ✓ プライバシーに配慮した共有
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">継続的なフォロー</h3>
+                    <p class="feature-description">新しい治験情報や制度更新を、急かすことなくお知らせ。状況が変わった時の再チェックも可能です。</p>
+                    <div class="feature-benefit">
+                        ✓ 長期的な関係性を大切に
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 体験の流れセクション -->
+    <section class="journey">
+        <div class="journey-content">
+            <h2 class="journey-title">Sottoriとの体験の流れ</h2>
+            <div class="journey-steps">
+                <div class="journey-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>迷いながらの発見</h3>
+                        <p>「○○がん 治療」で検索を繰り返しているあなた。情報はあるけど、「私の場合はどうなんだろう？」という疑問を抱えています。</p>
+                        <p>Sottoriの「迷っても、頼ってもいい。」のメッセージに、少しほっとします。</p>
+                        <div class="step-note">
+                            💭 「今の私でも大丈夫そう」という安心感を大切にしています
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="journey-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>そっと背中を押される</h3>
+                        <p>「情報整理してみませんか？」の提案に興味を持ちつつも、「ちゃんと答えられるかな」と躊躇。</p>
+                        <p>でも「わからない」「まだ検査中」も立派な選択肢として用意されていて、「後で変更できます」の安心設計に支えられます。</p>
+                        <div class="step-note">
+                            🌸 「疲れたら休憩しても大丈夫」のメッセージで、プレッシャーなく進められます
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="journey-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>安心できる情報の受け取り</h3>
+                        <p>あなた専用ガイドを見て「なるほど、こういう流れなのか」と理解が深まります。</p>
+                        <p>「今日決める必要はありません」「ご家族との相談材料として」の位置づけで、急かされない安心感があります。</p>
+                        <div class="step-note">
+                            👨‍👩‍👧‍👦 各情報に「主治医と相談してください」を自然に配置し、医療との適切な関係性を保っています
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="journey-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>自分のペースでの行動</h3>
+                        <p>情報を家族と共有し、「あ、こういうことか」と理解が深まります。数日後、また新しい疑問が湧いてきます。</p>
+                        <p>かんたん共有機能で家族も同じ情報を理解し、「焦らなくて大丈夫」というスタンスでの継続サポートを受けられます。</p>
+                        <div class="step-note">
+                            🔄 「新しい情報がありますが、お時間のある時にどうぞ」の配慮ある通知スタイル
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 信頼性セクション -->
+    <section class="trust">
+        <div class="trust-content">
+            <h2 class="trust-title">なぜ、Sottoriを信頼できるのか</h2>
+            <p class="trust-subtitle">医療情報を扱う責任を真摯に受け止め、信頼性と透明性を重視しています</p>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <div class="trust-icon">📚</div>
+                    <h3 class="trust-item-title">医学文献準拠</h3>
+                    <p class="trust-item-description">著名医学雑誌とガイドラインから情報を収集。出典を明記し、参考情報としての位置づけを明確化しています。</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🔒</div>
+                    <h3 class="trust-item-title">プライバシー保護</h3>
+                    <p class="trust-item-description">個人情報は最小限の収集に留め、適切な暗号化と管理を実施。共有時も匿名性を保護します。</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">👤</div>
+                    <h3 class="trust-item-title">一人運営の透明性</h3>
+                    <p class="trust-item-description">運営者の顔が見える個人的な信頼関係。医療×デジタル経験と、がん体験者としての想いを公開しています。</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">⚡</div>
+                    <h3 class="trust-item-title">AI活用の効率化</h3>
+                    <p class="trust-item-description">最新のAI技術で情報更新を効率化。人間による監修と組み合わせ、質の高い情報提供を実現しています。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最終CTA -->
+    <section class="final-cta">
+        <div class="final-cta-content">
+            <h2 class="final-cta-title">今日から、一人で悩まない。</h2>
+            <p class="final-cta-subtitle">
+                5つの質問で状況を整理し、あなた専用の治療ガイドを作成します。<br>
+                完璧な答えは求めません。今の状況から、あなたのペースで、一歩ずつ。
+            </p>
+            <a href="#" class="final-cta-button">
+                🌸 ゆっくりチェックを始める
+                <span>→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">Sottori</div>
+                <p class="footer-tagline">
+                    がんと向き合うあなたに、そっと寄り添います。<br>
+                    迷いも不安も、すべて自然なこと。<br>
+                    あなたのペースで、一緒に歩んでいきましょう。
+                </p>
+            </div>
+            <div class="footer-section">
+                <h3>Sottori</h3>
+                <a href="#">サービスについて</a>
+                <a href="#">よくある質問</a>
+                <a href="#">運営者について</a>
+                <a href="#">お問い合わせ</a>
+            </div>
+            <div class="footer-section">
+                <h3>重要事項</h3>
+                <a href="#">利用規約</a>
+                <a href="#">プライバシーポリシー</a>
+                <a href="#">医療免責事項</a>
+                <a href="#">情報の取り扱い</a>
+            </div>
+            <div class="footer-section">
+                <h3>サポート</h3>
+                <a href="#">使い方ガイド</a>
+                <a href="#">技術的な問題</a>
+                <a href="#">医療機関の方へ</a>
+                <a href="#">フィードバック</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Sottori. 医療情報は参考情報です。必ず医師にご相談ください。</p>
+        </div>
+    </footer>
+</body>
+</html> 

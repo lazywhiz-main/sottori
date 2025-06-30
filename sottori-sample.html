@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>そっとり - 迷っても、頼ってもいい。次の一歩は、あなたのペースで。</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            400: '#a8a29e',
+                            500: '#78716c',
+                            600: '#57534e',
+                            700: '#44403c',
+                            800: '#292524',
+                            900: '#1c1917',
+                        },
+                        secondary: {
+                            50: '#fafafa',
+                            100: '#f4f4f5',
+                            200: '#e4e4e7',
+                            300: '#d4d4d8',
+                            400: '#a1a1aa',
+                            500: '#71717a',
+                            600: '#52525b',
+                            700: '#3f3f46',
+                            800: '#27272a',
+                            900: '#18181b',
+                        },
+                        accent: {
+                            50: '#fef7f0',
+                            100: '#fdeee0',
+                            200: '#fbd9c0',
+                            300: '#f8bd94',
+                            400: '#f49968',
+                            500: '#e67c47',
+                            600: '#d4633a',
+                            700: '#b54d30',
+                            800: '#943f2d',
+                            900: '#7a352a',
+                        }
+                    },
+                    fontFamily: {
+                        'japanese': ['Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Meiryo UI', 'Segoe UI', 'system-ui', 'sans-serif']
+                    },
+                    fontSize: {
+                        'xs': ['12px', { lineHeight: '18px' }],
+                        'sm': ['14px', { lineHeight: '22px' }],
+                        'base': ['16px', { lineHeight: '26px' }],
+                        'lg': ['18px', { lineHeight: '30px' }],
+                        'xl': ['20px', { lineHeight: '32px' }],
+                        '2xl': ['24px', { lineHeight: '36px' }],
+                        '3xl': ['28px', { lineHeight: '40px' }],
+                        '4xl': ['32px', { lineHeight: '44px' }],
+                        '5xl': ['40px', { lineHeight: '52px' }],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Meiryo UI', 'Segoe UI', system-ui, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-primary-50 text-primary-800 font-japanese">
+
+    <!-- ヘッダー -->
+    <header class="bg-white shadow-sm border-b border-primary-200">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-primary-700 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">そ</span>
+                </div>
+                <span class="text-xl font-medium text-primary-800">そっとり</span>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#" class="text-primary-600 hover:text-primary-800 transition-colors duration-300">使い方</a>
+                <a href="#" class="text-primary-600 hover:text-primary-800 transition-colors duration-300">よくある質問</a>
+                <a href="#" class="text-primary-600 hover:text-primary-800 transition-colors duration-300">運営者について</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-3xl md:text-4xl font-normal tracking-normal text-primary-800 leading-snug mb-6">
+                迷っても、頼ってもいい。<br>
+                <span class="text-primary-600">次の一歩は、あなたのペースで。</span>
+            </h1>
+            
+            <p class="text-lg text-primary-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+                がんと向き合うとき、情報の多さに迷うのは当然のことです。<br>
+                そっとりは、あなたの状況に合わせて情報を整理し、<br>
+                次の一歩を考えるお手伝いをします。
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button class="bg-primary-700 hover:bg-primary-800 text-white font-medium px-8 py-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-out w-full sm:w-auto">
+                    ゆっくりチェックを始める
+                </button>
+                <button class="bg-primary-100 hover:bg-primary-200 text-primary-700 font-medium px-8 py-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-out w-full sm:w-auto">
+                    まずは眺めてみる
+                </button>
+            </div>
+            
+            <p class="text-sm text-primary-500 mt-4">
+                完璧な答えは求めません。今わかることから始めましょう。
+            </p>
+        </div>
+    </section>
+
+    <!-- 特徴セクション -->
+    <section class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-xl md:text-2xl font-medium text-primary-700 text-center mb-12">
+                そっとりの3つの特徴
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-primary-50 rounded-lg shadow-sm border border-primary-200 p-6 transition-shadow duration-300 hover:shadow-md">
+                    <div class="w-12 h-12 bg-primary-700 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-white text-lg">❤️</span>
+                    </div>
+                    <h3 class="text-lg font-medium text-primary-700 mb-3">あなたのペースで</h3>
+                    <p class="text-base text-primary-600 leading-relaxed">
+                        「わからない」も立派な答えです。途中で保存して、後日続きから始められます。急がずに、あなたのタイミングで。
+                    </p>
+                </div>
+                
+                <div class="bg-primary-50 rounded-lg shadow-sm border border-primary-200 p-6 transition-shadow duration-300 hover:shadow-md">
+                    <div class="w-12 h-12 bg-primary-700 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-white text-lg">📋</span>
+                    </div>
+                    <h3 class="text-lg font-medium text-primary-700 mb-3">情報を整理</h3>
+                    <p class="text-base text-primary-600 leading-relaxed">
+                        散らばった情報を、あなたの状況に合わせて整理します。治療の流れ、費用、病院選びまで。
+                    </p>
+                </div>
+                
+                <div class="bg-primary-50 rounded-lg shadow-sm border border-primary-200 p-6 transition-shadow duration-300 hover:shadow-md">
+                    <div class="w-12 h-12 bg-primary-700 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-white text-lg">👨‍👩‍👧‍👦</span>
+                    </div>
+                    <h3 class="text-lg font-medium text-primary-700 mb-3">家族と一緒に</h3>
+                    <p class="text-base text-primary-600 leading-relaxed">
+                        まとめた情報を家族と簡単に共有できます。一人で抱え込まず、みんなで考えましょう。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 利用の流れ -->
+    <section class="py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-xl md:text-2xl font-medium text-primary-700 text-center mb-12">
+                ご利用の流れ
+            </h2>
+            
+            <div class="space-y-8">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="flex-shrink-0 w-16 h-16 bg-primary-700 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                        1
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-lg font-medium text-primary-700 mb-2">ゆっくりチェック（3〜5分）</h3>
+                        <p class="text-base text-primary-600 leading-relaxed">
+                            現在の状況や気持ちを、5つの質問でお聞きします。「わからない」も選択肢の一つです。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="flex-shrink-0 w-16 h-16 bg-primary-700 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                        2
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-lg font-medium text-primary-700 mb-2">あなた専用ガイド作成</h3>
+                        <p class="text-base text-primary-600 leading-relaxed">
+                            あなたの状況に合わせて、治療の流れや費用、病院情報をまとめたガイドを作成します。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="flex-shrink-0 w-16 h-16 bg-primary-700 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                        3
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-lg font-medium text-primary-700 mb-2">家族と相談</h3>
+                        <p class="text-base text-primary-600 leading-relaxed">
+                            作成したガイドを家族と簡単に共有。みんなで情報を確認し、次のステップを相談できます。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 運営者メッセージ -->
+    <section class="py-16 px-4 bg-white">
+        <div class="max-w-3xl mx-auto text-center">
+            <div class="w-20 h-20 bg-primary-200 rounded-full mx-auto mb-6 flex items-center justify-center">
+                <span class="text-primary-700 text-2xl">👩‍💻</span>
+            </div>
+            
+            <h2 class="text-xl font-medium text-primary-700 mb-4">
+                一人ひとりに寄り添いたい
+            </h2>
+            
+            <p class="text-base text-primary-600 leading-relaxed mb-6">
+                私自身もがんの告知を受けた経験があります。そのとき感じた情報の多さ、選択肢の複雑さ、家族への説明の難しさ。<br>
+                そんな体験から、「もう少し整理された情報があれば」と思い、そっとりを作りました。
+            </p>
+            
+            <p class="text-sm text-primary-500">
+                運営者：田中 恵子（仮名）<br>
+                医療×デジタル分野での経験を活かし、一人で運営しています
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 px-4 bg-primary-100">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-2xl font-medium text-primary-800 mb-4">
+                迷ったときは、そっとりへ
+            </h2>
+            
+            <p class="text-lg text-primary-600 leading-relaxed mb-8">
+                完璧でなくても、今日決めなくても大丈夫です。<br>
+                まずは情報を整理することから始めませんか？
+            </p>
+            
+            <button class="bg-accent-500 hover:bg-accent-600 text-white font-medium px-8 py-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-out">
+                ゆっくりチェックを始める
+            </button>
+            
+            <p class="text-sm text-primary-500 mt-4">
+                所要時間：3〜5分 / 途中保存可能 / 無料
+            </p>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="bg-primary-800 text-primary-200 py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-6 h-6 bg-primary-300 rounded flex items-center justify-center">
+                            <span class="text-primary-800 font-bold text-xs">そ</span>
+                        </div>
+                        <span class="font-medium">そっとり</span>
+                    </div>
+                    <p class="text-sm text-primary-300 leading-relaxed">
+                        迷っても、頼ってもいい。<br>
+                        次の一歩は、あなたのペースで。
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-medium mb-3">サービス</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">ゆっくりチェック</a></li>
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">あなた専用ガイド</a></li>
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">かんたん共有</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-medium mb-3">サポート</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">よくある質問</a></li>
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">お問い合わせ</a></li>
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">運営者について</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-medium mb-3">法的事項</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">利用規約</a></li>
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">プライバシーポリシー</a></li>
+                        <li><a href="#" class="text-primary-300 hover:text-white transition-colors duration-300">免責事項</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-primary-700 text-center">
+                <p class="text-sm text-primary-400">
+                    © 2024 そっとり. すべての権利を保有します.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html> 

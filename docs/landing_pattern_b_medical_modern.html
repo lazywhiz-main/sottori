@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sottori - がん治療情報を、あなたのペースで整理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', 'Hiragino Sans', 'Yu Gothic UI', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        :root {
+            /* 医療信頼カラー */
+            --primary-blue: #2563eb;
+            --primary-blue-light: #3b82f6;
+            --primary-blue-dark: #1d4ed8;
+            
+            /* アクセント */
+            --medical-green: #059669;
+            --warm-orange: #ea580c;
+            --neutral-gray: #6b7280;
+            
+            /* テキスト */
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6b7280;
+            
+            /* 背景 */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-accent: #eff6ff;
+            
+            /* ボーダー */
+            --border-light: #e5e7eb;
+            --border-medium: #d1d5db;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--medical-green));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-blue);
+        }
+        
+        .cta-button {
+            background: var(--primary-blue);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* ヒーローセクション */
+        .hero {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 100px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23e5e7eb" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+            opacity: 0.5;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text {
+            max-width: 500px;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--medical-green);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        
+        .hero-title {
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .primary-cta {
+            background: var(--primary-blue);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .primary-cta:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .secondary-cta {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s ease;
+        }
+        
+        .secondary-cta:hover {
+            color: var(--primary-blue);
+        }
+        
+        .hero-visual {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-light);
+        }
+        
+        .visual-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .visual-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--medical-green));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .visual-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .progress-demo {
+            margin-bottom: 20px;
+        }
+        
+        .progress-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+            width: 60%;
+            border-radius: 4px;
+            animation: progressAnimation 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes progressAnimation {
+            0% { width: 40%; }
+            100% { width: 80%; }
+        }
+        
+        .demo-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .demo-question {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* 特徴セクション */
+        .features {
+            padding: 120px 0;
+            background: var(--bg-primary);
+        }
+        
+        .features-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+        
+        .features-header {
+            margin-bottom: 80px;
+        }
+        
+        .features-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+        
+        .features-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary-blue);
+            margin-bottom: 24px;
+        }
+        
+        .feature-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .feature-benefit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--medical-green);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        /* 信頼性セクション */
+        .trust {
+            background: var(--bg-secondary);
+            padding: 80px 0;
+        }
+        
+        .trust-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+        
+        .trust-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .trust-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+        }
+        
+        .trust-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .trust-point {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .trust-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--medical-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .trust-point-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .trust-point-description {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* CTA セクション */
+        .final-cta {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .final-cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .final-cta-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        .final-cta-subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        
+        .final-cta-button {
+            background: white;
+            color: var(--primary-blue);
+            padding: 20px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .final-cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* フッター */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 60px 0 40px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 60px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">そ</div>
+                <div class="logo-text">Sottori</div>
+            </a>
+            <nav class="nav-actions">
+                <a href="#" class="nav-link">サービスについて</a>
+                <a href="#" class="nav-link">よくある質問</a>
+                <a href="#" class="nav-link">運営者について</a>
+                <button class="cta-button">今すぐ始める</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    🏥 医学文献準拠・信頼性重視
+                </div>
+                <h1 class="hero-title">迷っても、頼ってもいい。<br>次の一歩は、あなたのペースで。</h1>
+                <p class="hero-subtitle">がん治療の情報を、あなたの状況に合わせて整理。医学的根拠に基づいた信頼できる情報で、家族と一緒に次のステップを考えましょう。</p>
+                <div class="hero-cta">
+                    <a href="#" class="primary-cta">
+                        📋 状況を整理してみる
+                        <span>→</span>
+                    </a>
+                    <a href="#" class="secondary-cta">
+                        📖 サービス詳細を見る
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-header">
+                    <div class="visual-icon">🤗</div>
+                    <div class="visual-title">ゆっくりチェック体験</div>
+                </div>
+                <div class="progress-demo">
+                    <div class="progress-label">あなたのペースで進行中...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="demo-questions">
+                    <div class="demo-question">
+                        💭 今、どんな状況でしょうか？
+                        <br><small>「わからない」も大切な選択肢です</small>
+                    </div>
+                    <div class="demo-question">
+                        🎯 一番知りたいことはなんですか？
+                        <br><small>複数選択も可能です</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特徴セクション -->
+    <section class="features">
+        <div class="features-content">
+            <div class="features-header">
+                <h2 class="features-title">医療情報を、安心して整理</h2>
+                <p class="features-subtitle">信頼性の高い医学文献とガイドラインに基づいて、あなたの状況に合った情報をお届けします</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3 class="feature-title">5つの質問で状況整理</h3>
+                    <p class="feature-description">「わからない」も正当な選択肢。医療用語には簡単な説明を併記し、あなたのペースで進められます。</p>
+                    <div class="feature-benefit">
+                        ✓ 途中保存・中断可能
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">個別化された治療ガイド</h3>
+                    <p class="feature-description">あなたのがん種・地域・関心事に合わせて、標準治療の流れ、費用概算、専門医情報を整理します。</p>
+                    <div class="feature-benefit">
+                        ✓ 医学ガイドライン準拠
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍👩‍👧‍👦</div>
+                    <h3 class="feature-title">家族との情報共有</h3>
+                    <p class="feature-description">専用URLとQRコードで簡単共有。家族向け「やさしい日本語」版も自動生成されます。</p>
+                    <div class="feature-benefit">
+                        ✓ プライバシー保護
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">継続的なフォロー</h3>
+                    <p class="feature-description">新しい治験情報や制度更新を、急かすことなくお知らせ。状況が変わった時の再チェックも可能。</p>
+                    <div class="feature-benefit">
+                        ✓ ユーザーペース重視
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 信頼性セクション -->
+    <section class="trust">
+        <div class="trust-content">
+            <h2 class="trust-title">なぜ、Sottoriを信頼できるのか</h2>
+            <p class="trust-subtitle">医療情報を扱う責任を真摯に受け止め、信頼性と透明性を重視しています</p>
+            <div class="trust-points">
+                <div class="trust-point">
+                    <div class="trust-icon">📚</div>
+                    <h3 class="trust-point-title">医学文献準拠</h3>
+                    <p class="trust-point-description">著名医学雑誌とガイドラインから情報を収集。出典を明記し、参考情報としての位置づけを明確化。</p>
+                </div>
+                <div class="trust-point">
+                    <div class="trust-icon">🔒</div>
+                    <h3 class="trust-point-title">プライバシー保護</h3>
+                    <p class="trust-point-description">個人情報は最小限の収集に留め、適切な暗号化と管理を実施。共有時も匿名性を保護。</p>
+                </div>
+                <div class="trust-point">
+                    <div class="trust-icon">👤</div>
+                    <h3 class="trust-point-title">一人運営の透明性</h3>
+                    <p class="trust-point-description">運営者の顔が見える個人的な信頼関係。医療×デジタル経験と、がん体験者としての想い。</p>
+                </div>
+                <div class="trust-point">
+                    <div class="trust-icon">⚡</div>
+                    <h3 class="trust-point-title">AI活用の効率化</h3>
+                    <p class="trust-point-description">最新のAI技術で情報更新を効率化。人間による監修と組み合わせ、質の高い情報提供を実現。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最終CTA -->
+    <section class="final-cta">
+        <div class="final-cta-content">
+            <h2 class="final-cta-title">今日から、一人で悩まない。</h2>
+            <p class="final-cta-subtitle">5つの質問で状況を整理し、あなた専用の治療ガイドを作成します。<br>完璧な答えは求めません。今の状況から、一歩ずつ。</p>
+            <a href="#" class="final-cta-button">
+                📋 ゆっくりチェックを始める
+                <span>→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sottori</h3>
+                <a href="#">サービスについて</a>
+                <a href="#">よくある質問</a>
+                <a href="#">運営者について</a>
+                <a href="#">お問い合わせ</a>
+            </div>
+            <div class="footer-section">
+                <h3>重要事項</h3>
+                <a href="#">利用規約</a>
+                <a href="#">プライバシーポリシー</a>
+                <a href="#">医療免責事項</a>
+                <a href="#">情報の取り扱い</a>
+            </div>
+            <div class="footer-section">
+                <h3>サポート</h3>
+                <a href="#">使い方ガイド</a>
+                <a href="#">技術的な問題</a>
+                <a href="#">医療機関の方へ</a>
+                <a href="#">メディア関係者の方へ</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Sottori. 医療情報は参考情報です。必ず医師にご相談ください。</p>
+        </div>
+    </footer>
+</body>
+</html> 

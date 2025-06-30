@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>そっとり - がん治療の情報を、あなたのペースで整理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #fdfcfa 0%, #f7f5f1 100%);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        
+        :root {
+            /* そっとりブランドカラー（デザインシステム準拠） */
+            --brand-primary: #5a8a6b;
+            --brand-primary-light: #9bb5a6;
+            --brand-primary-dark: #4a6d5a;
+            --brand-accent: #6ba3d6;
+            --brand-warm: #c29768;
+            
+            /* セマンティックカラー */
+            --success: #2d7d52;
+            --info: #4a7ba7;
+            --neutral: #7a8b8c;
+            
+            /* テキストハイアラキー */
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --text-soft: #8e9aab;
+            
+            /* 背景システム */
+            --bg-primary: #fdfcfa;
+            --bg-soft: #f7f5f1;
+            --bg-card: #ffffff;
+            --bg-subtle: #f0ede9;
+            
+            /* ボーダー */
+            --border-primary: #e6e2dc;
+            --border-soft: #f0ede9;
+            --border-accent: #d4d8dc;
+            
+            /* スペーシング（黄金比ベース） */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.618rem;
+            --space-xl: 2.618rem;
+            --space-xxl: 4.236rem;
+            --space-xxxl: 6.854rem;
+        }
+        
+        /* ヘッダー */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(253, 252, 250, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: var(--space-lg) 0;
+            border-bottom: 1px solid var(--border-soft);
+            transition: transform 0.3s ease;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2.2em;
+            font-weight: 400;
+            color: var(--brand-primary);
+            letter-spacing: 0.02em;
+            text-decoration: none;
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .header-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .header-nav a:hover {
+            color: var(--brand-primary);
+        }
+        
+        .header-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--brand-accent);
+            transition: width 0.3s ease;
+        }
+        
+        .header-nav a:hover::after {
+            width: 100%;
+        }
+        
+        .header-cta {
+            background: var(--brand-primary);
+            color: white;
+            padding: var(--space-md) var(--space-xl);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(90, 138, 107, 0.2);
+        }
+        
+        .header-cta:hover {
+            background: var(--brand-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(90, 138, 107, 0.3);
+        }
+        
+        /* ヒーローセクション */
+        .hero {
+            padding: 140px 0 var(--space-xxxl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(155, 181, 166, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xxxl);
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text {
+            max-width: 500px;
+        }
+        
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-bottom: var(--space-lg);
+            font-weight: 400;
+        }
+        
+        .hero-title {
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 300;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: var(--space-xl);
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-description {
+            font-size: 1.3em;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xxl);
+            line-height: 1.6;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: var(--space-lg);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .cta-primary {
+            background: var(--brand-primary);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            box-shadow: 0 4px 20px rgba(90, 138, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-primary:hover {
+            background: var(--brand-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(90, 138, 107, 0.4);
+        }
+        
+        .cta-primary:hover::before {
+            left: 100%;
+        }
+        
+        .secondary-cta {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            transition: color 0.3s ease;
+        }
+        
+        .secondary-cta:hover {
+            color: var(--brand-primary);
+        }
+        
+        .hero-visual {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: var(--space-xxl);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-primary);
+            position: relative;
+        }
+        
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .visual-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-soft);
+        }
+        
+        .visual-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .visual-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .progress-demo {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .progress-label {
+            font-size: 14px;
+            color: var(--text-soft);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-subtle);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+            width: 60%;
+            border-radius: 4px;
+            animation: progressGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes progressGlow {
+            0% { 
+                width: 40%; 
+                box-shadow: 0 0 8px rgba(90, 138, 107, 0.3);
+            }
+            100% { 
+                width: 80%; 
+                box-shadow: 0 0 16px rgba(90, 138, 107, 0.5);
+            }
+        }
+        
+        .demo-questions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .demo-question {
+            background: var(--bg-soft);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            font-size: 14px;
+            color: var(--text-secondary);
+            position: relative;
+        }
+        
+        .demo-question::before {
+            content: '';
+            position: absolute;
+            left: var(--space-lg);
+            top: -4px;
+            width: 8px;
+            height: 8px;
+            background: var(--brand-accent);
+            border-radius: 50%;
+        }
+        
+        /* 特徴セクション */
+        .features {
+            padding: var(--space-xxxl) 0;
+            background: var(--bg-primary);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            font-weight: 300;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--space-xxxl);
+            letter-spacing: -0.02em;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xxl);
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-xxl);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(90, 138, 107, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-note {
+            background: rgba(90, 138, 107, 0.05);
+            border-left: 4px solid var(--brand-primary);
+            padding: var(--space-md);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: var(--text-soft);
+            font-style: italic;
+        }
+        
+        /* 使い方セクション */
+        .steps-section {
+            background: var(--bg-soft);
+            padding: var(--space-xxxl) 0;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xxl);
+        }
+        
+        .step-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: var(--space-xxl);
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 24px;
+            margin: 0 auto var(--space-xl);
+        }
+        
+        .step-title {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .step-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .step-note {
+            background: rgba(90, 138, 107, 0.05);
+            border-left: 4px solid var(--brand-primary);
+            padding: var(--space-md);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: var(--text-soft);
+            font-style: italic;
+            text-align: left;
+        }
+        
+        /* 運営者セクション */
+        .operator-section {
+            padding: var(--space-xxxl) 0;
+            background: var(--bg-primary);
+        }
+        
+        .operator-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--space-xxl);
+            align-items: center;
+        }
+        
+        .operator-image {
+            text-align: center;
+        }
+        
+        .operator-photo {
+            font-size: 6em;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .operator-name {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .operator-title {
+            color: var(--text-secondary);
+            font-size: 1em;
+        }
+        
+        .operator-story {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: var(--space-xl);
+            font-size: 1.1em;
+        }
+        
+        .trust-badge {
+            background: rgba(90, 138, 107, 0.05);
+            border: 1px solid rgba(90, 138, 107, 0.2);
+            border-radius: 16px;
+            padding: var(--space-xl);
+        }
+        
+        .trust-badge-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .trust-badge-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* FAQ セクション */
+        .faq-section {
+            background: var(--bg-soft);
+            padding: var(--space-xxxl) 0;
+        }
+        
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+        
+        .faq-item {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: var(--space-xl);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            font-size: 1.1em;
+        }
+        
+        .faq-answer {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* 最終CTA */
+        .final-cta {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+            color: white;
+            padding: var(--space-xxxl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><defs><pattern id="dots" width="60" height="60" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="60" height="60" fill="url(%23dots)"/></svg>') repeat;
+        }
+        
+        .final-cta-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .final-cta h2 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.02em;
+        }
+        
+        .final-cta p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: var(--space-xxl);
+        }
+        
+        .cta-secondary {
+            background: white;
+            color: var(--brand-primary);
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+        }
+        
+        .cta-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* フッター */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: var(--space-xxl) 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-note {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* スクロールアニメーション */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-xxl);
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .operator-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .header-nav {
+                display: none;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">そっとり</a>
+            <nav class="header-nav">
+                <a href="#features">特徴</a>
+                <a href="#steps">使い方</a>
+                <a href="#about">運営者について</a>
+                <a href="#faq">よくある質問</a>
+                <button class="header-cta">ゆっくり始める</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    🌿 医学的根拠に基づく・やさしい情報整理
+                </div>
+                <div class="hero-subtitle">がんと向き合うあなたへ</div>
+                <h1 class="hero-title">迷っても、頼ってもいい。<br>次の一歩は、あなたのペースで。</h1>
+                <p class="hero-description">
+                    がん治療の情報を、あなたの状況に合わせて整理します。<br>
+                    一人で抱え込まず、一緒に整理してみませんか？
+                </p>
+                <div class="hero-cta">
+                    <a href="#check" class="cta-primary">
+                        🌸 ゆっくりチェックを始める
+                        <span>→</span>
+                    </a>
+                    <a href="#steps" class="secondary-cta">
+                        📖 使い方を見る
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-header">
+                    <div class="visual-icon">🤗</div>
+                    <div class="visual-title">ゆっくりチェック体験</div>
+                </div>
+                <div class="progress-demo">
+                    <div class="progress-label">あなたのペースで進行中...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="demo-questions">
+                    <div class="demo-question">
+                        💭 今、どんな状況でしょうか？
+                        <br><small style="color: var(--text-soft);">「わからない」も大切な選択肢です</small>
+                    </div>
+                    <div class="demo-question">
+                        🎯 一番知りたいことはなんですか？
+                        <br><small style="color: var(--text-soft);">複数選択も可能です</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特徴セクション -->
+    <section class="features scroll-reveal" id="features">
+        <div class="container">
+            <h2 class="section-title">そっとりの特徴</h2>
+            <div class="features-grid">
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon">🌸</div>
+                    <h3 class="feature-title">わからなくても大丈夫</h3>
+                    <p class="feature-description">
+                        すべての質問に「わからない」という選択肢を用意しています。
+                        完璧に理解していなくても、今の状況から始められます。
+                    </p>
+                    <div class="feature-note">
+                        あなたのペースで、無理をせずに
+                    </div>
+                </div>
+                
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">信頼できる医学情報</h3>
+                    <p class="feature-description">
+                        著名医学雑誌やガイドラインを中心に、AI技術で最新情報を収集・整理。
+                        あくまで参考情報として、わかりやすくお伝えします。
+                    </p>
+                    <div class="feature-note">
+                        治療判断は必ず主治医と相談してください
+                    </div>
+                </div>
+                
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon">👨‍👩‍👧‍👦</div>
+                    <h3 class="feature-title">家族と一緒に理解</h3>
+                    <p class="feature-description">
+                        あなたの状況に合わせた情報を、家族とも簡単に共有できます。
+                        やさしい日本語版で、みんなが理解しやすく。
+                    </p>
+                    <div class="feature-note">
+                        一人で悩まず、みんなで支え合って
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 使い方セクション -->
+    <section class="steps-section scroll-reveal" id="steps">
+        <div class="container">
+            <h2 class="section-title">かんたん3ステップ</h2>
+            
+            <div class="steps-grid">
+                <div class="step-card scroll-reveal">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">眺める</h3>
+                    <p class="step-description">
+                        どんな情報があるか、まず見てみましょう。
+                        いくつかの質問にお答えいただくだけです。
+                    </p>
+                    <div class="step-note">
+                        わからない項目は「わからない」を選択できます
+                    </div>
+                </div>
+                
+                <div class="step-card scroll-reveal">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">整理する</h3>
+                    <p class="step-description">
+                        あなたの状況に合わせて、治療選択肢やお金の話など、
+                        必要な情報を整理してお見せします。
+                    </p>
+                    <div class="step-note">
+                        すべて参考情報です。治療判断は主治医と相談してください
+                    </div>
+                </div>
+                
+                <div class="step-card scroll-reveal">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">相談する</h3>
+                    <p class="step-description">
+                        家族や主治医との相談材料として活用してください。
+                        簡単に共有できる機能もあります。
+                    </p>
+                    <div class="step-note">
+                        やさしい日本語版で、ご家族にも分かりやすく
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 運営者セクション -->
+    <section class="operator-section scroll-reveal" id="about">
+        <div class="container">
+            <h2 class="section-title">運営者について</h2>
+            
+            <div class="operator-content">
+                <div class="operator-image">
+                    <div class="operator-photo">👨‍💻</div>
+                    <div class="operator-name">佐藤 健一（仮名）</div>
+                    <div class="operator-title">医療×デジタル事業開発 / がんサバイバー</div>
+                </div>
+                
+                <div class="operator-text">
+                    <p class="operator-story">
+                        私自身も5年前にがんの告知を受け、その時に「次に何をすればいいのか」で途方に暮れた経験があります。
+                        医療業界でのデジタル事業開発経験（10年）を活かし、同じ想いをする方の力になりたいと思い、
+                        一人でこのサービスを運営しています。
+                    </p>
+                    
+                    <div class="trust-badge">
+                        <div class="trust-badge-title">
+                            🛡️ 信頼性について
+                        </div>
+                        <div class="trust-badge-content">
+                            著名医学雑誌の文献とガイドラインを中心にAI技術で収集・整理していますが、
+                            <strong>医療行為ではありません</strong>。あくまで参考情報として活用いただき、
+                            治療に関する重要な判断は必ず主治医の先生と相談してください。
+                            一人運営のため至らない点もありますが、可能な限り正確で有用な情報提供に努めています。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ セクション -->
+    <section class="faq-section scroll-reveal" id="faq">
+        <div class="container">
+            <h2 class="section-title">よくある不安にお答えします</h2>
+            
+            <div class="faq-grid">
+                <div class="faq-item scroll-reveal">
+                    <div class="faq-question">🔒 個人情報は大丈夫？</div>
+                    <div class="faq-answer">
+                        匿名での利用が可能です。名前やメールアドレスの入力は任意で、
+                        入力いただいた情報は暗号化して安全に管理します。
+                    </div>
+                </div>
+                
+                <div class="faq-item scroll-reveal">
+                    <div class="faq-question">💰 お金はかかりますか？</div>
+                    <div class="faq-answer">
+                        完全無料でご利用いただけます。
+                        将来的にも基本機能は無料で提供し続ける予定です。
+                    </div>
+                </div>
+                
+                <div class="faq-item scroll-reveal">
+                    <div class="faq-question">📚 情報は信頼できる？</div>
+                    <div class="faq-answer">
+                        NEJM、Lancet等の著名医学雑誌とガイドラインが出典です。
+                        ただし医療行為ではないため、治療判断は必ず主治医と相談してください。
+                    </div>
+                </div>
+                
+                <div class="faq-item scroll-reveal">
+                    <div class="faq-question">⏸️ 途中でやめても大丈夫？</div>
+                    <div class="faq-answer">
+                        いつでも中断・再開できます。
+                        回答は自動保存され、お時間のある時に続きから始められます。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 最終CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <div class="final-cta-content">
+                <h2>一人で抱え込まず、一緒に整理してみませんか？</h2>
+                <p>あなたのペースで、大丈夫です。</p>
+                <a href="#check" class="cta-secondary">ゆっくりチェックを始める</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#terms">利用規約</a>
+                <a href="#privacy">プライバシーポリシー</a>
+                <a href="#contact">お問い合わせ</a>
+                <a href="#about">運営者について</a>
+            </div>
+            <div class="footer-note">
+                ※ このサービスは医療行為ではありません。治療に関する判断は必ず医療従事者にご相談ください。
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // スクロールアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+        
+        // アニメーション対象要素を監視
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // CTAボタンのクリック処理（デモ用）
+        document.querySelectorAll('.cta-primary, .cta-secondary').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('実際の実装では「ゆっくりチェック」画面に遷移します');
+            });
+        });
+        
+        // ヘッダーのスクロール効果
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const header = document.querySelector('.header');
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body>
+</html> 

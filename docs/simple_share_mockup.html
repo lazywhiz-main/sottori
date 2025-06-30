@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sottori - かんたん共有</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #faf8f5 0%, #f0ede7 100%);
+            min-height: 100vh;
+        }
+        
+        :root {
+            --primary-color: #7c9885;
+            --secondary-color: #a8c4a2;
+            --accent-color: #f4a261;
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --background-soft: #faf8f5;
+            --border-soft: #e8e4df;
+            --success-color: #27ae60;
+            --info-color: #3498db;
+            --warning-color: #f39c12;
+            --family-color: #e74c3c;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-soft);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: var(--primary-color);
+            letter-spacing: 0.5px;
+        }
+        
+        .back-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-soft);
+        }
+        
+        .back-btn:hover {
+            background: var(--background-soft);
+            border-color: var(--secondary-color);
+        }
+        
+        /* メインコンテナ */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 共有方法選択 */
+        .share-method-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(124, 152, 133, 0.1);
+            border: 1px solid var(--border-soft);
+            text-align: center;
+        }
+        
+        .share-title {
+            font-size: 2.2em;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .share-subtitle {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .method-card {
+            background: var(--background-soft);
+            border: 2px solid var(--border-soft);
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+        
+        .method-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124, 152, 133, 0.15);
+        }
+        
+        .method-card.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--background-soft), #f8f6f3);
+            box-shadow: 0 8px 25px rgba(124, 152, 133, 0.2);
+        }
+        
+        .method-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .method-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .method-title {
+            font-size: 1.4em;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .method-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1.05em;
+        }
+        
+        /* 共有オプション */
+        .share-options {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(124, 152, 133, 0.1);
+            border: 1px solid var(--border-soft);
+            display: none;
+        }
+        
+        .share-options.show {
+            display: block;
+            animation: slideInUp 0.5s ease forwards;
+        }
+        
+        .options-title {
+            font-size: 1.6em;
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        /* URL共有 */
+        .url-share {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .url-title {
+            font-size: 1.2em;
+            color: var(--info-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .url-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .url-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+        }
+        
+        .copy-btn {
+            padding: 12px 20px;
+            background: var(--info-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #2980b9;
+        }
+        
+        .url-note {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        /* QRコード */
+        .qr-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .qr-title {
+            font-size: 1.2em;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: var(--text-secondary);
+        }
+        
+        .qr-instruction {
+            color: var(--text-secondary);
+            font-size: 1em;
+            line-height: 1.5;
+        }
+        
+        /* 家族向けメッセージ */
+        .family-message {
+            background: linear-gradient(135deg, #fff5f5, #fef2f2);
+            border: 2px solid #f8b4b4;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .family-title {
+            font-size: 1.3em;
+            color: var(--family-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .family-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+        
+        .family-signature {
+            margin-top: 15px;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-top: 1px solid #f8b4b4;
+            padding-top: 15px;
+        }
+        
+        /* カスタマイズオプション */
+        .customize-section {
+            background: #f0f8f0;
+            border: 1px solid #d4edda;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .customize-title {
+            font-size: 1.2em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .customize-options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #d4edda;
+        }
+        
+        .option-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+        
+        .option-label {
+            color: var(--text-primary);
+            font-size: 1em;
+            cursor: pointer;
+        }
+        
+        /* ダウンロードセクション */
+        .download-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(124, 152, 133, 0.1);
+            border: 1px solid var(--border-soft);
+            text-align: center;
+        }
+        
+        .download-title {
+            font-size: 1.6em;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .download-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .download-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-pdf {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-pdf:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .btn-image {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-image:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        
+        /* プライバシー注意 */
+        .privacy-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .privacy-title {
+            font-size: 1.1em;
+            color: #856404;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .privacy-content {
+            color: #856404;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px 15px;
+            }
+            
+            .share-method-section,
+            .share-options,
+            .download-section {
+                padding: 25px 20px;
+            }
+            
+            .share-title {
+                font-size: 1.8em;
+            }
+            
+            .method-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .url-input-group {
+                flex-direction: column;
+            }
+            
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+                max-width: 280px;
+            }
+        }
+        
+        /* アニメーション */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .copy-btn.copied {
+            animation: pulse 0.3s ease;
+            background: var(--success-color) !important;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Sottori</div>
+            <a href="#" class="back-btn">← ガイドに戻る</a>
+        </div>
+    </header>
+    
+    <!-- メインコンテナ -->
+    <main class="main-container">
+        
+        <!-- 共有方法選択 -->
+        <section class="share-method-section">
+            <h1 class="share-title">家族と情報を共有しましょう</h1>
+            <p class="share-subtitle">
+                ご家族にも分かりやすい形で情報をお渡しします。<br>
+                どの方法で共有されますか？
+            </p>
+            
+            <div class="method-grid">
+                <div class="method-card selected" onclick="selectMethod(this, 'url')">
+                    <div class="method-icon">🔗</div>
+                    <h3 class="method-title">URLで共有</h3>
+                    <p class="method-description">
+                        専用のリンクを作成します。<br>
+                        LINEやメールで簡単に送信できます。
+                    </p>
+                </div>
+                
+                <div class="method-card" onclick="selectMethod(this, 'qr')">
+                    <div class="method-icon">📱</div>
+                    <h3 class="method-title">QRコードで共有</h3>
+                    <p class="method-description">
+                        QRコードを作成します。<br>
+                        スマホで読み取ってもらえます。
+                    </p>
+                </div>
+                
+                <div class="method-card" onclick="selectMethod(this, 'download')">
+                    <div class="method-icon">📄</div>
+                    <h3 class="method-title">ファイルをダウンロード</h3>
+                    <p class="method-description">
+                        PDFや画像で保存できます。<br>
+                        印刷して一緒に見ることもできます。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 共有オプション -->
+        <section class="share-options show">
+            <h2 class="options-title">🔗 URLで共有する</h2>
+            
+            <!-- URL共有 -->
+            <div class="url-share">
+                <div class="url-title">
+                    🔗 共有リンク
+                </div>
+                <div class="url-input-group">
+                    <input type="text" class="url-input" value="https://sottori.app/share/abc123" readonly>
+                    <button class="copy-btn" onclick="copyURL()">コピー</button>
+                </div>
+                <div class="url-note">
+                    このリンクは7日間有効です。個人情報は含まれていませんが、信頼できる方とのみ共有してください。
+                </div>
+            </div>
+            
+            <!-- QRコード -->
+            <div class="qr-section">
+                <div class="qr-title">QRコード</div>
+                <div class="qr-code">
+                    📱 QRコード<br>
+                    <small>（実装時に生成）</small>
+                </div>
+                <div class="qr-instruction">
+                    スマートフォンのカメラでこのQRコードを読み取ってもらってください
+                </div>
+            </div>
+            
+            <!-- 家族向けメッセージ -->
+            <div class="family-message">
+                <div class="family-title">
+                    👨‍👩‍👧‍👦 ご家族への一言
+                </div>
+                <div class="family-content">
+                    肺がんについての情報を整理しました。一緒に見ていただけると心強いです。
+                    わからないことがあれば、次の診察の時に一緒に先生に聞いてもらえるとありがたいです。
+                    
+                    <div class="family-signature">
+                        - Sottoriで情報整理をした本人より
+                    </div>
+                </div>
+            </div>
+            
+            <!-- カスタマイズオプション -->
+            <div class="customize-section">
+                <div class="customize-title">📝 共有する内容をカスタマイズ</div>
+                <div class="customize-options">
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" checked>
+                        <span class="option-label">治療の流れ（タイムライン）</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" checked>
+                        <span class="option-label">お金のこと（費用・助成制度）</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" checked>
+                        <span class="option-label">病院の情報</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox">
+                        <span class="option-label">やさしい日本語版も含める</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ダウンロードセクション -->
+        <section class="download-section">
+            <h2 class="download-title">📄 ファイルとしてダウンロード</h2>
+            
+            <div class="download-buttons">
+                <a href="#" class="download-btn btn-pdf">
+                    📑 PDFでダウンロード
+                </a>
+                <a href="#" class="download-btn btn-image">
+                    🖼️ 画像でダウンロード
+                </a>
+            </div>
+        </section>
+        
+        <!-- プライバシー注意 -->
+        <div class="privacy-notice">
+            <div class="privacy-title">
+                🛡️ プライバシーについて
+            </div>
+            <div class="privacy-content">
+                共有される情報には個人を特定できる情報（お名前、詳しい住所など）は含まれていません。
+                ただし、医療に関する情報ですので、信頼できるご家族との共有にとどめることをお勧めします。
+                共有リンクは7日後に自動的に無効になります。
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        let selectedMethod = 'url';
+        
+        function selectMethod(element, method) {
+            // 全ての選択を解除
+            document.querySelectorAll('.method-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 選択された項目をマーク
+            element.classList.add('selected');
+            selectedMethod = method;
+            
+            // 対応するオプションを表示
+            updateShareOptions();
+        }
+        
+        function updateShareOptions() {
+            const optionsSection = document.querySelector('.share-options');
+            const optionsTitle = document.querySelector('.options-title');
+            
+            switch(selectedMethod) {
+                case 'url':
+                    optionsTitle.innerHTML = '🔗 URLで共有する';
+                    break;
+                case 'qr':
+                    optionsTitle.innerHTML = '📱 QRコードで共有する';
+                    break;
+                case 'download':
+                    optionsTitle.innerHTML = '📄 ファイルをダウンロードする';
+                    break;
+            }
+            
+            optionsSection.classList.add('show');
+        }
+        
+        function copyURL() {
+            const urlInput = document.querySelector('.url-input');
+            const copyBtn = document.querySelector('.copy-btn');
+            
+            // URLをコピー
+            urlInput.select();
+            document.execCommand('copy');
+            
+            // フィードバック
+            copyBtn.classList.add('copied');
+            copyBtn.textContent = 'コピー完了！';
+            
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.textContent = 'コピー';
+            }, 2000);
+        }
+        
+        // ダウンロードボタンの処理
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const type = this.classList.contains('btn-pdf') ? 'PDF' : '画像';
+                alert(`${type}ファイルのダウンロードを開始します`);
+            });
+        });
+        
+        // チェックボックスの状態変更時の処理
+        document.querySelectorAll('.option-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                console.log(`${this.nextElementSibling.textContent}: ${this.checked}`);
+                // 実際の実装では共有内容を動的に更新
+            });
+        });
+        
+        // 初期表示
+        document.addEventListener('DOMContentLoaded', function() {
+            updateShareOptions();
+        });
+    </script>
+</body>
+</html>
