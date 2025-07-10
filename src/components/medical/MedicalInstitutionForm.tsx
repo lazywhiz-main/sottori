@@ -146,7 +146,7 @@ const MedicalInstitutionForm: React.FC<MedicalInstitutionFormProps> = ({
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：○○総合病院、△△クリニック"
                 required
               />
@@ -160,7 +160,7 @@ const MedicalInstitutionForm: React.FC<MedicalInstitutionFormProps> = ({
                 id="type"
                 value={formData.type}
                 onChange={(e) => handleInputChange('type', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 required
               >
                 {INSTITUTION_TYPES.map(type => (
@@ -182,7 +182,7 @@ const MedicalInstitutionForm: React.FC<MedicalInstitutionFormProps> = ({
               type="text"
               value={formData.address}
               onChange={(e) => handleInputChange('address', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               placeholder="例：東京都渋谷区○○1-2-3"
               required
             />
@@ -199,7 +199,7 @@ const MedicalInstitutionForm: React.FC<MedicalInstitutionFormProps> = ({
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：03-1234-5678"
                 required
               />
@@ -214,7 +214,7 @@ const MedicalInstitutionForm: React.FC<MedicalInstitutionFormProps> = ({
                 type="url"
                 value={formData.website || ''}
                 onChange={(e) => handleInputChange('website', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：https://example.com"
               />
             </div>
@@ -230,7 +230,7 @@ const MedicalInstitutionForm: React.FC<MedicalInstitutionFormProps> = ({
               value={formData.notes || ''}
               onChange={(e) => handleInputChange('notes', e.target.value)}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               placeholder="診療科、アクセス方法、特記事項などを記録できます。"
             />
           </div>

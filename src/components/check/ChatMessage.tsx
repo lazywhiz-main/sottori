@@ -6,9 +6,11 @@ interface ChatMessageProps {
   sender: 'sottori' | 'user'
   message: string
   isTyping?: boolean
+  canEdit?: boolean
+  onEdit?: () => void
 }
 
-export function ChatMessage({ sender, message, isTyping = false }: ChatMessageProps) {
+export function ChatMessage({ sender, message, isTyping = false, canEdit = false, onEdit }: ChatMessageProps) {
   if (sender === 'sottori') {
     return (
       <div className="flex items-start gap-3 mb-4">
@@ -44,9 +46,18 @@ export function ChatMessage({ sender, message, isTyping = false }: ChatMessagePr
     <div className="flex items-start gap-3 mb-4 justify-end">
       {/* メッセージバブル（右側） */}
       <div className="flex-1 max-w-md flex justify-end">
-        <div className="bg-deep-blue-500 text-white rounded-2xl rounded-tr-md p-4 shadow-sm">
+        <div className="bg-deep-blue-500 text-white rounded-2xl rounded-tr-md p-4 shadow-sm group relative">
           <p className="leading-relaxed text-white">
             {message}
+            {canEdit && onEdit && (
+              <button
+                onClick={onEdit}
+                className="ml-2 opacity-50 hover:opacity-100 transition-opacity text-white text-xs cursor-pointer"
+                title="回答を編集"
+              >
+                ✏️
+              </button>
+            )}
           </p>
         </div>
       </div>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>治療方針の決定ステップ詳細（寄り添い型サンプル）</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* roadmap_detail_sample_v3.htmlのCSS全文ここから */
+    :root { /* ...（v3のCSS全文をここに展開）... */ }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-sans); background: var(--gray-50); color: var(--gray-900); line-height: 1.6; }
+    .dashboard-container { display: flex; min-height: 100vh; }
+    .sidebar { width: 320px; background: white; border-right: 1px solid var(--gray-200); padding: var(--space-6); position: fixed; height: 100vh; overflow-y: auto; }
+    .main-content { flex: 1; margin-left: 320px; padding: var(--space-8); background: var(--gray-50); }
+    /* ...（以降v3のCSS全文を正確に展開）... */
+    .support-message { background: var(--warm-coral-50); color: var(--warm-coral-700); border-left: 4px solid var(--warm-coral-400); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-6); font-size: 1rem; font-weight: 500; box-shadow: var(--shadow-sm); }
+    .flex-actions { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .action-btn { background: var(--deep-blue-100); color: var(--deep-blue-700); border: none; border-radius: var(--radius-md); padding: 6px 16px; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
+    .action-btn:hover { background: var(--deep-blue-200); }
+    .question-list { background: var(--gray-100); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-6); }
+    .question-list-title { font-size: 1.1rem; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
+    .question-list ul { margin-left: 20px; color: var(--gray-800); font-size: 0.95rem; }
+    .memo-area { margin-bottom: var(--space-6); }
+    .memo-label { font-size: 0.95rem; color: var(--gray-700); margin-bottom: 4px; display: block; }
+    .memo-input { width: 100%; min-height: 60px; border: 1px solid var(--gray-300); border-radius: var(--radius-md); padding: 8px; font-size: 1rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="main-content" style="max-width:700px;margin:40px auto;">
+    <div class="support-message">治療方針を決めるのはとても大切な時間です。焦らず、あなたの気持ちや生活を大切にしながら進めていきましょう。</div>
+    <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:16px;">治療方針の決定ステップ詳細</h1>
+    <div class="flex-actions">
+      <button class="action-btn">あとで見る</button>
+      <button class="action-btn">メモする</button>
+      <button class="action-btn">家族に共有</button>
+      <button class="action-btn">主治医に質問リスト送信</button>
+    </div>
+    <div class="question-list">
+      <div class="question-list-title">主治医に相談したいことリスト例</div>
+      <ul>
+        <li>治療の選択肢とそれぞれのメリット・デメリット</li>
+        <li>治療による生活への影響</li>
+        <li>副作用やリスクについて</li>
+        <li>治療期間や通院頻度</li>
+        <li>家族への説明やサポート体制</li>
+      </ul>
+    </div>
+    <div class="memo-area">
+      <label class="memo-label" for="memo">気になること・自分の考えをメモ</label>
+      <textarea class="memo-input" id="memo" placeholder="ここに自由にメモできます"></textarea>
+    </div>
+    <div class="support-message">困った時はサポートにご相談ください。あなたの気持ちに寄り添います。</div>
+    <div style="margin-top:32px;text-align:right;">
+      <a href="roadmap_detail_v3_improved_main.html" style="color:var(--deep-blue-600);text-decoration:underline;font-size:0.95rem;">← ロードマップ全体に戻る</a>
+    </div>
+  </div>
+</body>
+</html> 

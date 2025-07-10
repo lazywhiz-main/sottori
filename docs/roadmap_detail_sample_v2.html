@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>治療ロードマップ詳細 - Sottori</title>
+    <style>
+        /* Sottori Design System */
+        :root {
+            --deep-blue-50: #f0f2ff;
+            --deep-blue-100: #e6eaff;
+            --deep-blue-200: #d1d9ff;
+            --deep-blue-300: #b3c0ff;
+            --deep-blue-400: #8a9eff;
+            --deep-blue-500: #556AAB;
+            --deep-blue-600: #4a5f9f;
+            --deep-blue-700: #3d4e85;
+            --deep-blue-800: #334070;
+            --deep-blue-900: #2d365e;
+            --warm-coral-50: #fef7f3;
+            --warm-coral-100: #fdeee6;
+            --warm-coral-200: #fbd9cc;
+            --warm-coral-300: #f7bea8;
+            --warm-coral-400: #E69974;
+            --warm-coral-500: #df7a5a;
+            --warm-coral-600: #d35d4a;
+            --warm-coral-700: #b14834;
+            --warm-coral-800: #933e2e;
+            --warm-coral-900: #7a372c;
+            --soft-peach-50: #fefcf9;
+            --soft-peach-100: #fef7f0;
+            --soft-peach-200: #fdeee1;
+            --soft-peach-300: #fbe0c8;
+            --soft-peach-400: #FAD8C5;
+            --soft-peach-500: #f5c4a3;
+            --soft-peach-600: #e8a67a;
+            --soft-peach-700: #d18a5a;
+            --soft-peach-800: #b36f47;
+            --soft-peach-900: #945c3d;
+            --golden-yellow-50: #fefcf0;
+            --golden-yellow-100: #fef7d9;
+            --golden-yellow-200: #fdecb3;
+            --golden-yellow-300: #fbdc82;
+            --golden-yellow-400: #f8c94a;
+            --golden-yellow-500: #f5b026;
+            --golden-yellow-600: #e6951c;
+            --golden-yellow-700: #c0731a;
+            --golden-yellow-800: #9a5b1d;
+            --golden-yellow-900: #7d4b1c;
+            --sage-green-50: #f6f7f6;
+            --sage-green-100: #e3e7e3;
+            --sage-green-200: #c7d0c7;
+            --sage-green-300: #a3b3a3;
+            --sage-green-400: #7a907a;
+            --sage-green-500: #5f755f;
+            --sage-green-600: #4a5d4a;
+            --sage-green-700: #3d4b3d;
+            --sage-green-800: #333e33;
+            --sage-green-900: #2c342c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: var(--deep-blue-900);
+            background-color: var(--soft-peach-50);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid var(--deep-blue-100);
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            margin-bottom: 30px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--deep-blue-500);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .profile-info h1 {
+            font-size: 18px;
+            color: var(--deep-blue-700);
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            font-size: 14px;
+            color: var(--deep-blue-600);
+        }
+
+        /* Status Section */
+        .status-section {
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: var(--soft-peach-50);
+            border: 2px solid var(--soft-peach-200);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .status-icon {
+            font-size: 20px;
+        }
+
+        .status-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--deep-blue-700);
+        }
+
+        .status-message {
+            font-size: 14px;
+            color: var(--deep-blue-600);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .status-button {
+            background: var(--deep-blue-500);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .status-button:hover {
+            background: var(--deep-blue-600);
+            transform: translateY(-1px);
+        }
+
+        /* Profile Summary */
+        .profile-summary {
+            background: var(--deep-blue-50);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .summary-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--deep-blue-700);
+            margin-bottom: 15px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: var(--deep-blue-600);
+        }
+
+        .summary-value {
+            font-size: 14px;
+            color: var(--deep-blue-700);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 320px;
+            padding: 30px;
+        }
+
+        /* Content Header */
+        .content-header {
+            margin-bottom: 30px;
+        }
+
+        .content-title {
+            font-size: 28px;
+            color: var(--deep-blue-700);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .content-subtitle {
+            font-size: 16px;
+            color: var(--deep-blue-600);
+        }
+
+        /* Treatment Journey */
+        .treatment-journey {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .journey-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .journey-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--deep-blue-100);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--deep-blue-600);
+        }
+
+        .journey-title {
+            font-size: 20px;
+            color: var(--deep-blue-700);
+            font-weight: 600;
+        }
+
+        /* Journey Steps */
+        .journey-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .journey-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .step-current {
+            background: var(--soft-peach-100);
+            border: 2px solid var(--soft-peach-400);
+        }
+
+        .step-completed {
+            background: var(--sage-green-50);
+            border: 2px solid var(--sage-green-200);
+        }
+
+        .step-upcoming {
+            background: var(--deep-blue-50);
+            border: 2px solid var(--deep-blue-200);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .step-current .step-number {
+            background: var(--soft-peach-400);
+            color: white;
+        }
+
+        .step-completed .step-number {
+            background: var(--sage-green-500);
+            color: white;
+        }
+
+        .step-upcoming .step-number {
+            background: var(--deep-blue-300);
+            color: white;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--deep-blue-700);
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: var(--deep-blue-600);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .step-details {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .step-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--deep-blue-600);
+        }
+
+        .step-detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-current .detail-icon {
+            background: var(--soft-peach-300);
+            color: var(--soft-peach-700);
+        }
+
+        .step-completed .detail-icon {
+            background: var(--sage-green-200);
+            color: var(--sage-green-700);
+        }
+
+        .step-upcoming .detail-icon {
+            background: var(--deep-blue-200);
+            color: var(--deep-blue-700);
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .step-action {
+            background: var(--deep-blue-500);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .step-action:hover {
+            background: var(--deep-blue-600);
+            transform: translateY(-1px);
+        }
+
+        .step-action.secondary {
+            background: var(--soft-peach-100);
+            color: var(--deep-blue-600);
+            border: 1px solid var(--soft-peach-300);
+        }
+
+        .step-action.secondary:hover {
+            background: var(--soft-peach-200);
+        }
+
+        /* Current Focus */
+        .current-focus {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--soft-peach-400);
+        }
+
+        .focus-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .focus-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--soft-peach-100);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--soft-peach-600);
+        }
+
+        .focus-title {
+            font-size: 20px;
+            color: var(--deep-blue-700);
+            font-weight: 600;
+        }
+
+        .focus-content {
+            background: var(--soft-peach-50);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .focus-description {
+            font-size: 16px;
+            color: var(--deep-blue-600);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .focus-checklist {
+            list-style: none;
+        }
+
+        .focus-checklist li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--deep-blue-600);
+        }
+
+        .focus-checklist li::before {
+            content: "✓";
+            width: 20px;
+            height: 20px;
+            background: var(--soft-peach-400);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .next-steps-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .next-steps-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--golden-yellow-100);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--golden-yellow-600);
+        }
+
+        .next-steps-title {
+            font-size: 20px;
+            color: var(--deep-blue-700);
+            font-weight: 600;
+        }
+
+        .next-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .next-step-card {
+            background: var(--golden-yellow-50);
+            border: 2px solid var(--golden-yellow-200);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .next-step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 176, 38, 0.2);
+        }
+
+        .next-step-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .next-step-icon {
+            font-size: 18px;
+        }
+
+        .next-step-category {
+            font-size: 12px;
+            color: var(--golden-yellow-700);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .next-step-description {
+            font-size: 14px;
+            color: var(--deep-blue-600);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+            
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .next-steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <div class="profile-header">
+                    <div class="profile-avatar">田</div>
+                    <div class="profile-info">
+                        <h1>田中さん</h1>
+                        <p>新規診断</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Check Section -->
+            <div class="status-section">
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-icon">👩‍⚕️</div>
+                        <div class="status-title">今日の調子</div>
+                    </div>
+                    <p class="status-message">診断から1週間が経ちました。家族と相談は進んでいますか？</p>
+                    <button class="status-button">状況を更新</button>
+                </div>
+            </div>
+
+            <!-- Profile Summary -->
+            <div class="profile-summary">
+                <h3 class="summary-title">プロフィール概要</h3>
+                <div class="summary-item">
+                    <span class="summary-label">診断日</span>
+                    <span class="summary-value">1週間前</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">がん種</span>
+                    <span class="summary-value">乳がん</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">現在の段階</span>
+                    <span class="summary-value">治療方針決定前</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">家族状況</span>
+                    <span class="summary-value">夫・娘と同居</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Content Header -->
+            <div class="content-header">
+                <h1 class="content-title">治療ロードマップ詳細</h1>
+                <p class="content-subtitle">田中さんの治療の流れと、今必要なことを整理しました</p>
+            </div>
+
+            <!-- Treatment Journey -->
+            <section class="treatment-journey">
+                <div class="journey-header">
+                    <div class="journey-icon">📋</div>
+                    <h2 class="journey-title">治療の流れ</h2>
+                </div>
+                
+                <div class="journey-steps">
+                    <!-- Step 1: Completed -->
+                    <div class="journey-step step-completed">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 class="step-title">診断・検査</h3>
+                            <p class="step-description">がんの種類と進行度を詳しく調べる段階です。</p>
+                            <div class="step-details">
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">✓</div>
+                                    <span>乳がんの診断完了</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">✓</div>
+                                    <span>病理検査完了</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">✓</div>
+                                    <span>ステージ判定完了</span>
+                                </div>
+                            </div>
+                            <div class="step-actions">
+                                <a href="#" class="step-action">詳細を見る</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Current -->
+                    <div class="journey-step step-current">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 class="step-title">治療方針の決定</h3>
+                            <p class="step-description">主治医と相談して、最適な治療法を決める段階です。</p>
+                            <div class="step-details">
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">📅</div>
+                                    <span>来週火曜日：主治医との相談</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">💭</div>
+                                    <span>家族との相談が必要</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">📋</div>
+                                    <span>治療選択肢の整理</span>
+                                </div>
+                            </div>
+                            <div class="step-actions">
+                                <a href="#" class="step-action">相談の準備</a>
+                                <a href="#" class="step-action secondary">家族と共有</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Upcoming -->
+                    <div class="journey-step step-upcoming">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 class="step-title">治療開始</h3>
+                            <p class="step-description">決めた治療法に基づいて、実際の治療を始める段階です。</p>
+                            <div class="step-details">
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">🏥</div>
+                                    <span>手術・化学療法・放射線治療</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">📅</div>
+                                    <span>治療スケジュールの調整</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">👨‍👩‍👧‍👦</div>
+                                    <span>家族のサポート体制</span>
+                                </div>
+                            </div>
+                            <div class="step-actions">
+                                <a href="#" class="step-action secondary">詳細を確認</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Upcoming -->
+                    <div class="journey-step step-upcoming">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 class="step-title">術後ケア・フォローアップ</h3>
+                            <p class="step-description">治療後の体調管理と、再発予防のための定期検査です。</p>
+                            <div class="step-details">
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">💊</div>
+                                    <span>薬物療法の継続</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">🏥</div>
+                                    <span>定期検査・診察</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">💪</div>
+                                    <span>リハビリ・運動</span>
+                                </div>
+                            </div>
+                            <div class="step-actions">
+                                <a href="#" class="step-action secondary">詳細を確認</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Upcoming -->
+                    <div class="journey-step step-upcoming">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3 class="step-title">社会復帰・生活再建</h3>
+                            <p class="step-description">治療を終えて、元の生活に戻る段階です。</p>
+                            <div class="step-details">
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">💼</div>
+                                    <span>仕事への復帰</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">👨‍👩‍👧‍👦</div>
+                                    <span>家族との関係調整</span>
+                                </div>
+                                <div class="step-detail-item">
+                                    <div class="detail-icon">🌸</div>
+                                    <span>新しい生活の構築</span>
+                                </div>
+                            </div>
+                            <div class="step-actions">
+                                <a href="#" class="step-action secondary">詳細を確認</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Current Focus -->
+            <section class="current-focus">
+                <div class="focus-header">
+                    <div class="focus-icon">🎯</div>
+                    <h2 class="focus-title">今、大切なこと</h2>
+                </div>
+                
+                <div class="focus-content">
+                    <p class="focus-description">
+                        現在は治療方針を決める段階です。焦らずに、家族とよく相談して決めましょう。
+                        主治医との相談で聞きたいことを整理しておくと、より良い選択ができます。
+                    </p>
+                    
+                    <ul class="focus-checklist">
+                        <li>家族に診断結果を伝える</li>
+                        <li>主治医との相談で聞きたいことをメモする</li>
+                        <li>治療の選択肢について調べる</li>
+                        <li>仕事や家事の調整について考える</li>
+                        <li>経済的な準備について確認する</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section class="next-steps">
+                <div class="next-steps-header">
+                    <div class="next-steps-icon">📋</div>
+                    <h2 class="next-steps-title">次のステップ</h2>
+                </div>
+                
+                <div class="next-steps-grid">
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">👨‍👩‍👧‍👦</div>
+                            <span class="next-step-category">家族</span>
+                        </div>
+                        <p class="next-step-description">夫と娘に診断結果を伝え、一緒に治療方針を考えましょう</p>
+                    </div>
+                    
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">👩‍⚕️</div>
+                            <span class="next-step-category">医療</span>
+                        </div>
+                        <p class="next-step-description">主治医との相談で、手術・化学療法・放射線治療の選択肢を確認</p>
+                    </div>
+                    
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">💰</div>
+                            <span class="next-step-category">経済</span>
+                        </div>
+                        <p class="next-step-description">治療費用と保険の適用について、詳しく調べておきましょう</p>
+                    </div>
+                    
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">💼</div>
+                            <span class="next-step-category">仕事</span>
+                        </div>
+                        <p class="next-step-description">職場に治療のことを伝えるタイミングと方法を考えましょう</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 簡単なインタラクション
+        document.querySelectorAll('.step-action').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('アクション実行:', this.textContent);
+            });
+        });
+
+        document.querySelector('.status-button').addEventListener('click', function() {
+            console.log('状況更新ページへ遷移');
+        });
+    </script>
+</body>
+</html> 

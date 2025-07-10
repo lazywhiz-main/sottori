@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>質問リスト作成 - 治療ロードマップ詳細</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ヘッダー */
+        .page-header {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .guide-steps {
+            display: flex;
+            gap: 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .guide-step {
+            background: #f1f5f9;
+            padding: 8px 20px 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            position: relative;
+        }
+        .step-number {
+            background: #3b82f6;
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+        .guide-arrow {
+            font-size: 22px;
+            color: #3b82f6;
+            margin: 0 8px;
+            user-select: none;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* 左側：質問プール */
+        .question-pool {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .pool-header {
+            margin-bottom: 20px;
+        }
+
+        .pool-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .pool-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        /* カテゴリータグ */
+        .category-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .category-tag {
+            padding: 6px 16px;
+            border-radius: 16px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        .category-tag.selected {
+            background: #3b82f6;
+            color: #fff;
+            border: 1.5px solid #3b82f6;
+        }
+
+        /* 質問カード共通 */
+        .question-card {
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 16px 12px 16px;
+            margin-bottom: 14px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .question-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+        }
+        .question-card .question-text {
+            font-size: 15px;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .question-card .question-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #64748b;
+        }
+        .question-card .question-category {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        .question-card .add-button, .question-card .remove-button {
+            margin-left: auto;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .question-card .add-button:hover {
+            background: #2563eb;
+        }
+        .question-card .remove-button {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .question-card .remove-button:hover {
+            background: #fee2e2;
+        }
+        /* おすすめバッジ */
+        .recommended-badge {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            background: #10b981;
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 1px 4px rgba(16,185,129,0.08);
+            z-index: 2;
+        }
+        /* 左右間の矢印 */
+        .arrow-between {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .arrow-icon {
+            font-size: 38px;
+            color: #3b82f6;
+            opacity: 0.7;
+            margin: 0 8px;
+        }
+
+        /* 右側：自分の質問リスト */
+        .my-questions {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .my-questions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .my-questions-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .clear-recommended {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .clear-recommended:hover {
+            background: #fee2e2;
+        }
+
+        .my-questions-list {
+            min-height: 400px;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        .my-question-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .my-question-item.recommended {
+            border-left: 4px solid #10b981;
+            background: #f0fdf4;
+        }
+
+        .my-question-item.recommended::before {
+            content: "おすすめ";
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: #10b981;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .my-question-text {
+            font-size: 14px;
+            color: #1e293b;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .my-question-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .my-question-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .remove-button {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .remove-button:hover {
+            background: #fee2e2;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #9ca3af;
+            padding: 40px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-hint {
+            font-size: 12px;
+        }
+
+        /* フッター */
+        .footer-actions {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-count {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ページヘッダー -->
+        <div class="page-header">
+            <h1 class="page-title">質問リストを作成</h1>
+            <p class="page-description">
+                医師との相談で聞きたい質問を選んで、効率的な診察を準備しましょう。
+                おすすめの質問が既に追加されています。
+            </p>
+            <div class="guide-steps">
+                <div class="guide-step">
+                    <span class="step-number">1</span>
+                    おすすめ質問を確認
+                </div>
+                <span class="guide-arrow">→</span>
+                <div class="guide-step">
+                    <span class="step-number">2</span>
+                    必要に応じて質問を追加・削除
+                </div>
+                <span class="guide-arrow">→</span>
+                <div class="guide-step">
+                    <span class="step-number">3</span>
+                    優先順位を調整
+                </div>
+                <span class="guide-arrow">→</span>
+                <div class="guide-step">
+                    <span class="step-number">4</span>
+                    保存して次へ
+                </div>
+            </div>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="main-content" style="grid-template-columns: 1fr 48px 1fr;">
+            <!-- 左側：質問プール -->
+            <div class="question-pool">
+                <div class="pool-header">
+                    <h2 class="pool-title">質問プール</h2>
+                    <p class="pool-subtitle">カテゴリー別に整理された質問から選んでください</p>
+                </div>
+                <!-- カテゴリータグ -->
+                <div class="category-tags">
+                    <div class="category-tag selected">すべて</div>
+                    <div class="category-tag">症状・体調</div>
+                    <div class="category-tag">治療について</div>
+                    <div class="category-tag">薬について</div>
+                    <div class="category-tag">生活・食事</div>
+                    <div class="category-tag">副作用</div>
+                    <div class="category-tag">経過・予後</div>
+                    <div class="category-tag">検査について</div>
+                </div>
+                <!-- 質問リスト -->
+                <div class="questions-list">
+                    <div class="question-card">
+                        <div class="question-text">
+                            現在の治療の効果はどの程度期待できますか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">治療について</span>
+                            <button class="add-button">追加</button>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text">
+                            この薬の副作用で注意すべき症状はありますか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">薬について</span>
+                            <button class="add-button">追加</button>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text">
+                            次回の検査はいつ頃予定されていますか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">検査について</span>
+                            <button class="add-button">追加</button>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text">
+                            日常生活で気をつけるべき点はありますか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">生活・食事</span>
+                            <button class="add-button">追加</button>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text">
+                            痛みや不快感が続く場合はどうすればよいですか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">症状・体調</span>
+                            <button class="add-button">追加</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 矢印 -->
+            <div class="arrow-between">
+                <span class="arrow-icon">→</span>
+            </div>
+            <!-- 右側：自分の質問リスト -->
+            <div class="my-questions">
+                <div class="my-questions-header">
+                    <h2 class="my-questions-title">私の質問リスト</h2>
+                    <button class="clear-recommended">おすすめをクリア</button>
+                </div>
+                <div class="my-questions-list">
+                    <div class="question-card">
+                        <span class="recommended-badge">おすすめ</span>
+                        <div class="question-text">
+                            現在の症状は治療の効果として正常な範囲内ですか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">症状・体調</span>
+                            <button class="remove-button">削除</button>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <span class="recommended-badge">おすすめ</span>
+                        <div class="question-text">
+                            治療の進行状況は予定通りですか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">治療について</span>
+                            <button class="remove-button">削除</button>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <span class="recommended-badge">おすすめ</span>
+                        <div class="question-text">
+                            次回の診察までに気をつけるべきことはありますか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">生活・食事</span>
+                            <button class="remove-button">削除</button>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text">
+                            この薬の服用方法で正しいでしょうか？
+                        </div>
+                        <div class="question-meta">
+                            <span class="question-category">薬について</span>
+                            <button class="remove-button">削除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- フッター -->
+        <div class="footer-actions">
+            <div class="question-count">
+                質問数: 4個
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary">下書き保存</button>
+                <button class="btn btn-primary">次へ進む</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

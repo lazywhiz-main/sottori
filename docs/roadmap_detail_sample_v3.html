@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>治療ロードマップ詳細 - Sottori</title>
+    <style>
+        /* CSS Variables for Design System */
+        :root {
+            /* Color Palette */
+            --deep-blue-50: #f0f2ff;
+            --deep-blue-100: #e6eaff;
+            --deep-blue-200: #d1d9ff;
+            --deep-blue-300: #b3c0ff;
+            --deep-blue-400: #8a9eff;
+            --deep-blue-500: #556AAB;
+            --deep-blue-600: #4a5f9f;
+            --deep-blue-700: #3d4e85;
+            --deep-blue-800: #334070;
+            --deep-blue-900: #2d365e;
+            
+            --warm-coral-50: #fef7f3;
+            --warm-coral-100: #fdeee6;
+            --warm-coral-200: #fbd9cc;
+            --warm-coral-300: #f7bea8;
+            --warm-coral-400: #E69974;
+            --warm-coral-500: #df7a5a;
+            --warm-coral-600: #d35d4a;
+            --warm-coral-700: #b14834;
+            --warm-coral-800: #933e2e;
+            --warm-coral-900: #7a372c;
+            
+            --soft-peach-50: #fefcf9;
+            --soft-peach-100: #fef7f0;
+            --soft-peach-200: #fdeee1;
+            --soft-peach-300: #fbe0c8;
+            --soft-peach-400: #FAD8C5;
+            --soft-peach-500: #f5c5a8;
+            --soft-peach-600: #eda882;
+            --soft-peach-700: #e18a5c;
+            --soft-peach-800: #d16d3a;
+            --soft-peach-900: #b8572b;
+            
+            --golden-yellow-50: #fefcf0;
+            --golden-yellow-100: #fef7d9;
+            --golden-yellow-200: #fdecb3;
+            --golden-yellow-300: #fbdc82;
+            --golden-yellow-400: #F4CB88;
+            --golden-yellow-500: #edb355;
+            --golden-yellow-600: #e19834;
+            --golden-yellow-700: #bc7a28;
+            --golden-yellow-800: #976025;
+            --golden-yellow-900: #7a4f22;
+
+            --sage-green-50: #f0f9f4;
+            --sage-green-100: #e8f5e8;
+            --sage-green-200: #d1e7d1;
+            --sage-green-300: #b3d9b3;
+            --sage-green-400: #8fcc8f;
+            --sage-green-500: #6bbf6b;
+            --sage-green-600: #4da64d;
+            --sage-green-700: #3d8c3d;
+            --sage-green-800: #2d732d;
+            --sage-green-900: #1d591d;
+
+            /* Neutral Colors */
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+
+            /* Typography */
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "ヒラギノ角ゴシック ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+            
+            /* Spacing System (8px grid) */
+            --space-1: 0.25rem;  /* 4px */
+            --space-2: 0.5rem;   /* 8px */
+            --space-3: 0.75rem;  /* 12px */
+            --space-4: 1rem;     /* 16px */
+            --space-5: 1.25rem;  /* 20px */
+            --space-6: 1.5rem;   /* 24px */
+            --space-8: 2rem;     /* 32px */
+            --space-10: 2.5rem;  /* 40px */
+            --space-12: 3rem;    /* 48px */
+            --space-16: 4rem;    /* 64px */
+            --space-20: 5rem;    /* 80px */
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;   /* 6px */
+            --radius-md: 0.5rem;     /* 8px */
+            --radius-lg: 0.75rem;    /* 12px */
+            --radius-xl: 1rem;       /* 16px */
+            --radius-2xl: 1.5rem;    /* 24px */
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            /* Transitions */
+            --transition-fast: 150ms ease-in-out;
+            --transition-normal: 250ms ease-in-out;
+            --transition-slow: 350ms ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: var(--space-6);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 320px;
+            padding: var(--space-8);
+            background: var(--gray-50);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--deep-blue-400), var(--warm-coral-400));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .profile-info h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-1);
+        }
+
+        .profile-info p {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* Status Check Section */
+        .status-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .status-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            transition: all var(--transition-normal);
+        }
+
+        .status-card:hover {
+            border-color: var(--warm-coral-300);
+            box-shadow: var(--shadow-md);
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-3);
+        }
+
+        .status-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            background: var(--warm-coral-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warm-coral-600);
+            font-size: 1rem;
+        }
+
+        .status-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .status-message {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-bottom: var(--space-3);
+            line-height: 1.5;
+        }
+
+        .status-button {
+            width: 100%;
+            background: var(--warm-coral-500);
+            color: white;
+            border: none;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .status-button:hover {
+            background: var(--warm-coral-600);
+        }
+
+        /* Profile Summary */
+        .profile-summary {
+            margin-bottom: var(--space-8);
+        }
+
+        .summary-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: var(--space-4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-2) 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .summary-value {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+
+        /* Main Content Header */
+        .content-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .content-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .content-subtitle {
+            font-size: 1rem;
+            color: var(--gray-600);
+        }
+
+        /* Treatment Journey Map */
+        .treatment-journey {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            transition: all var(--transition-normal);
+        }
+
+        .treatment-journey:hover {
+            border-color: var(--gray-300);
+            box-shadow: var(--shadow-md);
+        }
+
+        .journey-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
+        }
+
+        .journey-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--deep-blue-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--deep-blue-600);
+            font-size: 1.25rem;
+        }
+
+        .journey-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .journey-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-top: var(--space-1);
+        }
+
+        /* Journey Map */
+        .journey-map {
+            position: relative;
+            padding: var(--space-6) 0;
+        }
+
+        .journey-path {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gray-200);
+            z-index: 1;
+        }
+
+        .journey-steps {
+            position: relative;
+            z-index: 2;
+        }
+
+        .journey-step {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+            position: relative;
+        }
+
+        .journey-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 3;
+            border: 3px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-completed .step-marker {
+            background: var(--sage-green-500);
+            color: white;
+        }
+
+        .step-current .step-marker {
+            background: var(--warm-coral-500);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .step-upcoming .step-marker {
+            background: var(--gray-300);
+            color: var(--gray-600);
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: var(--shadow-sm), 0 0 0 0 rgba(223, 122, 90, 0.7);
+            }
+            50% { 
+                box-shadow: var(--shadow-sm), 0 0 0 10px rgba(223, 122, 90, 0);
+            }
+        }
+
+        .step-content {
+            flex: 1;
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-normal);
+        }
+
+        .step-current .step-content {
+            background: var(--warm-coral-50);
+            border-color: var(--warm-coral-200);
+        }
+
+        .step-completed .step-content {
+            background: var(--sage-green-50);
+            border-color: var(--sage-green-200);
+        }
+
+        .step-upcoming .step-content {
+            background: var(--gray-50);
+            border-color: var(--gray-200);
+        }
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .step-description {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: var(--space-3);
+            line-height: 1.5;
+        }
+
+        .step-details {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            margin-bottom: var(--space-3);
+        }
+
+        .step-detail-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .step-detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.625rem;
+            flex-shrink: 0;
+        }
+
+        .step-current .detail-icon {
+            background: var(--warm-coral-200);
+            color: var(--warm-coral-700);
+        }
+
+        .step-completed .detail-icon {
+            background: var(--sage-green-200);
+            color: var(--sage-green-700);
+        }
+
+        .step-upcoming .detail-icon {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .step-actions {
+            display: flex;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+        }
+
+        .step-action {
+            background: var(--deep-blue-500);
+            color: white;
+            border: none;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .step-action:hover {
+            background: var(--deep-blue-600);
+            transform: translateY(-1px);
+        }
+
+        .step-action.secondary {
+            background: transparent;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .step-action.secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        /* Current Focus */
+        .current-focus {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            transition: all var(--transition-normal);
+            border-left: 4px solid var(--warm-coral-500);
+        }
+
+        .current-focus:hover {
+            border-color: var(--gray-300);
+            box-shadow: var(--shadow-md);
+        }
+
+        .focus-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+        .focus-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--warm-coral-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warm-coral-600);
+            font-size: 1.25rem;
+        }
+
+        .focus-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .focus-content {
+            background: var(--warm-coral-50);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+        }
+
+        .focus-description {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            line-height: 1.6;
+            margin-bottom: var(--space-3);
+        }
+
+        .focus-checklist {
+            list-style: none;
+        }
+
+        .focus-checklist li {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+            font-size: 0.75rem;
+            color: var(--gray-700);
+        }
+
+        .focus-checklist li::before {
+            content: "✓";
+            width: 16px;
+            height: 16px;
+            background: var(--warm-coral-500);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.625rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            transition: all var(--transition-normal);
+        }
+
+        .next-steps:hover {
+            border-color: var(--gray-300);
+            box-shadow: var(--shadow-md);
+        }
+
+        .next-steps-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+        .next-steps-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--golden-yellow-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--golden-yellow-600);
+            font-size: 1.25rem;
+        }
+
+        .next-steps-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .next-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .next-step-card {
+            background: var(--golden-yellow-50);
+            border: 1px solid var(--golden-yellow-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            transition: all var(--transition-fast);
+        }
+
+        .next-step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--golden-yellow-300);
+        }
+
+        .next-step-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .next-step-icon {
+            font-size: 1rem;
+        }
+
+        .next-step-category {
+            font-size: 0.625rem;
+            color: var(--golden-yellow-700);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .next-step-description {
+            font-size: 0.75rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+            
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--gray-200);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: var(--space-4);
+            }
+            
+            .next-steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .treatment-journey,
+        .current-focus,
+        .next-steps {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .treatment-journey { animation-delay: 0.1s; }
+        .current-focus { animation-delay: 0.2s; }
+        .next-steps { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <div class="profile-header">
+                    <div class="profile-avatar">田</div>
+                    <div class="profile-info">
+                        <h1>田中さん</h1>
+                        <p>新規診断</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Check Section -->
+            <div class="status-section">
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-icon">👩‍⚕️</div>
+                        <div class="status-title">今日の調子</div>
+                    </div>
+                    <p class="status-message">診断から1週間が経ちました。家族と相談は進んでいますか？</p>
+                    <button class="status-button">状況を更新</button>
+                </div>
+            </div>
+
+            <!-- Profile Summary -->
+            <div class="profile-summary">
+                <h3 class="summary-title">プロフィール概要</h3>
+                <div class="summary-item">
+                    <span class="summary-label">診断日</span>
+                    <span class="summary-value">1週間前</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">がん種</span>
+                    <span class="summary-value">乳がん</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">現在の段階</span>
+                    <span class="summary-value">治療方針決定前</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">家族状況</span>
+                    <span class="summary-value">夫・娘と同居</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Content Header -->
+            <div class="content-header">
+                <h1 class="content-title">治療ロードマップ詳細</h1>
+                <p class="content-subtitle">田中さんの治療の流れと、今必要なことを整理しました</p>
+            </div>
+
+            <!-- Treatment Journey Map -->
+            <section class="treatment-journey">
+                <div class="journey-header">
+                    <div class="journey-icon">🗺️</div>
+                    <div>
+                        <h2 class="journey-title">治療の流れ</h2>
+                        <p class="journey-subtitle">あなた専用のガイドマップ</p>
+                    </div>
+                </div>
+                
+                <div class="journey-map">
+                    <div class="journey-path"></div>
+                    <div class="journey-steps">
+                        <!-- Step 1: Completed -->
+                        <div class="journey-step step-completed">
+                            <div class="step-marker">1</div>
+                            <div class="step-content">
+                                <h3 class="step-title">診断・検査</h3>
+                                <p class="step-description">がんの種類と進行度を詳しく調べる段階です。</p>
+                                <div class="step-details">
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">✓</div>
+                                        <span>乳がんの診断完了</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">✓</div>
+                                        <span>病理検査完了</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">✓</div>
+                                        <span>ステージ判定完了</span>
+                                    </div>
+                                </div>
+                                <div class="step-actions">
+                                    <a href="#" class="step-action">詳細を見る</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Current -->
+                        <div class="journey-step step-current">
+                            <div class="step-marker">2</div>
+                            <div class="step-content">
+                                <h3 class="step-title">治療方針の決定</h3>
+                                <p class="step-description">主治医と相談して、最適な治療法を決める段階です。</p>
+                                <div class="step-details">
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">📅</div>
+                                        <span>来週火曜日：主治医との相談</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">💭</div>
+                                        <span>家族との相談が必要</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">📋</div>
+                                        <span>治療選択肢の整理</span>
+                                    </div>
+                                </div>
+                                <div class="step-actions">
+                                    <a href="#" class="step-action">相談の準備</a>
+                                    <a href="#" class="step-action secondary">家族と共有</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Upcoming -->
+                        <div class="journey-step step-upcoming">
+                            <div class="step-marker">3</div>
+                            <div class="step-content">
+                                <h3 class="step-title">治療開始</h3>
+                                <p class="step-description">決めた治療法に基づいて、実際の治療を始める段階です。</p>
+                                <div class="step-details">
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">🏥</div>
+                                        <span>手術・化学療法・放射線治療</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">📅</div>
+                                        <span>治療スケジュールの調整</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">👨‍👩‍👧‍👦</div>
+                                        <span>家族のサポート体制</span>
+                                    </div>
+                                </div>
+                                <div class="step-actions">
+                                    <a href="#" class="step-action secondary">詳細を確認</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Upcoming -->
+                        <div class="journey-step step-upcoming">
+                            <div class="step-marker">4</div>
+                            <div class="step-content">
+                                <h3 class="step-title">術後ケア・フォローアップ</h3>
+                                <p class="step-description">治療後の体調管理と、再発予防のための定期検査です。</p>
+                                <div class="step-details">
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">💊</div>
+                                        <span>薬物療法の継続</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">🏥</div>
+                                        <span>定期検査・診察</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">💪</div>
+                                        <span>リハビリ・運動</span>
+                                    </div>
+                                </div>
+                                <div class="step-actions">
+                                    <a href="#" class="step-action secondary">詳細を確認</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Upcoming -->
+                        <div class="journey-step step-upcoming">
+                            <div class="step-marker">5</div>
+                            <div class="step-content">
+                                <h3 class="step-title">社会復帰・生活再建</h3>
+                                <p class="step-description">治療を終えて、元の生活に戻る段階です。</p>
+                                <div class="step-details">
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">💼</div>
+                                        <span>仕事への復帰</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">👨‍👩‍👧‍👦</div>
+                                        <span>家族との関係調整</span>
+                                    </div>
+                                    <div class="step-detail-item">
+                                        <div class="detail-icon">🌸</div>
+                                        <span>新しい生活の構築</span>
+                                    </div>
+                                </div>
+                                <div class="step-actions">
+                                    <a href="#" class="step-action secondary">詳細を確認</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Current Focus -->
+            <section class="current-focus">
+                <div class="focus-header">
+                    <div class="focus-icon">🎯</div>
+                    <h2 class="focus-title">今、大切なこと</h2>
+                </div>
+                
+                <div class="focus-content">
+                    <p class="focus-description">
+                        現在は治療方針を決める段階です。焦らずに、家族とよく相談して決めましょう。
+                        主治医との相談で聞きたいことを整理しておくと、より良い選択ができます。
+                    </p>
+                    
+                    <ul class="focus-checklist">
+                        <li>家族に診断結果を伝える</li>
+                        <li>主治医との相談で聞きたいことをメモする</li>
+                        <li>治療の選択肢について調べる</li>
+                        <li>仕事や家事の調整について考える</li>
+                        <li>経済的な準備について確認する</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section class="next-steps">
+                <div class="next-steps-header">
+                    <div class="next-steps-icon">📋</div>
+                    <h2 class="next-steps-title">次のステップ</h2>
+                </div>
+                
+                <div class="next-steps-grid">
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">👨‍👩‍👧‍👦</div>
+                            <span class="next-step-category">家族</span>
+                        </div>
+                        <p class="next-step-description">夫と娘に診断結果を伝え、一緒に治療方針を考えましょう</p>
+                    </div>
+                    
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">👩‍⚕️</div>
+                            <span class="next-step-category">医療</span>
+                        </div>
+                        <p class="next-step-description">主治医との相談で、手術・化学療法・放射線治療の選択肢を確認</p>
+                    </div>
+                    
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">💰</div>
+                            <span class="next-step-category">経済</span>
+                        </div>
+                        <p class="next-step-description">治療費用と保険の適用について、詳しく調べておきましょう</p>
+                    </div>
+                    
+                    <div class="next-step-card">
+                        <div class="next-step-header">
+                            <div class="next-step-icon">💼</div>
+                            <span class="next-step-category">仕事</span>
+                        </div>
+                        <p class="next-step-description">職場に治療のことを伝えるタイミングと方法を考えましょう</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.querySelectorAll('.step-action').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('アクション実行:', this.textContent);
+            });
+        });
+
+        document.querySelector('.status-button').addEventListener('click', function() {
+            console.log('状況更新ページへ遷移');
+        });
+    </script>
+</body>
+</html> 

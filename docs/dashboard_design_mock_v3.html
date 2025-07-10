@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sottori - 統合ダッシュボード デザインモック v3</title>
+    <style>
+        :root {
+            --deep-blue-50: #f0f2ff;
+            --deep-blue-100: #e6eaff;
+            --deep-blue-200: #d1d9ff;
+            --deep-blue-300: #b3c0ff;
+            --deep-blue-400: #8a9eff;
+            --deep-blue-500: #556AAB;
+            --deep-blue-600: #4a5f9f;
+            --deep-blue-700: #3d4e85;
+            --deep-blue-800: #334070;
+            --deep-blue-900: #2d365e;
+            --warm-coral-50: #fef7f3;
+            --warm-coral-100: #fdeee6;
+            --warm-coral-200: #fbd9cc;
+            --warm-coral-300: #f7bea8;
+            --warm-coral-400: #E69974;
+            --warm-coral-500: #df7a5a;
+            --warm-coral-600: #d35d4a;
+            --warm-coral-700: #b14834;
+            --warm-coral-800: #933e2e;
+            --warm-coral-900: #7a372c;
+            --golden-yellow-100: #fef7d9;
+            --golden-yellow-200: #fdecb3;
+            --golden-yellow-400: #F4CB88;
+            --golden-yellow-600: #e19834;
+            --sage-green-100: #e8f5e8;
+            --sage-green-400: #8fcc8f;
+            --sage-green-600: #4da64d;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "ヒラギノ角ゴシック ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+            --transition-normal: 250ms ease-in-out;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+        .dashboard-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: var(--space-6);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 320px;
+            padding: var(--space-8);
+            background: var(--gray-50);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content-header {
+            margin-bottom: var(--space-8);
+        }
+        .content-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-2);
+        }
+        .content-subtitle {
+            font-size: 1rem;
+            color: var(--gray-600);
+        }
+        .main-grid {
+            display: grid;
+            gap: var(--space-6);
+            grid-template-columns: 1fr 1fr 1fr;
+            margin-bottom: var(--space-8);
+        }
+        @media (max-width: 1024px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .sidebar { width: 100%; position: static; border-right: none; border-bottom: 1px solid var(--gray-200); }
+            .main-content { margin-left: 0; padding: var(--space-4); }
+        }
+        .card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            transition: all var(--transition-normal);
+            position: relative;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-top: var(--space-1);
+        }
+        /* --- 下部活用セクション --- */
+        .bottom-sections {
+            display: flex;
+            gap: var(--space-6);
+            margin-top: auto;
+            margin-bottom: var(--space-4);
+        }
+        .bottom-card {
+            flex: 1;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            min-width: 0;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+        }
+        .bottom-card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: var(--space-3);
+        }
+        .activity-list, .support-list, .family-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        .activity-item, .support-item, .family-item {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .activity-item strong { color: var(--deep-blue-600); }
+        .support-item strong { color: var(--warm-coral-600); }
+        .family-item strong { color: var(--sage-green-600); }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="profile-header">
+                    <div class="profile-avatar">田</div>
+                    <div class="profile-info">
+                        <h1>田中さん</h1>
+                        <p>治療中</p>
+                    </div>
+                </div>
+            </div>
+            <div class="status-section">
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-icon">👩‍⚕️</div>
+                        <div class="status-title">今日の調子</div>
+                    </div>
+                    <p class="status-message">前回の更新から3日経ちました。体調に変化はありませんか？</p>
+                    <button class="status-button">状況を更新</button>
+                </div>
+            </div>
+            <div class="profile-summary">
+                <h3 class="summary-title">プロフィール概要</h3>
+                <div class="summary-item">
+                    <span class="summary-label">治療段階</span>
+                    <span class="summary-value">治療中</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">最終更新</span>
+                    <span class="summary-value">3日前</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ロードマップ</span>
+                    <span class="summary-value">作成済み</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">関連情報</span>
+                    <span class="summary-value">5件</span>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1 class="content-title">ダッシュボード</h1>
+                <p class="content-subtitle">あなたの治療と情報を管理します</p>
+            </div>
+            <div class="main-grid">
+                <!-- Treatment Overview Card -->
+                <div class="card treatment-card">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <div>
+                            <h2 class="card-title">治療ロードマップ</h2>
+                            <p class="card-subtitle">あなた専用のガイド</p>
+                        </div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span class="progress-label">進捗</span>
+                            <span class="progress-percentage">65%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width:65%;background:var(--deep-blue-500);height:8px;border-radius:4px;"></div>
+                        </div>
+                    </div>
+                    <div class="treatment-info">
+                        <div class="info-row">
+                            <div class="info-dot current" style="background:var(--deep-blue-500);"></div>
+                            <div class="info-content">
+                                <div class="info-label">現在の段階</div>
+                                <div class="info-value">治療中</div>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-dot next" style="background:var(--warm-coral-500);"></div>
+                            <div class="info-content">
+                                <div class="info-label">次のマイルストーン</div>
+                                <div class="info-value">次の診察</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <p class="card-description">詳細な治療計画をご確認いただけます</p>
+                        <button class="card-button">詳しく見る</button>
+                    </div>
+                </div>
+                <!-- Personalized Info Card -->
+                <div class="card info-card">
+                    <div class="card-header">
+                        <div class="card-icon">🔍</div>
+                        <div>
+                            <h2 class="card-title">関連情報</h2>
+                            <p class="card-subtitle">今のあなたに関係がありそうな情報</p>
+                        </div>
+                    </div>
+                    <div class="update-list">
+                        <div class="update-item urgent" style="background:var(--warm-coral-50);border:1px solid var(--warm-coral-200);">
+                            <div class="update-header">
+                                <span class="update-icon">⚠️</span>
+                                <span class="update-title">治療中の副作用対策</span>
+                                <span class="priority-badge high" style="background:var(--warm-coral-100);color:var(--warm-coral-700);">重要</span>
+                            </div>
+                            <p class="update-summary">治療開始前に知っておくべき副作用とその対処法について詳しく解説します。</p>
+                        </div>
+                        <div class="update-item relevant" style="background:var(--golden-yellow-100);border:1px solid var(--golden-yellow-200);">
+                            <div class="update-header">
+                                <span class="update-icon">📚</span>
+                                <span class="update-title">がん専門医の見つけ方</span>
+                                <span class="priority-badge medium" style="background:var(--golden-yellow-100);color:var(--golden-yellow-700);">中程度</span>
+                            </div>
+                            <p class="update-summary">お住まいの地域でがん専門医を見つける方法と、病院選びのポイントをご紹介します。</p>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <p class="card-description">お時間のある時にご確認ください</p>
+                        <button class="card-button">すべて見る</button>
+                    </div>
+                </div>
+                <!-- Next Actions Card -->
+                <div class="card actions-card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div>
+                            <h2 class="card-title">次のアクション</h2>
+                            <p class="card-subtitle">おすすめの次のステップ</p>
+                        </div>
+                    </div>
+                    <div class="actions-list">
+                        <div class="action-item">
+                            <div class="action-header">
+                                <div class="action-icon">🌸</div>
+                                <span class="action-category">治療関連</span>
+                            </div>
+                            <p class="action-description">副作用の確認と対処について主治医と相談しましょう</p>
+                        </div>
+                        <div class="action-item">
+                            <div class="action-header">
+                                <div class="action-icon">📚</div>
+                                <span class="action-category">情報関連</span>
+                            </div>
+                            <p class="action-description">緊急情報の確認をお勧めします</p>
+                        </div>
+                    </div>
+                    <div class="status-indicator" style="margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--gray-100);display:flex;align-items:center;gap:var(--space-2);">
+                        <div class="indicator-dot" style="width:6px;height:6px;border-radius:50%;background:var(--sage-green-400);animation:pulse 2s infinite;"></div>
+                        <span class="indicator-text" style="font-size:0.625rem;color:var(--gray-500);font-weight:500;">サポート中</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 下部活用セクション -->
+            <div class="bottom-sections">
+                <div class="bottom-card">
+                    <div class="bottom-card-title">最近の活動履歴</div>
+                    <div class="activity-list">
+                        <div class="activity-item"><strong>診察記録</strong>を更新しました（2日前）</div>
+                        <div class="activity-item"><strong>副作用アンケート</strong>に回答（3日前）</div>
+                        <div class="activity-item"><strong>家族共有</strong>を設定（5日前）</div>
+                    </div>
+                </div>
+                <div class="bottom-card">
+                    <div class="bottom-card-title">サポート・お知らせ</div>
+                    <div class="support-list">
+                        <div class="support-item"><strong>新機能</strong>：家族共有が利用可能になりました</div>
+                        <div class="support-item"><strong>お知らせ</strong>：次回の診察日が近づいています</div>
+                    </div>
+                </div>
+                <div class="bottom-card">
+                    <div class="bottom-card-title">家族・共有</div>
+                    <div class="family-list">
+                        <div class="family-item"><strong>家族A</strong>：閲覧のみ</div>
+                        <div class="family-item"><strong>家族B</strong>：編集権限あり</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html> 

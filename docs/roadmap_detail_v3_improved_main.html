@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>治療ロードマップ詳細（寄り添い型改善サンプル）</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* roadmap_detail_sample_v3.htmlのCSS全文をここにコピペ */
+    :root {
+      /* Color Palette */
+      --deep-blue-50: #f0f2ff;
+      --deep-blue-100: #e6eaff;
+      --deep-blue-200: #d1d9ff;
+      --deep-blue-300: #b3c0ff;
+      --deep-blue-400: #8a9eff;
+      --deep-blue-500: #556AAB;
+      --deep-blue-600: #4a5f9f;
+      --deep-blue-700: #3d4e85;
+      --deep-blue-800: #334070;
+      --deep-blue-900: #2d365e;
+      --warm-coral-50: #fef7f3;
+      --warm-coral-100: #fdeee6;
+      --warm-coral-200: #fbd9cc;
+      --warm-coral-300: #f7bea8;
+      --warm-coral-400: #E69974;
+      --warm-coral-500: #df7a5a;
+      --warm-coral-600: #d35d4a;
+      --warm-coral-700: #b14834;
+      --warm-coral-800: #933e2e;
+      --warm-coral-900: #7a372c;
+      --soft-peach-50: #fefcf9;
+      --soft-peach-100: #fef7f0;
+      --soft-peach-200: #fdeee1;
+      --soft-peach-300: #fbe0c8;
+      --soft-peach-400: #FAD8C5;
+      --soft-peach-500: #f5c5a8;
+      --soft-peach-600: #eda882;
+      --soft-peach-700: #e18a5c;
+      --soft-peach-800: #d16d3a;
+      --soft-peach-900: #b8572b;
+      --golden-yellow-50: #fefcf0;
+      --golden-yellow-100: #fef7d9;
+      --golden-yellow-200: #fdecb3;
+      --golden-yellow-300: #fbdc82;
+      --golden-yellow-400: #F4CB88;
+      --golden-yellow-500: #edb355;
+      --golden-yellow-600: #e19834;
+      --golden-yellow-700: #bc7a28;
+      --golden-yellow-800: #976025;
+      --golden-yellow-900: #7a4f22;
+      --sage-green-50: #f0f9f4;
+      --sage-green-100: #e8f5e8;
+      --sage-green-200: #d1e7d1;
+      --sage-green-300: #b3d9b3;
+      --sage-green-400: #8fcc8f;
+      --sage-green-500: #6bbf6b;
+      --sage-green-600: #4da64d;
+      --sage-green-700: #3d8c3d;
+      --sage-green-800: #2d732d;
+      --sage-green-900: #1d591d;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "ヒラギノ角ゴシック ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+      --space-1: 0.25rem;  /* 4px */
+      --space-2: 0.5rem;   /* 8px */
+      --space-3: 0.75rem;  /* 12px */
+      --space-4: 1rem;     /* 16px */
+      --space-5: 1.25rem;  /* 20px */
+      --space-6: 1.5rem;   /* 24px */
+      --space-8: 2rem;     /* 32px */
+      --space-10: 2.5rem;  /* 40px */
+      --space-12: 3rem;    /* 48px */
+      --space-16: 4rem;    /* 64px */
+      --space-20: 5rem;    /* 80px */
+      --radius-sm: 0.375rem;   /* 6px */
+      --radius-md: 0.5rem;     /* 8px */
+      --radius-lg: 0.75rem;    /* 12px */
+      --radius-xl: 1rem;       /* 16px */
+      --radius-2xl: 1.5rem;    /* 24px */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --transition-fast: 150ms ease-in-out;
+      --transition-normal: 250ms ease-in-out;
+      --transition-slow: 350ms ease-in-out;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-sans); background: var(--gray-50); color: var(--gray-900); line-height: 1.6; }
+    .dashboard-container { display: flex; min-height: 100vh; }
+    .sidebar { width: 320px; background: white; border-right: 1px solid var(--gray-200); padding: var(--space-6); position: fixed; height: 100vh; overflow-y: auto; }
+    .main-content { flex: 1; margin-left: 320px; padding: var(--space-8); background: var(--gray-50); }
+    .profile-section { margin-bottom: var(--space-8); }
+    .profile-header { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6); }
+    .profile-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--deep-blue-400), var(--warm-coral-400)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; font-weight: 600; }
+    .profile-info h1 { font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: var(--space-1); }
+    .profile-info p { font-size: 0.875rem; color: var(--gray-600); }
+    .status-section { margin-bottom: var(--space-8); }
+    .status-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: var(--space-4); transition: all var(--transition-normal); }
+    .status-card:hover { border-color: var(--warm-coral-300); box-shadow: var(--shadow-md); }
+    .status-header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+    .status-icon { width: 32px; height: 32px; border-radius: var(--radius-md); background: var(--warm-coral-100); display: flex; align-items: center; justify-content: center; color: var(--warm-coral-600); font-size: 1rem; }
+    .status-title { font-size: 0.875rem; font-weight: 600; color: var(--gray-900); }
+    .status-message { font-size: 0.75rem; color: var(--gray-600); margin-bottom: var(--space-3); line-height: 1.5; }
+    .status-button { width: 100%; background: var(--warm-coral-500); color: white; border: none; padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all var(--transition-fast); }
+    .status-button:hover { background: var(--warm-coral-600); }
+    .profile-summary { margin-bottom: var(--space-8); }
+    .summary-title { font-size: 0.875rem; font-weight: 600; color: var(--gray-700); margin-bottom: var(--space-4); text-transform: uppercase; letter-spacing: 0.05em; }
+    .summary-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-2) 0; border-bottom: 1px solid var(--gray-100); }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-label { font-size: 0.75rem; color: var(--gray-600); }
+    .summary-value { font-size: 0.75rem; font-weight: 500; color: var(--gray-900); }
+    .content-header { margin-bottom: var(--space-8); }
+    .content-title { font-size: 1.875rem; font-weight: 700; color: var(--gray-900); margin-bottom: var(--space-2); }
+    .content-subtitle { font-size: 1rem; color: var(--gray-600); }
+    .treatment-journey { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-6); transition: all var(--transition-normal); }
+    .treatment-journey:hover { border-color: var(--gray-300); box-shadow: var(--shadow-md); }
+    .journey-header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6); }
+    .journey-icon { width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--deep-blue-100); display: flex; align-items: center; justify-content: center; color: var(--deep-blue-600); font-size: 1.25rem; }
+    .journey-title { font-size: 1.125rem; font-weight: 600; color: var(--gray-900); }
+    .journey-subtitle { font-size: 0.875rem; color: var(--gray-600); margin-top: var(--space-1); }
+    .journey-map { position: relative; padding: var(--space-6) 0; }
+    .journey-path { position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: var(--gray-200); z-index: 1; }
+    .journey-steps { position: relative; z-index: 2; }
+    .journey-step { display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-8); position: relative; }
+    .journey-step:last-child { margin-bottom: 0; }
+    .step-marker { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem; flex-shrink: 0; position: relative; z-index: 3; border: 3px solid white; box-shadow: var(--shadow-sm); }
+    .step-completed .step-marker { background: var(--sage-green-500); color: white; }
+    .step-current .step-marker { background: var(--warm-coral-500); color: white; animation: pulse 2s infinite; }
+    .step-upcoming .step-marker { background: var(--gray-300); color: var(--gray-600); }
+    @keyframes pulse { 0%, 100% { box-shadow: var(--shadow-sm), 0 0 0 0 rgba(223, 122, 90, 0.7); } 50% { box-shadow: var(--shadow-sm), 0 0 0 10px rgba(223, 122, 90, 0); } }
+    .step-content { flex: 1; background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); border: 1px solid var(--gray-200); transition: all var(--transition-normal); }
+    .step-current .step-content { background: var(--warm-coral-50); border-color: var(--warm-coral-200); }
+    .step-completed .step-content { background: var(--sage-green-50); border-color: var(--sage-green-200); }
+    .step-upcoming .step-content { background: var(--gray-50); border-color: var(--gray-200); }
+    .step-title { font-size: 1rem; font-weight: 600; color: var(--gray-900); margin-bottom: var(--space-2); }
+    .step-description { font-size: 0.875rem; color: var(--gray-600); margin-bottom: var(--space-3); line-height: 1.5; }
+    .step-details { background: rgba(255, 255, 255, 0.7); border-radius: var(--radius-md); padding: var(--space-3); margin-bottom: var(--space-3); }
+    .step-detail-item { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); font-size: 0.75rem; color: var(--gray-600); }
+    .step-detail-item:last-child { margin-bottom: 0; }
+    .detail-icon { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; flex-shrink: 0; }
+    .step-current .detail-icon { background: var(--warm-coral-200); color: var(--warm-coral-700); }
+    .step-completed .detail-icon { background: var(--sage-green-200); color: var(--sage-green-700); }
+    .step-upcoming .detail-icon { background: var(--gray-200); color: var(--gray-600); }
+    .step-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .step-action { background: var(--deep-blue-500); color: white; border: none; padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all var(--transition-fast); text-decoration: none; display: inline-flex; align-items: center; gap: var(--space-1); }
+    .step-action:hover { background: var(--deep-blue-600); transform: translateY(-1px); }
+    .step-action.secondary { background: transparent; color: var(--gray-700); border: 1px solid var(--gray-300); }
+    .step-action.secondary:hover { background: var(--gray-50); border-color: var(--gray-400); }
+    .current-focus { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-6); transition: all var(--transition-normal); border-left: 4px solid var(--warm-coral-500); }
+    .current-focus:hover { border-color: var(--gray-300); box-shadow: var(--shadow-md); }
+    .focus-header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); }
+    .focus-icon { width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--warm-coral-100); display: flex; align-items: center; justify-content: center; color: var(--warm-coral-600); font-size: 1.25rem; }
+    .focus-title { font-size: 1.125rem; font-weight: 600; color: var(--gray-900); }
+    .focus-content { background: var(--warm-coral-50); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4); }
+    .focus-description { font-size: 0.875rem; color: var(--gray-700); line-height: 1.6; margin-bottom: var(--space-3); }
+    .focus-checklist { list-style: none; }
+    .focus-checklist li { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); font-size: 0.75rem; color: var(--gray-700); }
+    .focus-checklist li::before { content: "✓"; width: 16px; height: 16px; background: var(--warm-coral-500); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: bold; flex-shrink: 0; }
+    .next-steps { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: var(--space-6); transition: all var(--transition-normal); }
+    .next-steps:hover { border-color: var(--gray-300); box-shadow: var(--shadow-md); }
+    .next-steps-header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); }
+    .next-steps-icon { width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--golden-yellow-100); display: flex; align-items: center; justify-content: center; color: var(--golden-yellow-600); font-size: 1.25rem; }
+    .next-steps-title { font-size: 1.125rem; font-weight: 600; color: var(--gray-900); }
+    .next-steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-4); }
+    .next-step-card { background: var(--golden-yellow-50); border: 1px solid var(--golden-yellow-200); border-radius: var(--radius-lg); padding: var(--space-4); transition: all var(--transition-fast); }
+    .next-step-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--golden-yellow-300); }
+    .next-step-header { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); }
+    .next-step-icon { font-size: 1rem; }
+    .next-step-category { font-size: 0.625rem; color: var(--golden-yellow-700); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .next-step-description { font-size: 0.75rem; color: var(--gray-700); line-height: 1.5; }
+    @media (max-width: 1024px) { .sidebar { width: 280px; } .main-content { margin-left: 280px; } }
+    @media (max-width: 768px) { .dashboard-container { flex-direction: column; } .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--gray-200); } .main-content { margin-left: 0; padding: var(--space-4); } .next-steps-grid { grid-template-columns: 1fr; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .treatment-journey, .current-focus, .next-steps { animation: fadeInUp 0.6s ease-out; }
+    .treatment-journey { animation-delay: 0.1s; }
+    .current-focus { animation-delay: 0.2s; }
+    .next-steps { animation-delay: 0.3s; }
+    /* roadmap_detail_sample_v3.htmlのCSSここまで */
+    /* 追加: サポート・寄り添いメッセージ・アクション用CSS */
+    .support-message { background: var(--warm-coral-50); color: var(--warm-coral-700); border-left: 4px solid var(--warm-coral-400); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-6); font-size: 1rem; font-weight: 500; box-shadow: var(--shadow-sm); }
+    .flex-actions { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .action-btn { background: var(--deep-blue-100); color: var(--deep-blue-700); border: none; border-radius: var(--radius-md); padding: 6px 16px; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
+    .action-btn:hover { background: var(--deep-blue-200); }
+    .sidebar .shortcut-area { margin-top: 32px; padding: 16px; background: var(--gray-100); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+    .sidebar .shortcut-title { font-size: 0.95rem; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
+    .sidebar .shortcut-link { display: block; color: var(--deep-blue-600); text-decoration: none; margin-bottom: 6px; font-size: 0.9rem; transition: color 0.2s; }
+    .sidebar .shortcut-link:hover { color: var(--warm-coral-500); }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- サイドバー -->
+    <aside class="sidebar">
+      <!-- v3のプロフィール・状況エリアそのまま -->
+      <div class="profile-section"> ... </div>
+      <div class="status-section"> ... </div>
+      <div class="profile-summary"> ... </div>
+      <!-- ショートカットエリア追加 -->
+      <div class="shortcut-area">
+        <div class="shortcut-title">よく使う・サポート</div>
+        <a href="#faq" class="shortcut-link">よくある質問</a>
+        <a href="#support" class="shortcut-link">サポートに相談</a>
+        <a href="#share" class="shortcut-link">家族に共有</a>
+      </div>
+      <!-- ステップ一覧（ページ内ジャンプ） -->
+      <ul class="step-list">
+        <li><a class="step-link" href="#step1">診断・検査</a></li>
+        <li><a class="step-link" href="#step2">治療方針の決定</a></li>
+        <li><a class="step-link" href="#step3">治療開始</a></li>
+        <li><a class="step-link" href="#step4">術後ケア・フォローアップ</a></li>
+        <li><a class="step-link" href="#step5">社会復帰・生活再建</a></li>
+      </ul>
+    </aside>
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+      <!-- 柔軟性の明示 -->
+      <div class="support-message">この治療の流れは一例です。あなたの状況や気持ちに合わせて、順番や内容は変わることがあります。迷った時はサポートもご活用ください。</div>
+      <!-- v3のcontent-headerそのまま -->
+      <div class="content-header"> ... </div>
+      <!-- 各ステップ（例：step2のみ展開、他は折りたたみ） -->
+      <section class="treatment-journey">
+        <div class="journey-header"> ... </div>
+        <div class="journey-map">
+          <div class="journey-path"></div>
+          <div class="journey-steps">
+            <!-- 例：step2（現在地） -->
+            <div class="journey-step step-current" id="step2">
+              <div class="step-marker">2</div>
+              <div class="step-content">
+                <div class="support-message">焦らず、あなたのペースで進めましょう。不安な時は一度立ち止まっても大丈夫です。</div>
+                <h3 class="step-title">治療方針の決定</h3>
+                <p class="step-description">主治医と相談して、最適な治療法を決める段階です。</p>
+                <div class="step-details"> ... </div>
+                <div class="flex-actions">
+                  <button class="action-btn">あとで見る</button>
+                  <button class="action-btn">メモする</button>
+                  <button class="action-btn">家族に共有</button>
+                  <button class="action-btn">主治医に質問リスト送信</button>
+                </div>
+                <div class="step-actions"> ... </div>
+              </div>
+            </div>
+            <!-- 他のステップは折りたたみ or 簡易表示 -->
+            <div class="journey-step step-upcoming" id="step3"> ... </div>
+            <div class="journey-step step-upcoming" id="step4"> ... </div>
+            <div class="journey-step step-upcoming" id="step5"> ... </div>
+          </div>
+        </div>
+      </section>
+      <!-- 今大切なこと・次のステップ等はv3そのまま -->
+      <section class="current-focus"> ... </section>
+      <section class="next-steps"> ... </section>
+      <!-- FAQ・サポート・寄り添いメッセージ -->
+      <section id="faq" class="support-message">よくある質問： ... </section>
+      <section id="support" class="support-message">困った時はサポートにご相談ください。あなたの気持ちに寄り添います。</section>
+    </main>
+  </div>
+</body>
+</html> 

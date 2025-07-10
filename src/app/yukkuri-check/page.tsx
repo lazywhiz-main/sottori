@@ -17,6 +17,7 @@ export default function YukkuriCheckPage() {
     step5?: { value: string; label: string }[]
   }>({})
   const [messages, setMessages] = useState<Array<{ sender: 'sottori' | 'user'; message: string }>>([])
+  const [completedSteps, setCompletedSteps] = useState<Set<Step>>(new Set())
 
   // 各ステップの選択肢（設計書から）
   const step1Choices = [
@@ -149,12 +150,12 @@ export default function YukkuriCheckPage() {
     
     // 最初の挨拶メッセージ
     showTypingThenMessage(
-      'こんにちは。Sottoriです。\n\n今日はお疲れさまでした。\n少しお話ししませんか？',
+      'こんにちは。sottoriです。\n\n今日はお疲れさまでした。\n少しお話ししませんか？',
       1500
     )
 
     // 安心メッセージ（最初のメッセージ表示後、2秒後に開始）
-    const timeoutId1 = setTimeout(() => {
+    const welcomeTimeoutId = setTimeout(() => {
       showTypingThenMessage(
         '無理をする必要はありません。\n途中で止めてもOKです。\n\nあなたのペースで、大丈夫です。',
         1200
@@ -162,11 +163,15 @@ export default function YukkuriCheckPage() {
     }, 2000)
 
     // 質問への移行（安心メッセージ表示後、1.5秒後）
-    const timeoutId2 = setTimeout(() => {
-      setCurrentStep('question1')
+    const transitionTimeoutId = setTimeout(() => {
+      // 先にタイピング状態を設定してからステップを変更
+      setIsTyping(true)
+      setTimeout(() => {
+        setCurrentStep('question1')
+      }, 0)
     }, 4700)
     
-    const timeoutId3 = setTimeout(() => {
+    const questionTimeoutId = setTimeout(() => {
       showTypingThenMessage(
         '今、どんな状況でしょうか？\n\nだいたいで構いませんので、教えてください。',
         1200
@@ -175,18 +180,19 @@ export default function YukkuriCheckPage() {
     
     // クリーンアップ
     return () => {
-      clearTimeout(timeoutId1)
-      clearTimeout(timeoutId2)
-      clearTimeout(timeoutId3)
+      clearTimeout(welcomeTimeoutId)
+      clearTimeout(transitionTimeoutId)
+      clearTimeout(questionTimeoutId)
     }
   }, [])
 
   const handleChoice = (value: string, label: string, isMultiple = false) => {
-    // 回答を保存
+    // 回答を保存（即座に実行してUIに反映）
     if (currentStep === 'question1') {
       setSelectedAnswers(prev => ({ ...prev, step1: { value, label } }))
+      setCompletedSteps(prev => new Set([...prev, 'question1']))
       
-      // 単一選択なので即座にユーザーメッセージを表示して次へ進む
+      // 単一選択なので即座にユーザーメッセージを表示
       setMessages(prev => [...prev, { sender: 'user', message: label }])
       
       // Step2への移行
@@ -198,17 +204,22 @@ export default function YukkuriCheckPage() {
       }, 1000)
 
       setTimeout(() => {
-        setCurrentStep('question2')
-        showTypingThenMessage(
-          'どちらの部位のがんと診断されましたか？\n\nまだ検査中の場合は、疑われている部位で構いません。',
-          1500
-        )
+        // 先にタイピング状態を設定してからステップを変更
+        setIsTyping(true)
+        setTimeout(() => {
+          setCurrentStep('question2')
+          showTypingThenMessage(
+            'どちらの部位のがんと診断されましたか？\n\nまだ検査中の場合は、疑われている部位で構いません。',
+            1500
+          )
+        }, 0)
       }, 4000)
       
     } else if (currentStep === 'question2') {
       setSelectedAnswers(prev => ({ ...prev, step2: { value, label } }))
+      setCompletedSteps(prev => new Set([...prev, 'question2']))
       
-      // 単一選択なので即座にユーザーメッセージを表示して次へ進む
+      // 単一選択なので即座にユーザーメッセージを表示
       setMessages(prev => [...prev, { sender: 'user', message: label }])
       
       setTimeout(() => {
@@ -219,17 +230,22 @@ export default function YukkuriCheckPage() {
       }, 1000)
 
       setTimeout(() => {
-        setCurrentStep('question3')
-        showTypingThenMessage(
-          'どちらの地域にお住まいでしょうか？\n\nお住まいの地域に合わせて、病院や制度の情報をお伝えできます。',
-          1500
-        )
+        // 先にタイピング状態を設定してからステップを変更
+        setIsTyping(true)
+        setTimeout(() => {
+          setCurrentStep('question3')
+          showTypingThenMessage(
+            'どちらの地域にお住まいでしょうか？\n\nお住まいの地域に合わせて、病院や制度の情報をお伝えできます。',
+            1500
+          )
+        }, 0)
       }, 4000)
       
     } else if (currentStep === 'question3') {
       setSelectedAnswers(prev => ({ ...prev, step3: { value, label } }))
+      setCompletedSteps(prev => new Set([...prev, 'question3']))
       
-      // 単一選択なので即座にユーザーメッセージを表示して次へ進む
+      // 単一選択なので即座にユーザーメッセージを表示
       setMessages(prev => [...prev, { sender: 'user', message: label }])
       
       setTimeout(() => {
@@ -240,31 +256,65 @@ export default function YukkuriCheckPage() {
       }, 1000)
 
       setTimeout(() => {
-        setCurrentStep('question4')
-        showTypingThenMessage(
-          '今、一番知りたいのはどんなことでしょうか？\n\n複数選んでいただいても構いません。',
-          1500
-        )
+        // 先にタイピング状態を設定してからステップを変更
+        setIsTyping(true)
+        setTimeout(() => {
+          setCurrentStep('question4')
+          showTypingThenMessage(
+            '今、一番知りたいのはどんなことでしょうか？\n\n複数選んでいただいても構いません。',
+            1500
+          )
+        }, 0)
       }, 4000)
       
     } else if (currentStep === 'question4') {
-      // 複数選択の場合は選択状態を更新するだけ（メッセージは追加しない）
-      setSelectedAnswers(prev => ({ 
-        ...prev, 
-        step4: prev.step4 ? [...prev.step4, { value, label }] : [{ value, label }]
-      }))
+      // 複数選択の場合は選択状態を切り替える（選択済みなら削除、未選択なら追加）
+      setSelectedAnswers(prev => {
+        const currentStep4 = prev.step4 || []
+        const isAlreadySelected = currentStep4.some(item => item.value === value)
+        
+        if (isAlreadySelected) {
+          // 既に選択されている場合は削除
+          return {
+            ...prev,
+            step4: currentStep4.filter(item => item.value !== value)
+          }
+        } else {
+          // 未選択の場合は追加
+          return {
+            ...prev,
+            step4: [...currentStep4, { value, label }]
+          }
+        }
+      })
       
     } else if (currentStep === 'question5') {
-      // 複数選択の場合は選択状態を更新するだけ（メッセージは追加しない）
-      setSelectedAnswers(prev => ({ 
-        ...prev, 
-        step5: prev.step5 ? [...prev.step5, { value, label }] : [{ value, label }]
-      }))
+      // 複数選択の場合は選択状態を切り替える（選択済みなら削除、未選択なら追加）
+      setSelectedAnswers(prev => {
+        const currentStep5 = prev.step5 || []
+        const isAlreadySelected = currentStep5.some(item => item.value === value)
+        
+        if (isAlreadySelected) {
+          // 既に選択されている場合は削除
+          return {
+            ...prev,
+            step5: currentStep5.filter(item => item.value !== value)
+          }
+        } else {
+          // 未選択の場合は追加
+          return {
+            ...prev,
+            step5: [...currentStep5, { value, label }]
+          }
+        }
+      })
     }
   }
 
   const handleMultipleChoiceNext = () => {
     if (currentStep === 'question4') {
+      setCompletedSteps(prev => new Set([...prev, 'question4']))
+      
       // 選択した項目をユーザーメッセージとして表示
       const selectedLabels = selectedAnswers.step4?.map(a => a.label).join(', ') || ''
       setMessages(prev => [...prev, { sender: 'user', message: selectedLabels }])
@@ -277,14 +327,20 @@ export default function YukkuriCheckPage() {
       }, 500)
 
       setTimeout(() => {
-        setCurrentStep('question5')
-        showTypingThenMessage(
-          '最後に、今のお気持ちはいかがですか？\n\nどんな気持ちでも大丈夫です。正直な気持ちを教えてください。',
-          1500
-        )
+        // 先にタイピング状態を設定してからステップを変更
+        setIsTyping(true)
+        setTimeout(() => {
+          setCurrentStep('question5')
+          showTypingThenMessage(
+            '最後に、今のお気持ちはいかがですか？\n\nどんな気持ちでも大丈夫です。正直な気持ちを教えてください。',
+            1500
+          )
+        }, 0)
       }, 3000)
       
     } else if (currentStep === 'question5') {
+      setCompletedSteps(prev => new Set([...prev, 'question5']))
+      
       // 選択した項目をユーザーメッセージとして表示
       const selectedLabels = selectedAnswers.step5?.map(a => a.label).join(', ') || ''
       setMessages(prev => [...prev, { sender: 'user', message: selectedLabels }])
@@ -297,12 +353,104 @@ export default function YukkuriCheckPage() {
       }, 500)
 
       setTimeout(() => {
-        setCurrentStep('result')
-        showTypingThenMessage(
-          'お疲れさまでした。\n\nあなたの状況とお気持ちを教えてくださり、ありがとうございました。\n\nこれからも、あなたのペースで一歩ずつ進んでいきましょう。',
-          1500
-        )
+        // 先にタイピング状態を設定してからステップを変更
+        setIsTyping(true)
+        setTimeout(() => {
+          setCurrentStep('result')
+          showTypingThenMessage(
+            'お疲れさまでした。\n\nいただいた情報をもとに、あなたにぴったりの情報をご用意します。',
+            1500
+          )
+        }, 0)
       }, 3000)
+    }
+  }
+
+  // やり直し機能を追加
+  const handleRedo = (step: Step) => {
+    // 該当ステップとそれ以降の完了状態をリセット
+    const stepOrder: Step[] = ['question1', 'question2', 'question3', 'question4', 'question5']
+    const stepIndex = stepOrder.indexOf(step)
+    
+    if (stepIndex !== -1) {
+      // 該当ステップ以降の完了状態をクリア
+      const newCompletedSteps = new Set(completedSteps)
+      for (let i = stepIndex; i < stepOrder.length; i++) {
+        newCompletedSteps.delete(stepOrder[i])
+      }
+      setCompletedSteps(newCompletedSteps)
+      
+      // 該当ステップに戻る
+      setCurrentStep(step)
+      
+      // 該当ステップ以降の選択状態をクリア
+      setSelectedAnswers(prev => {
+        const newAnswers = { ...prev }
+        if (stepIndex <= 0) delete newAnswers.step1
+        if (stepIndex <= 1) delete newAnswers.step2
+        if (stepIndex <= 2) delete newAnswers.step3
+        if (stepIndex <= 3) delete newAnswers.step4
+        if (stepIndex <= 4) delete newAnswers.step5
+        return newAnswers
+      })
+      
+      // 該当ステップ以降のメッセージを削除
+      // これは複雑なので、シンプルに現在のメッセージを保持
+    }
+  }
+
+  // 戻る機能の実装
+  const handleGoBack = () => {
+    if (currentStep === 'question2') {
+      setCurrentStep('question1')
+      setSelectedAnswers(prev => ({ ...prev, step1: undefined }))
+      // 最後のユーザーメッセージを削除
+      setMessages(prev => prev.slice(0, -1))
+    } else if (currentStep === 'question3') {
+      setCurrentStep('question2')
+      setSelectedAnswers(prev => ({ ...prev, step2: undefined }))
+      setMessages(prev => prev.slice(0, -1))
+    } else if (currentStep === 'question4') {
+      setCurrentStep('question3')
+      setSelectedAnswers(prev => ({ ...prev, step3: undefined }))
+      setMessages(prev => prev.slice(0, -1))
+    } else if (currentStep === 'question5') {
+      setCurrentStep('question4')
+      setSelectedAnswers(prev => ({ ...prev, step4: undefined }))
+      setMessages(prev => prev.slice(0, -1))
+    }
+  }
+
+  // 編集機能の実装
+  const handleEdit = (messageIndex: number) => {
+    // メッセージのインデックスから対応するステップを特定して戻る処理を実行
+    const userMessages = messages.filter(msg => msg.sender === 'user')
+    const userMessageCount = userMessages.length
+    
+    if (messageIndex < userMessageCount) {
+      const targetStep = messageIndex + 1 // 1から始まるステップ番号
+      
+      if (targetStep === 1) {
+        setCurrentStep('question1')
+        setSelectedAnswers(prev => ({ ...prev, step1: undefined }))
+        setMessages(prev => prev.slice(0, 3)) // 最初の3つのメッセージまで残す
+      } else if (targetStep === 2) {
+        setCurrentStep('question2')
+        setSelectedAnswers(prev => ({ ...prev, step2: undefined }))
+        setMessages(prev => prev.slice(0, 4))
+      } else if (targetStep === 3) {
+        setCurrentStep('question3')
+        setSelectedAnswers(prev => ({ ...prev, step3: undefined }))
+        setMessages(prev => prev.slice(0, 5))
+      } else if (targetStep === 4) {
+        setCurrentStep('question4')
+        setSelectedAnswers(prev => ({ ...prev, step4: undefined }))
+        setMessages(prev => prev.slice(0, 6))
+      } else if (targetStep === 5) {
+        setCurrentStep('question5')
+        setSelectedAnswers(prev => ({ ...prev, step5: undefined }))
+        setMessages(prev => prev.slice(0, 7))
+      }
     }
   }
 
@@ -325,69 +473,89 @@ export default function YukkuriCheckPage() {
             {/* メッセージ履歴 */}
             <div className="space-y-4 mb-6">
               {messages.map((msg, index) => (
-                <div key={index}>
-                  <ChatMessage
-                    sender={msg.sender}
-                    message={msg.message}
-                  />
-                  
-                  {/* 各質問メッセージの直後に対応する選択肢を表示（選択済みの場合のみ） */}
-                  {msg.sender === 'sottori' && msg.message.includes('今、どんな状況でしょうか？') && selectedAnswers.step1 && (
-                    <div className="mt-4">
-                      <ChoiceButtons
-                        choices={step1Choices}
-                        onSelect={() => {}} // 選択済みなので無効化
-                        disabled={true}
-                        selectedValues={[selectedAnswers.step1.value]}
-                      />
-                    </div>
-                  )}
-                  
-                  {msg.sender === 'sottori' && msg.message.includes('どちらの部位のがんと診断されましたか？') && selectedAnswers.step2 && (
-                    <div className="mt-4">
-                      <ChoiceButtons
-                        choices={step2Choices}
-                        onSelect={() => {}} // 選択済みなので無効化
-                        disabled={true}
-                        selectedValues={[selectedAnswers.step2.value]}
-                      />
-                    </div>
-                  )}
-                  
-                  {msg.sender === 'sottori' && msg.message.includes('どちらの地域にお住まいでしょうか？') && selectedAnswers.step3 && (
-                    <div className="mt-4">
-                      <ChoiceButtons
-                        choices={step3Choices}
-                        onSelect={() => {}} // 選択済みなので無効化
-                        disabled={true}
-                        selectedValues={[selectedAnswers.step3.value]}
-                      />
-                    </div>
-                  )}
-                  
-                  {msg.sender === 'sottori' && msg.message.includes('今、一番知りたいのはどんなことでしょうか？') && selectedAnswers.step4 && selectedAnswers.step4.length > 0 && currentStep !== 'question4' && (
-                    <div className="mt-4">
-                      <ChoiceButtons
-                        choices={step4Choices}
-                        onSelect={() => {}} // 選択済みなので無効化
-                        disabled={true}
-                        multiple={true}
-                        selectedValues={selectedAnswers.step4.map(a => a.value)}
-                      />
-                    </div>
-                  )}
-                  
-                  {msg.sender === 'sottori' && msg.message.includes('最後に、今のお気持ちはいかがですか？') && selectedAnswers.step5 && selectedAnswers.step5.length > 0 && currentStep !== 'question5' && (
-                    <div className="mt-4">
-                      <ChoiceButtons
-                        choices={step5Choices}
-                        onSelect={() => {}} // 選択済みなので無効化
-                        disabled={true}
-                        multiple={true}
-                        selectedValues={selectedAnswers.step5.map(a => a.value)}
-                      />
-                    </div>
-                  )}
+                <div key={index} className="flex">
+                  <div className={`max-w-[85%] ${msg.sender === 'user' ? 'ml-auto' : ''}`}>
+                    <ChatMessage
+                      sender={msg.sender}
+                      message={msg.message}
+                      isTyping={false}
+                    />
+                    
+                    {/* 選択済み選択肢をメッセージの直後に表示（1度だけ） */}
+                    {/* Step1: question1の後 */}
+                    {msg.sender === 'sottori' && 
+                     msg.message.includes('今、どんな状況でしょうか？') && 
+                     selectedAnswers.step1 && (
+                      <div className="mt-4">
+                        <ChoiceButtons
+                          choices={step1Choices}
+                          onSelect={() => {}}
+                          disabled={true}
+                          selectedValues={[selectedAnswers.step1.value]}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Step2: question2の後 */}
+                    {msg.sender === 'sottori' && 
+                     msg.message.includes('どちらの部位のがんと診断されましたか？') && 
+                     selectedAnswers.step2 && (
+                      <div className="mt-4">
+                        <ChoiceButtons
+                          choices={step2Choices}
+                          onSelect={() => {}}
+                          disabled={true}
+                          selectedValues={[selectedAnswers.step2.value]}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Step3: question3の後 */}
+                    {msg.sender === 'sottori' && 
+                     msg.message.includes('どちらの地域にお住まいでしょうか？') && 
+                     selectedAnswers.step3 && (
+                      <div className="mt-4">
+                        <ChoiceButtons
+                          choices={step3Choices}
+                          onSelect={() => {}}
+                          disabled={true}
+                          selectedValues={[selectedAnswers.step3.value]}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Step4: question4の後 */}
+                    {msg.sender === 'sottori' && 
+                     msg.message.includes('今、一番知りたいのはどんなことでしょうか？') && 
+                     selectedAnswers.step4 && 
+                     selectedAnswers.step4.length > 0 && (
+                      <div className="mt-4">
+                        <ChoiceButtons
+                          choices={step4Choices}
+                          onSelect={() => {}}
+                          disabled={true}
+                          multiple={true}
+                          selectedValues={selectedAnswers.step4.map(a => a.value)}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Step5: question5の後 */}
+                    {msg.sender === 'sottori' && 
+                     msg.message.includes('最後に、今のお気持ちはいかがですか？') && 
+                     selectedAnswers.step5 && 
+                     selectedAnswers.step5.length > 0 && (
+                      <div className="mt-4">
+                        <ChoiceButtons
+                          choices={step5Choices}
+                          onSelect={() => {}}
+                          disabled={true}
+                          multiple={true}
+                          selectedValues={selectedAnswers.step5.map(a => a.value)}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
               
@@ -401,7 +569,7 @@ export default function YukkuriCheckPage() {
               )}
             </div>
 
-            {/* 選択肢 */}
+            {/* アクティブな選択肢（現在のステップでのみ表示） */}
             {/* デバッグ情報 */}
             {process.env.NODE_ENV === 'development' && (
               <div className="text-xs text-gray-500 mb-2 p-2 bg-gray-100 rounded">
@@ -411,28 +579,36 @@ export default function YukkuriCheckPage() {
               </div>
             )}
             
-            {/* 現在アクティブなステップの選択肢のみ表示（未選択の場合のみ） */}
+            {/* 質問1の選択肢 */}
             {currentStep === 'question1' && !isTyping && messages.length >= 3 && !selectedAnswers.step1 && (
               <ChoiceButtons
                 choices={step1Choices}
                 onSelect={handleChoice}
+                canGoBack={false}
               />
             )}
             
+            {/* 質問2の選択肢 */}
             {currentStep === 'question2' && !isTyping && messages.length >= 4 && !selectedAnswers.step2 && (
               <ChoiceButtons
                 choices={step2Choices}
                 onSelect={handleChoice}
+                canGoBack={true}
+                onGoBack={handleGoBack}
               />
             )}
             
+            {/* 質問3の選択肢 */}
             {currentStep === 'question3' && !isTyping && messages.length >= 5 && !selectedAnswers.step3 && (
               <ChoiceButtons
                 choices={step3Choices}
                 onSelect={handleChoice}
+                canGoBack={true}
+                onGoBack={handleGoBack}
               />
             )}
             
+            {/* 質問4の選択肢 */}
             {currentStep === 'question4' && !isTyping && messages.length >= 6 && (
               <ChoiceButtons
                 choices={step4Choices}
@@ -440,9 +616,12 @@ export default function YukkuriCheckPage() {
                 multiple={true}
                 selectedValues={selectedAnswers.step4?.map(a => a.value) || []}
                 onNext={handleMultipleChoiceNext}
+                canGoBack={true}
+                onGoBack={handleGoBack}
               />
             )}
             
+            {/* 質問5の選択肢 */}
             {currentStep === 'question5' && !isTyping && messages.length >= 7 && (
               <ChoiceButtons
                 choices={step5Choices}
@@ -450,6 +629,8 @@ export default function YukkuriCheckPage() {
                 multiple={true}
                 selectedValues={selectedAnswers.step5?.map(a => a.value) || []}
                 onNext={handleMultipleChoiceNext}
+                canGoBack={true}
+                onGoBack={handleGoBack}
               />
             )}
 
@@ -475,11 +656,25 @@ export default function YukkuriCheckPage() {
                   
                   {/* 次のステップボタン */}
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       // 回答をローカルストレージに保存
                       localStorage.setItem('yukkuri-check-responses', JSON.stringify(selectedAnswers))
-                      // ロードマップページに遷移
-                      window.location.href = '/roadmap'
+                      
+                      // データベースにチェック履歴を保存し、そのIDを取得
+                      let checkHistoryId = null
+                      try {
+                        const { saveCheckHistory } = await import('@/lib/utils/dataHistory')
+                        const checkHistory = await saveCheckHistory(selectedAnswers)
+                        checkHistoryId = checkHistory.id
+                        
+                        // チェック履歴IDをローカルストレージに保存
+                        localStorage.setItem('current-check-history-id', checkHistoryId.toString())
+                      } catch (error) {
+                        console.error('チェック履歴の保存に失敗しました:', error)
+                      }
+                      
+                      // ロードマップページに遷移（新規生成モード）
+                      window.location.href = '/roadmap?mode=generate'
                     }}
                     className="w-full bg-gradient-to-r from-warm-coral-400 to-warm-coral-500 text-white py-4 px-6 rounded-2xl font-medium hover:from-warm-coral-500 hover:to-warm-coral-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                   >

@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIお薦めアクティビティ + 個別追加サンプル</title>
+  <style>
+    :root {
+      --deep-blue-500: #556AAB;
+      --deep-blue-100: #e6eaff;
+      --warm-coral-500: #df7a5a;
+      --warm-coral-100: #fdeee6;
+      --sage-green-500: #6bbf6b;
+      --golden-yellow-500: #edb355;
+      --golden-yellow-100: #fef7d9;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+      --transition-normal: 250ms ease-in-out;
+    }
+    body {
+      background: var(--gray-50);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "メイリオ", Meiryo, sans-serif;
+      color: var(--gray-900);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 32px 24px 64px 24px;
+      position: relative;
+    }
+    .roadmap {
+      margin-bottom: 32px;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .step-marker {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 3px solid white;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      z-index: 2;
+    }
+    .step-completed .step-marker {
+      background: var(--sage-green-500);
+      color: white;
+    }
+    .step-current .step-marker {
+      background: var(--warm-coral-500);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: var(--shadow-md), 0 0 0 0 rgba(223,122,90,0.7); }
+      50% { box-shadow: var(--shadow-md), 0 0 0 10px rgba(223,122,90,0); }
+    }
+    .step-content {
+      flex: 1;
+      background: var(--gray-50);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--gray-200);
+      transition: all var(--transition-normal);
+    }
+    .step-current .step-content {
+      background: var(--warm-coral-100);
+      border-color: var(--warm-coral-100);
+    }
+    .step-completed .step-content {
+      background: #e8f5e8;
+      border-color: #d1e7d1;
+    }
+    .step-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .step-description {
+      font-size: 0.92rem;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+    }
+    .activity-list {
+      margin-top: 10px;
+      margin-bottom: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .activity-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-normal);
+    }
+    .activity-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gray-300);
+    }
+    .activity-type {
+      font-size: 0.75em;
+      border-radius: 6px;
+      padding: 3px 8px;
+      margin-right: 8px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .activity-type.medical {
+      background: var(--deep-blue-100);
+      color: var(--deep-blue-700);
+    }
+    .activity-type.personal {
+      background: var(--warm-coral-100);
+      color: var(--warm-coral-700);
+    }
+    .activity-type.recommended {
+      background: var(--golden-yellow-100);
+      color: var(--golden-yellow-700);
+    }
+    .activity-content {
+      flex: 1;
+      line-height: 1.4;
+    }
+    .activity-date {
+      font-size: 0.75em;
+      color: var(--gray-500);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .activity-status {
+      font-size: 0.7em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .status-completed {
+      background: var(--sage-green-100);
+      color: var(--sage-green-700);
+    }
+    .status-upcoming {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+    .status-urgent {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    /* 点線枠のスタイル */
+    .dotted-section {
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.7);
+      transition: all var(--transition-normal);
+    }
+    .dotted-section:hover {
+      border-color: var(--deep-blue-300);
+      background: rgba(230, 234, 255, 0.3);
+    }
+    .add-activity-section {
+      text-align: center;
+      cursor: pointer;
+    }
+    .add-activity-button {
+      background: none;
+      border: none;
+      color: var(--deep-blue-500);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 8px;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+    }
+    .add-activity-button:hover {
+      background: var(--deep-blue-100);
+      color: var(--deep-blue-700);
+    }
+    .add-icon {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    /* お薦めセクション */
+    .recommendations-section {
+      margin-top: 12px;
+    }
+    .recommendations-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+    .recommendations-badge {
+      background: var(--golden-yellow-100);
+      color: var(--golden-yellow-700);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .recommendation-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .recommendation-item {
+      background: white;
+      border: 1px solid var(--golden-yellow-200);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-normal);
+      font-size: 0.85rem;
+    }
+    .recommendation-item:hover {
+      border-color: var(--golden-yellow-300);
+      box-shadow: var(--shadow-md);
+    }
+    .recommendation-content {
+      flex: 1;
+      color: var(--gray-900);
+    }
+    .recommendation-actions {
+      display: flex;
+      gap: 4px;
+    }
+    .btn-small {
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      border: none;
+    }
+    .btn-add {
+      background: var(--deep-blue-500);
+      color: white;
+    }
+    .btn-add:hover {
+      background: #3d4e85;
+    }
+    .btn-skip {
+      background: var(--gray-200);
+      color: var(--gray-600);
+    }
+    .btn-skip:hover {
+      background: var(--gray-300);
+    }
+    /* フローティングボタン */
+    .fab {
+      position: fixed;
+      right: 32px;
+      bottom: 32px;
+      background: var(--deep-blue-500);
+      color: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      z-index: 100;
+      transition: all var(--transition-normal);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .fab:hover {
+      background: #3d4e85;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px -3px rgba(0,0,0,0.1);
+    }
+    .fab-icon {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    /* モーダル */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.18);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 0;
+      min-width: 400px;
+      max-width: 90vw;
+      position: relative;
+      animation: fadeIn 0.2s;
+      border: 1px solid var(--gray-200);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header {
+      background: var(--deep-blue-100);
+      padding: 20px 24px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--deep-blue-800);
+      margin: 0;
+    }
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: var(--deep-blue-600);
+      margin-top: 4px;
+    }
+    .modal-body {
+      padding: 24px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--gray-900);
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      font-size: 0.95rem;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--gray-50);
+      box-sizing: border-box;
+      transition: all var(--transition-normal);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--deep-blue-300);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(85, 106, 171, 0.1);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .auto-placement-notice {
+      background: var(--warm-coral-50);
+      border: 1px solid var(--warm-coral-200);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      color: var(--warm-coral-700);
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 20px 24px;
+      background: var(--gray-50);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      border-top: 1px solid var(--gray-200);
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      border: none;
+    }
+    .btn-primary {
+      background: var(--deep-blue-500);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #3d4e85;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--gray-200);
+      color: var(--gray-900);
+    }
+    .btn-secondary:hover {
+      background: var(--gray-300);
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.5rem;
+      color: var(--gray-400);
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-normal);
+    }
+    .modal-close:hover {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+    /* 追加成功メッセージ */
+    .success-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--sage-green-500);
+      color: white;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      z-index: 300;
+      animation: slideInRight 0.3s ease-out;
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .highlight-step {
+      animation: highlight 1s ease-out;
+    }
+    @keyframes highlight {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); box-shadow: 0 0 0 4px rgba(223, 122, 90, 0.3); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:24px;">治療ロードマップ</h2>
+    
+    <div class="roadmap">
+      <!-- Step 1: Completed -->
+      <div class="step step-completed" id="step-1">
+        <div class="step-marker">1</div>
+        <div class="step-content">
+          <div class="step-title">診断・検査</div>
+          <div class="step-description">がんの種類と進行度を詳しく調べる段階です。</div>
+          <ul class="activity-list" id="activities-step-1">
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">乳がんの診断確定</span>
+              <span class="activity-date">1週間前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">病理検査（組織診断）</span>
+              <span class="activity-date">5日前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">ステージ判定（ステージIIA）</span>
+              <span class="activity-date">3日前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">CT・MRI検査</span>
+              <span class="activity-date">2日前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+          </ul>
+          
+          <!-- ＋アクティビティ追加セクション -->
+          <div class="dotted-section add-activity-section" onclick="openModal('1')">
+            <button class="add-activity-button">
+              <span class="add-icon">＋</span>
+              <span>アクティビティ追加</span>
+            </button>
+          </div>
+          
+          <!-- お薦めアクティビティセクション -->
+          <div class="dotted-section recommendations-section">
+            <div class="recommendations-header">
+              <span class="recommendations-badge">おすすめ</span>
+              <span>AIお薦めアクティビティ</span>
+            </div>
+            <ul class="recommendation-list">
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">検査結果の詳細を主治医に確認する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('1', '診察', '検査結果の詳細を主治医に確認する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">家族相談</span>
+                <span class="recommendation-content">検査データを家族に説明する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('1', '家族相談', '検査データを家族に説明する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 2: Current -->
+      <div class="step step-current" id="step-2">
+        <div class="step-marker">2</div>
+        <div class="step-content">
+          <div class="step-title">治療方針の決定</div>
+          <div class="step-description">主治医と相談して、最適な治療法を決める段階です。</div>
+          <ul class="activity-list" id="activities-step-2">
+            <li class="activity-card">
+              <span class="activity-type medical">診察</span>
+              <span class="activity-content">主治医との治療方針相談</span>
+              <span class="activity-date">来週火曜日</span>
+              <span class="activity-status status-urgent">重要</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type personal">家族相談</span>
+              <span class="activity-content">夫と娘に診断結果を伝える</span>
+              <span class="activity-date">今週末</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type personal">メモ</span>
+              <span class="activity-content">主治医に聞きたい質問リスト作成</span>
+              <span class="activity-date">明日まで</span>
+              <span class="activity-status status-upcoming">準備中</span>
+            </li>
+          </ul>
+          
+          <!-- ＋アクティビティ追加セクション -->
+          <div class="dotted-section add-activity-section" onclick="openModal('2')">
+            <button class="add-activity-button">
+              <span class="add-icon">＋</span>
+              <span>アクティビティ追加</span>
+            </button>
+          </div>
+          
+          <!-- お薦めアクティビティセクション -->
+          <div class="dotted-section recommendations-section">
+            <div class="recommendations-header">
+              <span class="recommendations-badge">おすすめ</span>
+              <span>AIお薦めアクティビティ</span>
+            </div>
+            <ul class="recommendation-list">
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">主治医に治療の選択肢を詳しく聞く</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('2', '診察', '主治医に治療の選択肢を詳しく聞く')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">家族相談</span>
+                <span class="recommendation-content">夫と治療方針について話し合う</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('2', '家族相談', '夫と治療方針について話し合う')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">準備</span>
+                <span class="recommendation-content">仕事の調整について上司に相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('2', '準備', '仕事の調整について上司に相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">準備</span>
+                <span class="recommendation-content">高額療養費の手続きを確認する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('2', '準備', '高額療養費の手続きを確認する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">セカンドオピニオンを検討する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('2', '診察', 'セカンドオピニオンを検討する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 3: Upcoming -->
+      <div class="step" id="step-3">
+        <div class="step-marker">3</div>
+        <div class="step-content">
+          <div class="step-title">手術・治療</div>
+          <div class="step-description">実際の治療を開始する段階です。手術や化学療法などが行われます。</div>
+          <ul class="activity-list" id="activities-step-3">
+            <li class="activity-card">
+              <span class="activity-type medical">手術</span>
+              <span class="activity-content">乳房部分切除術</span>
+              <span class="activity-date">2週間後</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">術前検査（血液検査・心電図）</span>
+              <span class="activity-date">1週間後</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+          </ul>
+          
+          <!-- ＋アクティビティ追加セクション -->
+          <div class="dotted-section add-activity-section" onclick="openModal('3')">
+            <button class="add-activity-button">
+              <span class="add-icon">＋</span>
+              <span>アクティビティ追加</span>
+            </button>
+          </div>
+          
+          <!-- お薦めアクティビティセクション -->
+          <div class="dotted-section recommendations-section">
+            <div class="recommendations-header">
+              <span class="recommendations-badge">おすすめ</span>
+              <span>AIお薦めアクティビティ</span>
+            </div>
+            <ul class="recommendation-list">
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">手術の詳細について主治医に確認する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('3', '診察', '手術の詳細について主治医に確認する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">手術後のケアについて看護師に相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('3', '診察', '手術後のケアについて看護師に相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">家族相談</span>
+                <span class="recommendation-content">手術当日の家族の付き添いを決める</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('3', '家族相談', '手術当日の家族の付き添いを決める')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">準備</span>
+                <span class="recommendation-content">手術後の生活用品を準備する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('3', '準備', '手術後の生活用品を準備する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">準備</span>
+                <span class="recommendation-content">手術前日の食事制限を確認する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('3', '準備', '手術前日の食事制限を確認する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 4: Upcoming -->
+      <div class="step" id="step-4">
+        <div class="step-marker">4</div>
+        <div class="step-content">
+          <div class="step-title">術後ケア・回復</div>
+          <div class="step-description">手術後の回復とケアを行う段階です。痛みの管理やリハビリが中心です。</div>
+          <ul class="activity-list" id="activities-step-4">
+            <li class="activity-card">
+              <span class="activity-type medical">診察</span>
+              <span class="activity-content">術後1週間の経過確認</span>
+              <span class="activity-date">手術後1週間</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">リハビリ</span>
+              <span class="activity-content">腕の可動域訓練開始</span>
+              <span class="activity-date">手術後2週間</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+          </ul>
+          
+          <!-- ＋アクティビティ追加セクション -->
+          <div class="dotted-section add-activity-section" onclick="openModal('4')">
+            <button class="add-activity-button">
+              <span class="add-icon">＋</span>
+              <span>アクティビティ追加</span>
+            </button>
+          </div>
+          
+          <!-- お薦めアクティビティセクション -->
+          <div class="dotted-section recommendations-section">
+            <div class="recommendations-header">
+              <span class="recommendations-badge">おすすめ</span>
+              <span>AIお薦めアクティビティ</span>
+            </div>
+            <ul class="recommendation-list">
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">痛みの管理方法について看護師に相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('4', '診察', '痛みの管理方法について看護師に相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">術後の食事制限について栄養士に相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('4', '診察', '術後の食事制限について栄養士に相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">家族相談</span>
+                <span class="recommendation-content">家族に術後のサポート体制を相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('4', '家族相談', '家族に術後のサポート体制を相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">準備</span>
+                <span class="recommendation-content">術後の入浴方法を確認する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('4', '準備', '術後の入浴方法を確認する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">準備</span>
+                <span class="recommendation-content">術後の運動制限について確認する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('4', '準備', '術後の運動制限について確認する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 5: Upcoming -->
+      <div class="step" id="step-5">
+        <div class="step-marker">5</div>
+        <div class="step-content">
+          <div class="step-title">フォローアップ・再発予防</div>
+          <div class="step-description">治療後の経過観察と再発予防を行う段階です。定期的な検査が続きます。</div>
+          <ul class="activity-list" id="activities-step-5">
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">術後3ヶ月の定期検査</span>
+              <span class="activity-date">術後3ヶ月</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">診察</span>
+              <span class="activity-content">術後6ヶ月の経過確認</span>
+              <span class="activity-date">術後6ヶ月</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+          </ul>
+          
+          <!-- ＋アクティビティ追加セクション -->
+          <div class="dotted-section add-activity-section" onclick="openModal('5')">
+            <button class="add-activity-button">
+              <span class="add-icon">＋</span>
+              <span>アクティビティ追加</span>
+            </button>
+          </div>
+          
+          <!-- お薦めアクティビティセクション -->
+          <div class="dotted-section recommendations-section">
+            <div class="recommendations-header">
+              <span class="recommendations-badge">おすすめ</span>
+              <span>AIお薦めアクティビティ</span>
+            </div>
+            <ul class="recommendation-list">
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">再発予防のための生活習慣改善を相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('5', '診察', '再発予防のための生活習慣改善を相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">準備</span>
+                <span class="recommendation-content">定期検査のスケジュールを確認する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('5', '準備', '定期検査のスケジュールを確認する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type personal">家族相談</span>
+                <span class="recommendation-content">家族に再発の兆候について説明する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('5', '家族相談', '家族に再発の兆候について説明する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">運動療法の継続について相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('5', '診察', '運動療法の継続について相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+              <li class="recommendation-item">
+                <span class="activity-type medical">診察</span>
+                <span class="recommendation-content">心理的サポートについて相談する</span>
+                <div class="recommendation-actions">
+                  <button class="btn-small btn-add" onclick="addRecommendation('5', '診察', '心理的サポートについて相談する')">追加</button>
+                  <button class="btn-small btn-skip" onclick="skipRecommendation(this)">スキップ</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- フローティングアクションボタン -->
+  <div class="fab" id="fab">
+    <span class="fab-icon">＋</span>
+    <span>アクティビティ追加</span>
+  </div>
+  
+  <!-- モーダル -->
+  <div class="modal-bg" id="modal-bg" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">×</button>
+      <div class="modal-header">
+        <h3 class="modal-title">アクティビティを追加</h3>
+        <p class="modal-subtitle">新しい予定やメモを追加できます</p>
+      </div>
+      <div class="modal-body">
+        <div class="auto-placement-notice" id="auto-notice">
+          💡 段階を指定しない場合、現在の段階（治療方針の決定）に自動で配置されます
+        </div>
+        <form id="activity-form">
+          <div class="form-group">
+            <label class="form-label" for="activity-type">種別</label>
+            <select class="form-select" id="activity-type" required>
+              <option value="診察">診察</option>
+              <option value="検査">検査</option>
+              <option value="準備">準備</option>
+              <option value="家族相談">家族相談</option>
+              <option value="メモ">メモ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="activity-content">内容</label>
+            <textarea class="form-textarea" id="activity-content" rows="3" required placeholder="例：主治医との相談で聞きたいことを整理する"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="activity-step">紐付ける段階（任意）</label>
+            <select class="form-select" id="activity-step">
+              <option value="">自動で現在地に配置</option>
+              <option value="1">診断・検査</option>
+              <option value="2">治療方針の決定</option>
+              <option value="3">手術・治療</option>
+              <option value="4">術後ケア・回復</option>
+              <option value="5">フォローアップ・再発予防</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="modal-cancel">キャンセル</button>
+        <button type="submit" class="btn btn-primary" form="activity-form">追加</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = '2'; // 現在地
+    
+    // モーダル制御
+    const fab = document.getElementById('fab');
+    const modalBg = document.getElementById('modal-bg');
+    const modalClose = document.getElementById('modal-close');
+    const modalCancel = document.getElementById('modal-cancel');
+    
+    fab.onclick = () => openModal();
+    modalClose.onclick = modalCancel.onclick = () => closeModal();
+    
+    function openModal(stepId = null) {
+      if (stepId) {
+        document.getElementById('activity-step').value = stepId;
+        document.getElementById('auto-notice').style.display = 'none';
+      } else {
+        document.getElementById('activity-step').value = '';
+        document.getElementById('auto-notice').style.display = 'block';
+      }
+      modalBg.style.display = 'flex';
+    }
+    
+    function closeModal() {
+      modalBg.style.display = 'none';
+      document.getElementById('activity-form').reset();
+    }
+    
+    // AIお薦めの追加
+    function addRecommendation(stepId, type, content) {
+      const ul = document.getElementById('activities-step-' + stepId);
+      const li = document.createElement('li');
+      li.className = 'activity-card';
+      
+      const isMedical = ['診察', '検査'].includes(type);
+      const typeClass = isMedical ? 'medical' : 'personal';
+      
+      li.innerHTML = `
+        <span class="activity-type ${typeClass}">${type}</span>
+        <span class="activity-content">${content}</span>
+        <span class="activity-date">今日</span>
+        <span class="activity-status status-upcoming">AIお薦め</span>
+      `;
+      ul.appendChild(li);
+      
+      // ステップをハイライト
+      const stepElement = document.getElementById('step-' + stepId);
+      stepElement.classList.add('highlight-step');
+      setTimeout(() => stepElement.classList.remove('highlight-step'), 1000);
+      
+      // 成功メッセージを表示
+      showSuccessMessage(stepId, type);
+      
+      // お薦めアイテムを削除
+      const recommendationItem = event.target.closest('.recommendation-item');
+      recommendationItem.remove();
+    }
+    
+    // お薦めのスキップ
+    function skipRecommendation(button) {
+      const recommendationItem = button.closest('.recommendation-item');
+      recommendationItem.style.opacity = '0.5';
+      recommendationItem.style.textDecoration = 'line-through';
+      button.disabled = true;
+      button.textContent = 'スキップ済み';
+    }
+    
+    // アクティビティ追加
+    document.getElementById('activity-form').onsubmit = function(e) {
+      e.preventDefault();
+      const type = document.getElementById('activity-type').value;
+      const content = document.getElementById('activity-content').value;
+      const step = document.getElementById('activity-step').value;
+      const stepId = step || currentStep; // 未指定なら現在地
+      
+      // アクティビティを追加
+      const ul = document.getElementById('activities-step-' + stepId);
+      const li = document.createElement('li');
+      li.className = 'activity-card';
+      
+      const isMedical = ['診察', '検査'].includes(type);
+      const typeClass = isMedical ? 'medical' : 'personal';
+      
+      li.innerHTML = `
+        <span class="activity-type ${typeClass}">${type}</span>
+        <span class="activity-content">${content}</span>
+        <span class="activity-date">今日</span>
+        <span class="activity-status status-upcoming">新規</span>
+      `;
+      ul.appendChild(li);
+      
+      // ステップをハイライト
+      const stepElement = document.getElementById('step-' + stepId);
+      stepElement.classList.add('highlight-step');
+      setTimeout(() => stepElement.classList.remove('highlight-step'), 1000);
+      
+      // 成功メッセージを表示
+      showSuccessMessage(stepId, type);
+      
+      closeModal();
+    };
+    
+    function showSuccessMessage(stepId, type) {
+      const stepNames = {
+        '1': '診断・検査',
+        '2': '治療方針の決定',
+        '3': '手術・治療',
+        '4': '術後ケア・回復',
+        '5': 'フォローアップ・再発予防'
+      };
+      const stepName = stepNames[stepId] || '現在の段階';
+      const message = document.createElement('div');
+      message.className = 'success-message';
+      message.textContent = `${type}を「${stepName}」に追加しました`;
+      
+      document.body.appendChild(message);
+      
+      setTimeout(() => {
+        message.remove();
+      }, 3000);
+    }
+  </script>
+</body>
+</html> 

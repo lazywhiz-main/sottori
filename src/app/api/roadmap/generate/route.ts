@@ -1,22 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { AI_CONFIG, isAIFeatureEnabled, logAIUsage } from '@/lib/config/ai'
-
-interface UserResponses {
-  step1?: { value: string; label: string }
-  step2?: { value: string; label: string }
-  step3?: { value: string; label: string }
-  step4?: { value: string; label: string }[]
-  step5?: { value: string; label: string }[]
-}
-
-interface RoadmapSection {
-  id: string
-  title: string
-  icon: string
-  content: string[]
-  priority: number
-}
+import { roadmapService } from '@/lib/services/roadmapService'
+import { UserResponses, RoadmapSection } from '@/lib/types/roadmap'
 
 // OpenAI クライアントの初期化
 const openai = AI_CONFIG.OPENAI.API_KEY ? new OpenAI({
@@ -27,31 +13,80 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now()
   
   try {
-    const { responses }: { responses: UserResponses } = await request.json()
+    // ユーザー認証チェック
+    const authHeader = request.headers.get('authorization')
+    if (!authHeader) {
+      return NextResponse.json(
+        { success: false, error: '認証が必要です' },
+        { status: 401 }
+      )
+    }
 
-    // AI機能が有効かチェック
+    const { responses, mode = 'async' }: { responses: UserResponses; mode?: 'sync' | 'async' } = await request.json()
+
+    // リクエスト検証
+    if (!responses || Object.keys(responses).length === 0) {
+      return NextResponse.json(
+        { success: false, error: '回答データが必要です' },
+        { status: 400 }
+      )
+    }
+
+    // 非同期モードの場合は即座にジョブIDを返す
+    if (mode === 'async') {
+      // 同一ユーザーの進行中ジョブをチェック
+      const userId = authHeader?.replace('Bearer ', '') || 'anonymous'
+      const existingJobId = await checkExistingJob(userId)
+      
+      if (existingJobId) {
+        return NextResponse.json({
+          success: true,
+          jobId: existingJobId,
+          mode: 'async',
+          message: '既に処理中のジョブがあります。そちらの結果をお待ちください。',
+          estimatedTime: '1-2分',
+          isExisting: true
+        })
+      }
+      
+      const jobId = generateJobId()
+      
+      // ジョブの開始をマーク
+      await markJobAsStarted(userId, jobId)
+      
+      // バックグラウンドでAI生成を開始（エラーをキャッチ）
+      processRoadmapAsync(jobId, responses, startTime, authHeader).catch(error => {
+        console.error(`❌ 非同期処理でエラーが発生: ${jobId}`, error)
+        markJobAsCompleted(userId, jobId).catch(console.error)
+      })
+      
+      return NextResponse.json({
+        success: true,
+        jobId,
+        mode: 'async',
+        message: 'ロードマップ生成を開始しました。結果は後ほど確認できます。',
+        estimatedTime: '1-2分'
+      })
+    }
+
+    // 同期モード（既存の処理）
+    let roadmapSections: RoadmapSection[]
+    let aiGenerated = false
+    
     if (isAIFeatureEnabled('ROADMAP_GENERATION') && openai) {
       try {
-        const roadmapSections = await generateRoadmapWithAI(responses)
+        roadmapSections = await generateRoadmapWithAI(responses)
+        aiGenerated = true
         
-        // 使用統計をログ
         logAIUsage({
           feature: 'roadmap_generation',
           success: true,
           responseTime: Date.now() - startTime,
           timestamp: new Date()
         })
-
-        return NextResponse.json({
-          success: true,
-          sections: roadmapSections,
-          generatedAt: new Date().toISOString(),
-          aiGenerated: true
-        })
       } catch (aiError) {
         console.error('AI generation failed, falling back to legacy:', aiError)
         
-        // 使用統計をログ
         logAIUsage({
           feature: 'roadmap_generation',
           success: false,
@@ -59,27 +94,49 @@ export async function POST(request: NextRequest) {
           timestamp: new Date()
         })
         
-        // フォールバック処理
         if (AI_CONFIG.FALLBACK.USE_LEGACY_LOGIC) {
-          const roadmapSections = generateRoadmapLegacy(responses)
-          return NextResponse.json({
-            success: true,
-            sections: roadmapSections,
-            generatedAt: new Date().toISOString(),
-            aiGenerated: false,
-            fallbackUsed: true
-          })
+          roadmapSections = generateRoadmapLegacy(responses)
+        } else {
+          throw aiError
         }
       }
+    } else {
+      roadmapSections = generateRoadmapLegacy(responses)
     }
 
-    // AI機能が無効またはAPIキーが未設定の場合は既存ロジックを使用
-    const roadmapSections = generateRoadmapLegacy(responses)
+    // データベースにロードマップを保存
+    try {
+      const userId = authHeader?.replace('Bearer ', '') || 'anonymous'
+      const roadmap = await roadmapService.createRoadmapFromAIResponse(
+        userId,
+        responses,
+        roadmapSections,
+        aiGenerated
+      )
+
+      if (roadmap) {
+        return NextResponse.json({
+          success: true,
+          roadmapId: roadmap.id,
+          sections: roadmapSections,
+          generatedAt: new Date().toISOString(),
+          aiGenerated,
+          fallbackUsed: !aiGenerated,
+          mode: 'sync'
+        })
+      }
+    } catch (dbError) {
+      console.error('Failed to save roadmap to database:', dbError)
+      // データベース保存に失敗しても、生成結果は返す
+    }
+
     return NextResponse.json({
       success: true,
       sections: roadmapSections,
       generatedAt: new Date().toISOString(),
-      aiGenerated: false
+      aiGenerated,
+      fallbackUsed: !aiGenerated,
+      mode: 'sync'
     })
 
   } catch (error) {
@@ -89,6 +146,218 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
+}
+
+// ジョブID生成
+function generateJobId(): string {
+  return `roadmap_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+}
+
+// 進行中ジョブのチェック（メモリベース）
+async function checkExistingJob(userId: string): Promise<string | null> {
+  try {
+    const globalCache = global as any
+    const userJobs = globalCache.userActiveJobs || new Map()
+    
+    const userActiveJobs = userJobs.get(userId)
+    if (userActiveJobs && userActiveJobs.length > 0) {
+      // 最後のジョブを返す
+      const lastJob = userActiveJobs[userActiveJobs.length - 1]
+      const elapsed = Date.now() - lastJob.startTime
+      
+      // 5分以内なら継続中とみなす
+      if (elapsed < 5 * 60 * 1000) {
+        console.log(`🔄 進行中ジョブ発見: ${lastJob.jobId} (${userId})`)
+        return lastJob.jobId
+      } else {
+        // 古いジョブを削除
+        userJobs.delete(userId)
+      }
+    }
+    
+    return null
+  } catch (error) {
+    console.error('進行中ジョブチェックエラー:', error)
+    return null
+  }
+}
+
+// ジョブ開始をマーク
+async function markJobAsStarted(userId: string, jobId: string): Promise<void> {
+  try {
+    const globalCache = global as any
+    if (!globalCache.userActiveJobs) {
+      globalCache.userActiveJobs = new Map()
+    }
+    
+    const userJobs = globalCache.userActiveJobs.get(userId) || []
+    userJobs.push({
+      jobId,
+      startTime: Date.now()
+    })
+    globalCache.userActiveJobs.set(userId, userJobs)
+    
+    console.log(`📝 ジョブ開始マーク: ${jobId} (${userId})`)
+  } catch (error) {
+    console.error('ジョブ開始マークエラー:', error)
+  }
+}
+
+// ジョブ完了をマーク
+async function markJobAsCompleted(userId: string, jobId: string): Promise<void> {
+  try {
+    const globalCache = global as any
+    const userJobs = globalCache.userActiveJobs?.get(userId) || []
+    
+    // 完了したジョブを削除
+    const filteredJobs = userJobs.filter((job: any) => job.jobId !== jobId)
+    if (filteredJobs.length > 0) {
+      globalCache.userActiveJobs.set(userId, filteredJobs)
+    } else {
+      globalCache.userActiveJobs?.delete(userId)
+    }
+    
+    console.log(`✅ ジョブ完了マーク: ${jobId} (${userId})`)
+  } catch (error) {
+    console.error('ジョブ完了マークエラー:', error)
+  }
+}
+
+// 非同期処理（バックグラウンド実行）
+async function processRoadmapAsync(jobId: string, responses: UserResponses, startTime: number, authHeader: string | null) {
+  try {
+    console.log(`🚀 非同期ロードマップ生成開始: ${jobId}`)
+    
+    let roadmapSections: RoadmapSection[]
+    let aiGenerated = false
+    
+    if (isAIFeatureEnabled('ROADMAP_GENERATION') && openai) {
+      try {
+        roadmapSections = await generateRoadmapWithAI(responses)
+        aiGenerated = true
+        console.log(`✅ AI生成完了: ${jobId}`)
+      } catch (aiError) {
+        console.error(`⚠️ AI生成失敗、フォールバック: ${jobId}`, aiError)
+        roadmapSections = generateRoadmapLegacy(responses)
+      }
+    } else {
+      roadmapSections = generateRoadmapLegacy(responses)
+    }
+    
+    // 結果をデータベースまたはキャッシュに保存
+    const result = {
+      jobId,
+      success: true,
+      sections: roadmapSections,
+      generatedAt: new Date().toISOString(),
+      aiGenerated,
+      mode: 'async',
+      responseTime: Date.now() - startTime
+    }
+    
+    await saveJobResult(jobId, result, authHeader)
+    
+    logAIUsage({
+      feature: 'roadmap_generation',
+      success: true,
+      responseTime: Date.now() - startTime,
+      timestamp: new Date()
+    })
+    
+    console.log(`🎉 非同期処理完了: ${jobId} (${Date.now() - startTime}ms)`)
+    
+    // ジョブ完了をマーク
+    const userId = authHeader?.replace('Bearer ', '') || 'anonymous'
+    await markJobAsCompleted(userId, jobId)
+    
+  } catch (error) {
+    console.error(`❌ 非同期処理エラー: ${jobId}`, error)
+    
+    const errorResult = {
+      jobId,
+      success: false,
+      error: 'ロードマップの生成に失敗しました',
+      generatedAt: new Date().toISOString(),
+      mode: 'async'
+    }
+    
+    await saveJobResult(jobId, errorResult, authHeader)
+  }
+}
+
+// ジョブ結果の保存（実装例）
+async function saveJobResult(jobId: string, result: any, authHeader?: string | null) {
+  // 実装案1: メモリキャッシュ（即座に動作）
+  try {
+    // グローバルキャッシュに保存
+    const globalCache = global as any
+    if (!globalCache.roadmapJobCache) {
+      globalCache.roadmapJobCache = new Map()
+    }
+    globalCache.roadmapJobCache.set(jobId, result)
+    console.log(`💾 メモリキャッシュに保存: ${jobId}`)
+    
+    // TTL設定（5分後に削除）
+    setTimeout(() => {
+      globalCache.roadmapJobCache?.delete(jobId)
+      console.log(`🗑️ キャッシュ削除: ${jobId}`)
+    }, 5 * 60 * 1000)
+  } catch (error) {
+    console.error('メモリキャッシュ保存エラー:', error)
+  }
+
+  // 実装案2: Supabaseに保存（オプション）
+  try {
+    if (typeof window === 'undefined') {
+      // サーバーサイドでのみ実行
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY! // サービスロールキー
+      
+      const supabase = createClient(supabaseUrl, supabaseServiceKey)
+      
+      // ユーザーIDの取得（認証ヘッダーから）
+      let userId = null
+      if (authHeader) {
+        try {
+          // JWTトークンからユーザーIDを抽出（簡易版）
+          const token = authHeader.replace('Bearer ', '')
+          const payload = JSON.parse(atob(token.split('.')[1]))
+          userId = payload.sub
+        } catch (error) {
+          console.error('Failed to extract user ID from token:', error)
+        }
+      }
+      
+      await supabase
+        .from('roadmap_jobs')
+        .upsert({
+          job_id: jobId,
+          result: result,
+          user_id: userId,
+          created_at: new Date().toISOString(),
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24時間後に期限切れ
+        })
+    }
+  } catch (error) {
+    console.error('Failed to save job result:', error)
+  }
+  
+  // 実装案2: メモリキャッシュ（簡易版）
+  const globalCache = global as any
+  if (!globalCache.roadmapJobCache) {
+    globalCache.roadmapJobCache = new Map()
+  }
+  
+  globalCache.roadmapJobCache.set(jobId, {
+    ...result,
+    timestamp: Date.now()
+  })
+  
+  // 1時間後に自動削除
+  setTimeout(() => {
+    globalCache.roadmapJobCache?.delete(jobId)
+  }, 60 * 60 * 1000)
 }
 
 async function generateRoadmapWithAI(responses: UserResponses): Promise<RoadmapSection[]> {
@@ -112,6 +381,8 @@ async function generateRoadmapWithAI(responses: UserResponses): Promise<RoadmapS
     ],
     temperature: AI_CONFIG.OPENAI.TEMPERATURE,
     max_tokens: AI_CONFIG.OPENAI.MAX_TOKENS,
+    frequency_penalty: 0.1,
+    presence_penalty: 0.1,
   })
 
   const aiResponse = completion.choices[0]?.message?.content
@@ -135,41 +406,24 @@ function buildPromptFromResponses(responses: UserResponses): string {
   const interests = responses.step4?.map(i => i.label).join(', ') || '不明'
   const emotions = responses.step5?.map(e => e.label).join(', ') || '不明'
 
-  return `
-【患者情報】
-- 現在の状況: ${situation}
-- がんの種類: ${cancerType}
-- お住まいの地域: ${region}
-- 知りたいこと: ${interests}
-- 現在の気持ち: ${emotions}
+  return `患者情報: ${situation}, ${cancerType}, ${region}地域
+興味: ${interests}
+感情: ${emotions}
 
-【重要な方針】
-1. 「今すぐ決めなくても大丈夫」という安心感を提供
-2. 医療行為ではなく「参考情報」として位置づけ
-3. 必ず主治医との相談を促す
-4. 患者の感情状態に配慮した表現を使用
-5. 具体的だが急かさない情報提供
-6. 希望を失わせない、前向きな表現を心がける
+安心感を重視し、3つのセクションで情報整理ガイドを作成。各セクション5段落、最後は必ず「※詳細は主治医にご相談ください。」
 
-この患者さんに最適化された3分ロードマップを作成してください。
-各セクションは読みやすく、実行可能な内容にしてください。
-
-【出力形式】
-以下のJSON形式で回答してください：
+JSON形式:
 {
   "sections": [
     {
-      "id": "unique_id",
-      "title": "セクション名",
+      "id": "info_1",
+      "title": "情報整理",
       "icon": "📚",
       "priority": 1,
-      "content": ["段落1", "段落2", "段落3", "段落4", "段落5"]
+      "content": ["段落1", "段落2", "段落3", "段落4", "※詳細は主治医にご相談ください。"]
     }
   ]
-}
-
-重要：content配列には必ず5つの段落を含めてください。最後の段落は必ず「※ これは一般的な情報です。詳細は必ず主治医にご相談ください。」で終わってください。
-  `.trim()
+}`
 }
 
 // 既存のレガシー実装（フォールバック用）

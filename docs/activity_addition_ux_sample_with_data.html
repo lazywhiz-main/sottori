@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>治療ロードマップ＋アクティビティ追加UXサンプル（データ付き）</title>
+  <style>
+    :root {
+      --deep-blue-500: #556AAB;
+      --deep-blue-100: #e6eaff;
+      --warm-coral-500: #df7a5a;
+      --warm-coral-100: #fdeee6;
+      --sage-green-500: #6bbf6b;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+      --transition-normal: 250ms ease-in-out;
+    }
+    body {
+      background: var(--gray-50);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "メイリオ", Meiryo, sans-serif;
+      color: var(--gray-900);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 32px 24px 64px 24px;
+      position: relative;
+    }
+    .roadmap {
+      margin-bottom: 32px;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .step-marker {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 3px solid white;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      z-index: 2;
+    }
+    .step-completed .step-marker {
+      background: var(--sage-green-500);
+      color: white;
+    }
+    .step-current .step-marker {
+      background: var(--warm-coral-500);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: var(--shadow-md), 0 0 0 0 rgba(223,122,90,0.7); }
+      50% { box-shadow: var(--shadow-md), 0 0 0 10px rgba(223,122,90,0); }
+    }
+    .step-content {
+      flex: 1;
+      background: var(--gray-50);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--gray-200);
+      transition: all var(--transition-normal);
+    }
+    .step-current .step-content {
+      background: var(--warm-coral-100);
+      border-color: var(--warm-coral-100);
+    }
+    .step-completed .step-content {
+      background: #e8f5e8;
+      border-color: #d1e7d1;
+    }
+    .step-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .step-description {
+      font-size: 0.92rem;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+    }
+    .activity-list {
+      margin-top: 10px;
+      margin-bottom: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .activity-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-normal);
+    }
+    .activity-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gray-300);
+    }
+    .activity-type {
+      font-size: 0.75em;
+      border-radius: 6px;
+      padding: 3px 8px;
+      margin-right: 8px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    /* 通院系アクティビティ（診察・検査） */
+    .activity-type.medical {
+      background: var(--deep-blue-100);
+      color: var(--deep-blue-700);
+    }
+    /* 非通院系アクティビティ（家族相談・メモ・準備） */
+    .activity-type.personal {
+      background: var(--warm-coral-100);
+      color: var(--warm-coral-700);
+    }
+    .activity-content {
+      flex: 1;
+      line-height: 1.4;
+    }
+    .activity-date {
+      font-size: 0.75em;
+      color: var(--gray-500);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .activity-status {
+      font-size: 0.7em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .status-completed {
+      background: var(--sage-green-100);
+      color: var(--sage-green-700);
+    }
+    .status-upcoming {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+    .status-urgent {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .step-add-button {
+      background: var(--deep-blue-500);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      margin-top: 8px;
+    }
+    .step-add-button:hover {
+      background: #3d4e85;
+      transform: translateY(-1px);
+    }
+    /* フローティングボタン */
+    .fab {
+      position: fixed;
+      right: 32px;
+      bottom: 32px;
+      background: var(--deep-blue-500);
+      color: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      z-index: 100;
+      transition: all var(--transition-normal);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .fab:hover {
+      background: #3d4e85;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px -3px rgba(0,0,0,0.1);
+    }
+    .fab-icon {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    /* モーダル */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.18);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 0;
+      min-width: 400px;
+      max-width: 90vw;
+      position: relative;
+      animation: fadeIn 0.2s;
+      border: 1px solid var(--gray-200);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header {
+      background: var(--deep-blue-100);
+      padding: 20px 24px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--deep-blue-800);
+      margin: 0;
+    }
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: var(--deep-blue-600);
+      margin-top: 4px;
+    }
+    .modal-body {
+      padding: 24px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--gray-900);
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      font-size: 0.95rem;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--gray-50);
+      box-sizing: border-box;
+      transition: all var(--transition-normal);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--deep-blue-300);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(85, 106, 171, 0.1);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .auto-placement-notice {
+      background: var(--warm-coral-50);
+      border: 1px solid var(--warm-coral-200);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      color: var(--warm-coral-700);
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 20px 24px;
+      background: var(--gray-50);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      border-top: 1px solid var(--gray-200);
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      border: none;
+    }
+    .btn-primary {
+      background: var(--deep-blue-500);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #3d4e85;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--gray-200);
+      color: var(--gray-900);
+    }
+    .btn-secondary:hover {
+      background: var(--gray-300);
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.5rem;
+      color: var(--gray-400);
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-normal);
+    }
+    .modal-close:hover {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+    /* 追加成功メッセージ */
+    .success-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--sage-green-500);
+      color: white;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      z-index: 300;
+      animation: slideInRight 0.3s ease-out;
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .highlight-step {
+      animation: highlight 1s ease-out;
+    }
+    @keyframes highlight {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); box-shadow: 0 0 0 4px rgba(223, 122, 90, 0.3); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:24px;">治療ロードマップ</h2>
+    <div class="roadmap">
+      <!-- Step 1: Completed -->
+      <div class="step step-completed" id="step-1">
+        <div class="step-marker">1</div>
+        <div class="step-content">
+          <div class="step-title">診断・検査</div>
+          <div class="step-description">がんの種類と進行度を詳しく調べる段階です。</div>
+          <ul class="activity-list" id="activities-step-1">
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">乳がんの診断確定</span>
+              <span class="activity-date">1週間前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">病理検査（組織診断）</span>
+              <span class="activity-date">5日前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">ステージ判定（ステージIIA）</span>
+              <span class="activity-date">3日前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type medical">検査</span>
+              <span class="activity-content">CT・MRI検査</span>
+              <span class="activity-date">2日前</span>
+              <span class="activity-status status-completed">完了</span>
+            </li>
+          </ul>
+          <button class="step-add-button" onclick="openModal('1')">＋ この段階に追加</button>
+        </div>
+      </div>
+      <!-- Step 2: Current -->
+      <div class="step step-current" id="step-2">
+        <div class="step-marker">2</div>
+        <div class="step-content">
+          <div class="step-title">治療方針の決定</div>
+          <div class="step-description">主治医と相談して、最適な治療法を決める段階です。</div>
+          <ul class="activity-list" id="activities-step-2">
+            <li class="activity-card">
+              <span class="activity-type medical">診察</span>
+              <span class="activity-content">主治医との治療方針相談</span>
+              <span class="activity-date">来週火曜日</span>
+              <span class="activity-status status-urgent">重要</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type personal">家族相談</span>
+              <span class="activity-content">夫と娘に診断結果を伝える</span>
+              <span class="activity-date">今週末</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type personal">メモ</span>
+              <span class="activity-content">主治医に聞きたい質問リスト作成</span>
+              <span class="activity-date">明日まで</span>
+              <span class="activity-status status-upcoming">準備中</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type personal">家族相談</span>
+              <span class="activity-content">治療選択肢について家族と相談</span>
+              <span class="activity-date">来週月曜日</span>
+              <span class="activity-status status-upcoming">予定</span>
+            </li>
+            <li class="activity-card">
+              <span class="activity-type personal">メモ</span>
+              <span class="activity-content">治療費用と保険の確認</span>
+              <span class="activity-date">今週中</span>
+              <span class="activity-status status-upcoming">準備中</span>
+            </li>
+          </ul>
+          <button class="step-add-button" onclick="openModal('2')">＋ この段階に追加</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- フローティングアクションボタン -->
+  <div class="fab" id="fab">
+    <span class="fab-icon">＋</span>
+    <span>アクティビティ追加</span>
+  </div>
+  
+  <!-- モーダル -->
+  <div class="modal-bg" id="modal-bg" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">×</button>
+      <div class="modal-header">
+        <h3 class="modal-title">アクティビティを追加</h3>
+        <p class="modal-subtitle">新しい予定やメモを追加できます</p>
+      </div>
+      <div class="modal-body">
+        <div class="auto-placement-notice" id="auto-notice">
+          💡 段階を指定しない場合、現在の段階（治療方針の決定）に自動で配置されます
+        </div>
+        <form id="activity-form">
+          <div class="form-group">
+            <label class="form-label" for="activity-type">種別</label>
+            <select class="form-select" id="activity-type" required>
+              <option value="診察">診察</option>
+              <option value="検査">検査</option>
+              <option value="家族相談">家族相談</option>
+              <option value="メモ">メモ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="activity-content">内容</label>
+            <textarea class="form-textarea" id="activity-content" rows="3" required placeholder="例：主治医との相談で聞きたいことを整理する"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="activity-step">紐付ける段階（任意）</label>
+            <select class="form-select" id="activity-step">
+              <option value="">自動で現在地に配置</option>
+              <option value="1">診断・検査</option>
+              <option value="2">治療方針の決定</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="modal-cancel">キャンセル</button>
+        <button type="submit" class="btn btn-primary" form="activity-form">追加</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = '2'; // 現在地
+    
+    // モーダル制御
+    const fab = document.getElementById('fab');
+    const modalBg = document.getElementById('modal-bg');
+    const modalClose = document.getElementById('modal-close');
+    const modalCancel = document.getElementById('modal-cancel');
+    
+    fab.onclick = () => openModal();
+    modalClose.onclick = modalCancel.onclick = () => closeModal();
+    
+    function openModal(stepId = null) {
+      if (stepId) {
+        document.getElementById('activity-step').value = stepId;
+        document.getElementById('auto-notice').style.display = 'none';
+      } else {
+        document.getElementById('activity-step').value = '';
+        document.getElementById('auto-notice').style.display = 'block';
+      }
+      modalBg.style.display = 'flex';
+    }
+    
+    function closeModal() {
+      modalBg.style.display = 'none';
+      document.getElementById('activity-form').reset();
+    }
+    
+    // アクティビティ追加
+    document.getElementById('activity-form').onsubmit = function(e) {
+      e.preventDefault();
+      const type = document.getElementById('activity-type').value;
+      const content = document.getElementById('activity-content').value;
+      const step = document.getElementById('activity-step').value;
+      const stepId = step || currentStep; // 未指定なら現在地
+      
+      // アクティビティを追加
+      const ul = document.getElementById('activities-step-' + stepId);
+      const li = document.createElement('li');
+      li.className = 'activity-card';
+      
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
+      
+      // 通院系かどうかでクラスを分ける
+      const isMedical = ['診察', '検査'].includes(type);
+      const typeClass = isMedical ? 'medical' : 'personal';
+      
+      li.innerHTML = `
+        <span class="activity-type ${typeClass}">${type}</span>
+        <span class="activity-content">${content}</span>
+        <span class="activity-date">今日</span>
+        <span class="activity-status status-upcoming">新規</span>
+      `;
+      ul.appendChild(li);
+      
+      // ステップをハイライト
+      const stepElement = document.getElementById('step-' + stepId);
+      stepElement.classList.add('highlight-step');
+      setTimeout(() => stepElement.classList.remove('highlight-step'), 1000);
+      
+      // 成功メッセージを表示
+      showSuccessMessage(stepId, type);
+      
+      closeModal();
+    };
+    
+    function showSuccessMessage(stepId, type) {
+      const stepName = stepId === '1' ? '診断・検査' : '治療方針の決定';
+      const message = document.createElement('div');
+      message.className = 'success-message';
+      message.textContent = `${type}を「${stepName}」に追加しました`;
+      
+      document.body.appendChild(message);
+      
+      setTimeout(() => {
+        message.remove();
+      }, 3000);
+    }
+  </script>
+</body>
+</html> 

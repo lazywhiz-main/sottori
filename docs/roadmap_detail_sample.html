@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>治療ロードマップ詳細 - Sottori</title>
+    <style>
+        /* Sottori Design System */
+        :root {
+            --deep-blue-50: #f0f2ff;
+            --deep-blue-100: #e6eaff;
+            --deep-blue-200: #d1d9ff;
+            --deep-blue-300: #b3c0ff;
+            --deep-blue-400: #8a9eff;
+            --deep-blue-500: #556AAB;
+            --deep-blue-600: #4a5f9f;
+            --deep-blue-700: #3d4e85;
+            --deep-blue-800: #334070;
+            --deep-blue-900: #2d365e;
+            --warm-coral-50: #fef7f3;
+            --warm-coral-100: #fdeee6;
+            --warm-coral-200: #fbd9cc;
+            --warm-coral-300: #f7bea8;
+            --warm-coral-400: #E69974;
+            --warm-coral-500: #df7a5a;
+            --warm-coral-600: #d35d4a;
+            --warm-coral-700: #b14834;
+            --warm-coral-800: #933e2e;
+            --warm-coral-900: #7a372c;
+            --soft-peach-50: #fefcf9;
+            --soft-peach-100: #fef7f0;
+            --soft-peach-200: #fdeee1;
+            --soft-peach-300: #fbe0c8;
+            --soft-peach-400: #FAD8C5;
+            --soft-peach-500: #f5c4a3;
+            --soft-peach-600: #e8a67a;
+            --soft-peach-700: #d18a5a;
+            --soft-peach-800: #b36f47;
+            --soft-peach-900: #945c3d;
+            --golden-yellow-50: #fefcf0;
+            --golden-yellow-100: #fef7d9;
+            --golden-yellow-200: #fdecb3;
+            --golden-yellow-300: #fbdc82;
+            --golden-yellow-400: #f8c94a;
+            --golden-yellow-500: #f5b026;
+            --golden-yellow-600: #e6951c;
+            --golden-yellow-700: #c0731a;
+            --golden-yellow-800: #9a5b1d;
+            --golden-yellow-900: #7d4b1c;
+            --sage-green-50: #f6f7f6;
+            --sage-green-100: #e3e7e3;
+            --sage-green-200: #c7d0c7;
+            --sage-green-300: #a3b3a3;
+            --sage-green-400: #7a907a;
+            --sage-green-500: #5f755f;
+            --sage-green-600: #4a5d4a;
+            --sage-green-700: #3d4b3d;
+            --sage-green-800: #333e33;
+            --sage-green-900: #2c342c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: var(--deep-blue-900);
+            background-color: var(--soft-peach-50);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--deep-blue-500), var(--deep-blue-600));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(85, 106, 171, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            flex: 1;
+        }
+
+        .share-button {
+            background: var(--warm-coral-500);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .share-button:hover {
+            background: var(--warm-coral-600);
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--deep-blue-500);
+        }
+
+        .welcome-title {
+            font-size: 20px;
+            color: var(--deep-blue-700);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .welcome-message {
+            color: var(--deep-blue-600);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* Progress Overview */
+        .progress-overview {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--deep-blue-700);
+        }
+
+        .progress-percentage {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--deep-blue-500);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--deep-blue-100);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--deep-blue-400), var(--deep-blue-500));
+            border-radius: 6px;
+            width: 30%;
+            transition: width 0.5s ease;
+        }
+
+        .current-phase {
+            background: var(--soft-peach-100);
+            border: 2px solid var(--soft-peach-400);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .phase-label {
+            font-size: 14px;
+            color: var(--soft-peach-700);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .phase-name {
+            font-size: 18px;
+            color: var(--deep-blue-700);
+            font-weight: 600;
+        }
+
+        .next-milestone {
+            background: var(--golden-yellow-50);
+            border: 2px solid var(--golden-yellow-200);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .milestone-label {
+            font-size: 14px;
+            color: var(--golden-yellow-700);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .milestone-name {
+            font-size: 18px;
+            color: var(--deep-blue-700);
+            font-weight: 600;
+        }
+
+        /* Sections Grid */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .section-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            border-color: var(--deep-blue-200);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--deep-blue-700);
+        }
+
+        .section-description {
+            color: var(--deep-blue-600);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .section-items {
+            list-style: none;
+        }
+
+        .section-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--deep-blue-600);
+        }
+
+        .item-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--deep-blue-300);
+        }
+
+        /* Section-specific colors */
+        .treatment-section .section-icon {
+            background: var(--deep-blue-100);
+            color: var(--deep-blue-600);
+        }
+
+        .cost-section .section-icon {
+            background: var(--warm-coral-100);
+            color: var(--warm-coral-600);
+        }
+
+        .hospital-section .section-icon {
+            background: var(--sage-green-100);
+            color: var(--sage-green-600);
+        }
+
+        .family-section .section-icon {
+            background: var(--soft-peach-100);
+            color: var(--soft-peach-600);
+        }
+
+        .clinical-section .section-icon {
+            background: var(--golden-yellow-100);
+            color: var(--golden-yellow-600);
+        }
+
+        .work-section .section-icon {
+            background: var(--deep-blue-100);
+            color: var(--deep-blue-600);
+        }
+
+        /* Trust Indicators */
+        .trust-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--sage-green-500);
+        }
+
+        .trust-title {
+            font-size: 18px;
+            color: var(--sage-green-700);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .trust-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: var(--sage-green-50);
+            border-radius: 12px;
+        }
+
+        .trust-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--sage-green-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sage-green-600);
+            font-size: 18px;
+        }
+
+        .trust-text {
+            font-size: 14px;
+            color: var(--sage-green-700);
+            font-weight: 500;
+        }
+
+        /* Action Section */
+        .action-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .action-title {
+            font-size: 20px;
+            color: var(--deep-blue-700);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .action-message {
+            color: var(--deep-blue-600);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .primary-button {
+            background: var(--deep-blue-500);
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: var(--deep-blue-600);
+            transform: translateY(-1px);
+        }
+
+        .secondary-button {
+            background: var(--soft-peach-100);
+            color: var(--deep-blue-600);
+            border: 2px solid var(--soft-peach-300);
+        }
+
+        .secondary-button:hover {
+            background: var(--soft-peach-200);
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-button {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .header, .action-section {
+                display: none;
+            }
+
+            .section-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/dashboard" class="back-button">
+                    ← ダッシュボードに戻る
+                </a>
+                <h1 class="page-title">治療ロードマップ詳細</h1>
+                <button class="share-button">
+                    📤 家族と共有
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h2 class="welcome-title">田中さん、こんにちは</h2>
+                <p class="welcome-message">
+                    前回お話しした内容は、こちらに保存してあります。何か変わったことがあれば、教えてください。
+                    今日は詳しく見ますか？概要だけにしますか？どちらでも大丈夫です。
+                </p>
+            </section>
+
+            <!-- Progress Overview -->
+            <section class="progress-overview">
+                <div class="progress-header">
+                    <h3 class="progress-title">治療の進捗</h3>
+                    <span class="progress-percentage">30%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                
+                <div class="current-phase">
+                    <div class="phase-label">現在の段階</div>
+                    <div class="phase-name">手術前の準備期間</div>
+                </div>
+                
+                <div class="next-milestone">
+                    <div class="milestone-label">次のマイルストーン</div>
+                    <div class="milestone-name">来週火曜日：術前検査</div>
+                </div>
+            </section>
+
+            <!-- Sections Grid -->
+            <div class="sections-grid">
+                <!-- Treatment Section -->
+                <div class="section-card treatment-section">
+                    <div class="section-header">
+                        <div class="section-icon">🏥</div>
+                        <h3 class="section-title">治療計画・スケジュール</h3>
+                    </div>
+                    <p class="section-description">
+                        あなたの治療の流れと、各段階で何が起こるかを説明します。
+                    </p>
+                    <ul class="section-items">
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            手術前の準備（現在）
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            手術
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            術後ケア
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            退院後の生活
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Cost Section -->
+                <div class="section-card cost-section">
+                    <div class="section-header">
+                        <div class="section-icon">💰</div>
+                        <h3 class="section-title">費用・保険</h3>
+                    </div>
+                    <p class="section-description">
+                        治療にかかる費用と、保険の適用について詳しく説明します。
+                    </p>
+                    <ul class="section-items">
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            手術費用の内訳
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            高額療養費制度
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            医療費控除
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            その他の支援制度
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hospital Section -->
+                <div class="section-card hospital-section">
+                    <div class="section-header">
+                        <div class="section-icon">🏥</div>
+                        <h3 class="section-title">病院・医療チーム</h3>
+                    </div>
+                    <p class="section-description">
+                        担当医や看護師との関係、病院での過ごし方について説明します。
+                    </p>
+                    <ul class="section-items">
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            主治医との相談の仕方
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            看護師とのコミュニケーション
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            セカンドオピニオン
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            病院選びのポイント
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Family Section -->
+                <div class="section-card family-section">
+                    <div class="section-header">
+                        <div class="section-icon">👨‍👩‍👧‍👦</div>
+                        <h3 class="section-title">家族・サポート</h3>
+                    </div>
+                    <p class="section-description">
+                        家族との関係、周りの人からのサポートについて考えてみましょう。
+                    </p>
+                    <ul class="section-items">
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            家族への伝え方
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            サポートの受け方
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            コミュニケーションのコツ
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            家族のケア
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Clinical Section -->
+                <div class="section-card clinical-section">
+                    <div class="section-header">
+                        <div class="section-icon">🔬</div>
+                        <h3 class="section-title">治験・研究</h3>
+                    </div>
+                    <p class="section-description">
+                        最新の治療法や治験について、選択肢の一つとして知っておきましょう。
+                    </p>
+                    <ul class="section-items">
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            治験とは
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            参加のメリット・デメリット
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            参加の条件
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            相談の仕方
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Work Section -->
+                <div class="section-card work-section">
+                    <div class="section-header">
+                        <div class="section-icon">💼</div>
+                        <h3 class="section-title">仕事・社会復帰</h3>
+                    </div>
+                    <p class="section-description">
+                        治療後の仕事への復帰や、社会との関わりについて考えてみましょう。
+                    </p>
+                    <ul class="section-items">
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            職場への報告
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            復職のタイミング
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            働き方の調整
+                        </li>
+                        <li class="section-item">
+                            <div class="item-dot"></div>
+                            支援制度の活用
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Trust Indicators -->
+            <section class="trust-section">
+                <h3 class="trust-title">信頼できる情報源</h3>
+                <div class="trust-content">
+                    <div class="trust-item">
+                        <div class="trust-icon">📚</div>
+                        <div class="trust-text">日本がん学会ガイドライン</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon">🏥</div>
+                        <div class="trust-text">国立がん研究センター</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon">👨‍⚕️</div>
+                        <div class="trust-text">専門医監修</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon">📅</div>
+                        <div class="trust-text">2024年最新情報</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Action Section -->
+            <section class="action-section">
+                <h3 class="action-title">次のステップ</h3>
+                <p class="action-message">
+                    この情報は参考情報としてご活用ください。今日決める必要はありません。
+                    迷ったら、また来てください。いつでもお待ちしています。
+                </p>
+                <div class="action-buttons">
+                    <a href="/dashboard" class="action-button primary-button">
+                        🏠 ダッシュボードに戻る
+                    </a>
+                    <button class="action-button secondary-button">
+                        📋 印刷する
+                    </button>
+                    <button class="action-button secondary-button">
+                        💬 主治医に相談する
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // 簡単なインタラクション
+        document.querySelectorAll('.section-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // セクション詳細ページへの遷移（実装予定）
+                console.log('セクション詳細ページへ遷移:', this.querySelector('.section-title').textContent);
+            });
+        });
+
+        // 印刷機能
+        document.querySelector('.secondary-button').addEventListener('click', function() {
+            if (this.textContent.includes('印刷')) {
+                window.print();
+            }
+        });
+
+        // 共有機能（実装予定）
+        document.querySelector('.share-button').addEventListener('click', function() {
+            alert('家族共有機能は準備中です。');
+        });
+    </script>
+</body>
+</html> 

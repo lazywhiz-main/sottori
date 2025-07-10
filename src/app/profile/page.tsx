@@ -5,17 +5,31 @@ import { useAuth } from '@/lib/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import ProfileForm from '@/components/forms/ProfileForm'
+import CancerProfileForm from '@/components/forms/CancerProfileForm'
 import Button from '@/components/ui/Button'
+import { useState } from 'react'
 
 export default function ProfilePage() {
   const { user, loading, signOut } = useAuth()
   const router = useRouter()
+  const [activeSection, setActiveSection] = useState<'basic' | 'cancer'>('basic')
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/auth')
     }
   }, [user, loading, router])
+
+  // URLパラメータから初期セクションを設定
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search)
+      const section = urlParams.get('section')
+      if (section === 'cancer-info') {
+        setActiveSection('cancer')
+      }
+    }
+  }, [])
 
   if (loading) {
     return (
@@ -70,7 +84,38 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        <ProfileForm />
+        {/* セクション切り替えタブ */}
+        <div className="mb-6">
+          <div className="flex border-b border-gray-200">
+            <button
+              onClick={() => setActiveSection('basic')}
+              className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeSection === 'basic'
+                  ? 'border-deep-blue-500 text-deep-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              基本情報
+            </button>
+            <button
+              onClick={() => setActiveSection('cancer')}
+              className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeSection === 'cancer'
+                  ? 'border-deep-blue-500 text-deep-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              がん治療プロフィール
+            </button>
+          </div>
+        </div>
+
+        {/* セクション別コンテンツ */}
+        {activeSection === 'basic' ? (
+          <ProfileForm />
+        ) : (
+          <CancerProfileForm />
+        )}
       </main>
     </div>
   )

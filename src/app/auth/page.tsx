@@ -14,8 +14,8 @@ export default function AuthPage() {
     <div className="min-h-screen bg-gradient-to-br from-deep-blue-50 via-white to-soft-peach-50 flex items-center justify-center p-8">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-light text-gray-900 mb-2">
-            Sottori
+          <h1 className="text-3xl font-midium text-gray-900 mb-2">
+            sottori
           </h1>
           <p className="text-gray-600">
             迷っても、頼ってもいい。次の一歩は、あなたのペースで。

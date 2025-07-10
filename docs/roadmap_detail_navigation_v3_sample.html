@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>治療ロードマップ詳細ナビゲーション体験サンプル</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* --- ここにroadmap_detail_sample_v3.htmlのCSSをそのまま貼り付け（省略） --- */
+    /* ...（ここにv3のCSS全文を挿入）... */
+    /* 追加: グローバルヘッダー用 */
+    .global-header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .global-header .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #556AAB;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+    }
+    .global-header .nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .global-header .nav a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: border 0.2s, color 0.2s;
+    }
+    .global-header .nav a.active {
+      color: #556AAB;
+      border-bottom: 2px solid #556AAB;
+    }
+    .global-header .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .global-header .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8a9eff, #E69974);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .breadcrumbs {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin: 24px 0 8px 0;
+    }
+    .breadcrumbs a {
+      color: #556AAB;
+      text-decoration: none;
+      margin-right: 4px;
+    }
+    /* モーダル */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.25);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px rgba(85,106,171,0.18);
+      padding: 40px 32px 32px 32px;
+      min-width: 340px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: fadeInUp 0.4s;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #556AAB;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="global-header">
+    <div class="logo">sottori</div>
+    <nav class="nav">
+      <a href="#" class="">ダッシュボード</a>
+      <a href="#" class="active">治療ロードマップ</a>
+      <a href="#" class="">関連情報</a>
+      <a href="#" class="">マイデータ</a>
+    </nav>
+    <div class="user-menu">
+      <span class="user-avatar">M</span>
+      <span>minaさん</span>
+      <a href="#" style="color:#556AAB;font-weight:600;text-decoration:none;">設定</a>
+      <a href="#" style="color:#E69974;font-weight:600;text-decoration:none;">ログアウト</a>
+    </div>
+  </div>
+  <div class="breadcrumbs">
+    <a href="#">ダッシュボード</a> &gt; <a href="#">治療ロードマップ</a> &gt; <span>詳細</span>
+  </div>
+  <!-- roadmap_detail_sample_v3.htmlの.dashboard-container以下をそのまま貼り付け（省略） -->
+  <!-- ...（ここにv3の.dashboard-container全文を挿入）... -->
+  <!-- モーダル：治療ステップ詳細ページ体験 -->
+  <div id="modal-bg" class="modal-bg" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <h2 style="font-size:1.3rem;font-weight:700;color:#556AAB;margin-bottom:16px;">治療ステップ詳細ページ（サンプル）</h2>
+      <div style="color:#374151;line-height:1.7;">
+        ここは「治療ステップ詳細ページ」のサンプルです。<br>
+        例えば「治療開始」や「術後ケア」など、各ステップの詳細・記録・アクション・履歴などを表示できます。<br>
+        <ul style="margin:16px 0 0 20px;">
+          <li>このモーダルは「詳細を見る」ボタンから遷移した体験を模擬しています。</li>
+          <li>実際の実装では個別ページ遷移や、URLパラメータによる動的表示も可能です。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script>
+    // サイドバーの治療ステップ一覧でページ内ジャンプ
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.sidebar .step-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const id = this.getAttribute('href').replace('#','');
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+      // 「詳細を見る」クリックでモーダル表示
+      document.querySelectorAll('.step-action').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          if(this.textContent.includes('詳細')){
+            e.preventDefault();
+            document.getElementById('modal-bg').style.display = 'flex';
+          }
+        });
+      });
+    });
+    function closeModal(){
+      document.getElementById('modal-bg').style.display = 'none';
+    }
+  </script>
+</body>
+</html> 

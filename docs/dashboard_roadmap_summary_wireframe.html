@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>治療ロードマップ概要ワイヤーフレーム</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(85,106,171,0.08);
+      padding: 32px 24px 24px 24px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #334070;
+    }
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+    .toggle input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #556AAB;
+    }
+    .progress-area {
+      margin: 24px 0 16px 0;
+      padding: 16px;
+      background: #f0f2ff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .progress-bar {
+      flex: 1;
+      height: 10px;
+      background: #e6eaff;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-right: 16px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 65%;
+      background: #556AAB;
+      border-radius: 5px;
+      transition: width 0.4s;
+    }
+    .progress-label {
+      font-size: 0.95rem;
+      color: #556AAB;
+      font-weight: 600;
+      min-width: 80px;
+    }
+    .info-section {
+      margin-bottom: 18px;
+    }
+    .info-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #b14834;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-content {
+      font-size: 0.98rem;
+      color: #7a372c;
+      background: #fdeee6;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 4px;
+    }
+    .action-section {
+      margin-bottom: 18px;
+    }
+    .action-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #4da64d;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-btn {
+      background: #df7a5a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.2s;
+    }
+    .action-btn:hover {
+      background: #b14834;
+    }
+    .details-section {
+      margin-top: 10px;
+      background: #fef7f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 0.97rem;
+      color: #374151;
+      display: none;
+    }
+    .details-section.open {
+      display: block;
+    }
+    .more-link {
+      color: #556AAB;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 8px;
+      display: inline-block;
+    }
+  </style>
+  <script>
+    function toggleDetails() {
+      const details = document.getElementById('details');
+      details.classList.toggle('open');
+    }
+    function toggleSummaryMode(checkbox) {
+      const details = document.getElementById('details');
+      if (checkbox.checked) {
+        details.classList.remove('open');
+      } else {
+        details.classList.add('open');
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">治療ロードマップ概要</div>
+      <!-- 要点だけ見るトグル -->
+      <label class="toggle">
+        <input type="checkbox" id="summaryToggle" checked onchange="toggleSummaryMode(this)">
+        要点だけ見る
+      </label>
+    </div>
+    <!-- 進捗バー＋現在地 -->
+    <div class="progress-area">
+      <div class="progress-label">治療中</div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <div style="font-size:0.95rem; color:#556AAB; font-weight:600;">進捗 65%</div>
+    </div>
+    <!-- 重要なお知らせ -->
+    <div class="info-section">
+      <div class="info-title">⚠️ 重要なお知らせ</div>
+      <div class="info-content">治療中の副作用対策について、医師の指示を必ずご確認ください。</div>
+    </div>
+    <!-- 次のアクション -->
+    <div class="action-section">
+      <div class="action-title">▶️ 次のアクション</div>
+      <button class="action-btn">状況を更新</button>
+    </div>
+    <!-- 詳細情報（折りたたみ/もっと見る） -->
+    <div id="details" class="details-section">
+      <div style="font-weight:600; margin-bottom:6px;">詳細情報</div>
+      <ul style="margin:0 0 8px 18px; padding:0;">
+        <li>治療スケジュール：2025年7月〜2025年12月</li>
+        <li>次のマイルストーン：副作用チェック</li>
+        <li>関連情報：5件（未読2件）</li>
+        <li>家族共有：可能</li>
+      </ul>
+      <div style="color:#888; font-size:0.93rem;">※詳細はロードマップ詳細ページで確認できます</div>
+    </div>
+    <span class="more-link" onclick="toggleDetails()">もっと見る / 閉じる</span>
+  </div>
+</body>
+</html> 

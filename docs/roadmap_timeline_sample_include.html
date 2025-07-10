@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>治療タイムライン（包含型）サンプル</title>
+  <style>
+    body {
+      background: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+    .timeline {
+      position: relative;
+      margin-left: 32px;
+      padding-left: 24px;
+      border-left: 3px solid #e5e7eb;
+    }
+    .step-section {
+      background: #e6eaff;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(85,106,171,0.06);
+      margin-bottom: 40px;
+      padding: 28px 28px 18px 28px;
+      position: relative;
+    }
+    .step-marker {
+      position: absolute;
+      left: -44px;
+      top: 28px;
+      width: 36px;
+      height: 36px;
+      background: #556AAB;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+      z-index: 2;
+    }
+    .step-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .step-desc {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .step-details {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 18px;
+    }
+    .now-badge {
+      display: inline-block;
+      background: #df7a5a;
+      color: #fff;
+      font-size: 12px;
+      border-radius: 8px;
+      padding: 2px 12px;
+      margin-left: 8px;
+      font-weight: 600;
+      vertical-align: middle;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(223,122,90,0.3); }
+      70% { box-shadow: 0 0 0 8px rgba(223,122,90,0); }
+      100% { box-shadow: 0 0 0 0 rgba(223,122,90,0); }
+    }
+    .visit-list {
+      margin-top: 8px;
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .visit-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(85,106,171,0.10);
+      padding: 18px 20px 14px 20px;
+      border-left: 5px solid #F4CB88;
+      position: relative;
+      min-width: 0;
+    }
+    .visit-date {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .visit-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 2px;
+    }
+    .visit-summary {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+    .visit-badges {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .badge {
+      background: #e0e7ff;
+      color: #3730a3;
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+    }
+    .visit-actions {
+      margin-top: 4px;
+    }
+    .visit-actions button {
+      background: #556AAB;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: background 0.2s;
+    }
+    .visit-actions button:hover {
+      background: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="font-size:22px;font-weight:bold;margin-bottom:24px;">治療タイムライン（包含型）</h1>
+    <div class="timeline">
+      <!-- ステップ1 -->
+      <div class="step-section">
+        <div class="step-marker">1</div>
+        <div class="step-title">診断・検査</div>
+        <div class="step-desc">がんの種類と進行度を詳しく調べる段階です。</div>
+        <div class="step-details">・乳がんの診断完了<br>・病理検査完了<br>・ステージ判定完了</div>
+        <div class="visit-list">
+          <div class="visit-card">
+            <div class="visit-date">2024/07/10（水）</div>
+            <div class="visit-title">初回診察</div>
+            <div class="visit-summary">主治医と今後の治療方針について相談。<br>家族への説明も実施。</div>
+            <div class="visit-badges">
+              <span class="badge">質問リスト 3件</span>
+              <span class="badge">メモあり</span>
+            </div>
+            <div class="visit-actions">
+              <button>詳細を見る</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ステップ2（現在地） -->
+      <div class="step-section">
+        <div class="step-marker">2</div>
+        <div class="step-title">治療方針の決定 <span class="now-badge">現在地</span></div>
+        <div class="step-desc">主治医と相談して、最適な治療法を決める段階です。</div>
+        <div class="step-details">・来週火曜日：主治医との相談<br>・家族との相談が必要<br>・治療選択肢の整理</div>
+        <div class="visit-list">
+          <div class="visit-card">
+            <div class="visit-date">2024/07/17（水）</div>
+            <div class="visit-title">治療方針相談</div>
+            <div class="visit-summary">治療選択肢について主治医と相談予定。<br>家族の意見もまとめておく。</div>
+            <div class="visit-badges">
+              <span class="badge">質問リスト 4件</span>
+            </div>
+            <div class="visit-actions">
+              <button>詳細を見る</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ステップ3 -->
+      <div class="step-section">
+        <div class="step-marker">3</div>
+        <div class="step-title">治療開始</div>
+        <div class="step-desc">決めた治療法に基づいて、実際の治療を始める段階です。</div>
+        <div class="step-details">・手術・化学療法・放射線治療<br>・治療スケジュールの調整<br>・家族のサポート体制</div>
+        <div class="visit-list">
+          <div class="visit-card">
+            <div class="visit-date">2024/07/24（水）</div>
+            <div class="visit-title">治療開始前診察</div>
+            <div class="visit-summary">治療内容の最終確認と準備物の説明。</div>
+            <div class="visit-badges">
+              <span class="badge">ToDo 2件</span>
+            </div>
+            <div class="visit-actions">
+              <button>詳細を見る</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ステップ4 -->
+      <div class="step-section">
+        <div class="step-marker">4</div>
+        <div class="step-title">術後ケア・フォローアップ</div>
+        <div class="step-desc">治療後の体調管理と、再発予防のための定期検査です。</div>
+        <div class="step-details">・薬物療法の継続<br>・定期検査・診察<br>・リハビリ・運動</div>
+        <!-- この段階には診察日なし -->
+      </div>
+    </div>
+  </div>
+</body>
+</html> 

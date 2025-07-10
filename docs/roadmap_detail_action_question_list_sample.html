@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>質問リスト作成 - Sottori</title>
+    <style>
+        :root {
+            --deep-blue-50: #f0f2ff;
+            --deep-blue-100: #e6eaff;
+            --deep-blue-200: #d1d9ff;
+            --deep-blue-300: #b3c0ff;
+            --deep-blue-400: #8a9eff;
+            --deep-blue-500: #556AAB;
+            --deep-blue-600: #4a5f9f;
+            --deep-blue-700: #3d4e85;
+            --deep-blue-800: #334070;
+            --deep-blue-900: #2d365e;
+            --warm-coral-50: #fef7f3;
+            --warm-coral-100: #fdeee6;
+            --warm-coral-200: #fbd9cc;
+            --warm-coral-300: #f7bea8;
+            --warm-coral-400: #E69974;
+            --warm-coral-500: #df7a5a;
+            --warm-coral-600: #d35d4a;
+            --warm-coral-700: #b14834;
+            --warm-coral-800: #933e2e;
+            --warm-coral-900: #7a372c;
+            --soft-peach-50: #fefcf9;
+            --soft-peach-100: #fef7f0;
+            --soft-peach-200: #fdeee1;
+            --soft-peach-300: #fbe0c8;
+            --soft-peach-400: #FAD8C5;
+            --soft-peach-500: #f5c5a8;
+            --soft-peach-600: #eda882;
+            --soft-peach-700: #e18a5c;
+            --soft-peach-800: #d16d3a;
+            --soft-peach-900: #b8572b;
+            --golden-yellow-50: #fefcf0;
+            --golden-yellow-100: #fef7d9;
+            --golden-yellow-200: #fdecb3;
+            --golden-yellow-300: #fbdc82;
+            --golden-yellow-400: #F4CB88;
+            --golden-yellow-500: #edb355;
+            --golden-yellow-600: #e19834;
+            --golden-yellow-700: #bc7a28;
+            --golden-yellow-800: #976025;
+            --golden-yellow-900: #7a4f22;
+            --sage-green-50: #f0f9f4;
+            --sage-green-100: #e8f5e8;
+            --sage-green-200: #d1e7d1;
+            --sage-green-300: #b3d9b3;
+            --sage-green-400: #8fcc8f;
+            --sage-green-500: #6bbf6b;
+            --sage-green-600: #4da64d;
+            --sage-green-700: #3d8c3d;
+            --sage-green-800: #2d732d;
+            --sage-green-900: #1d591d;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "ヒラギノ角ゴシック ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition-fast: 150ms ease-in-out;
+            --transition-normal: 250ms ease-in-out;
+            --transition-slow: 350ms ease-in-out;
+        }
+        body {
+            font-family: var(--font-sans);
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: var(--space-12) var(--space-8);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background: var(--deep-blue-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--deep-blue-600);
+            font-size: 2rem;
+        }
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        .header-desc {
+            font-size: 1rem;
+            color: var(--gray-600);
+            margin-top: var(--space-1);
+        }
+        .question-list-section {
+            margin-bottom: var(--space-8);
+        }
+        .question-list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+        }
+        .question-list-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--deep-blue-700);
+        }
+        .add-btn {
+            background: var(--deep-blue-500);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .add-btn:hover {
+            background: var(--deep-blue-600);
+        }
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .question-item {
+            background: var(--deep-blue-50);
+            border: 1px solid var(--deep-blue-100);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-4);
+            position: relative;
+        }
+        .question-priority {
+            font-size: 0.85rem;
+            color: var(--golden-yellow-700);
+            font-weight: 600;
+            background: var(--golden-yellow-100);
+            border-radius: var(--radius-md);
+            padding: 2px 10px;
+            margin-right: var(--space-2);
+        }
+        .question-text {
+            flex: 1;
+            font-size: 1rem;
+            color: var(--gray-900);
+        }
+        .question-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+        .action-btn {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            padding: var(--space-1) var(--space-3);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+        }
+        .action-btn:hover {
+            background: var(--gray-200);
+            border-color: var(--gray-400);
+        }
+        .share-section {
+            margin-bottom: var(--space-8);
+            display: flex;
+            gap: var(--space-4);
+        }
+        .share-btn, .print-btn {
+            background: var(--warm-coral-500);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-5);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .share-btn:hover, .print-btn:hover {
+            background: var(--warm-coral-600);
+        }
+        .memo-section {
+            background: var(--soft-peach-50);
+            border: 1px solid var(--soft-peach-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+        }
+        .memo-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--warm-coral-700);
+            margin-bottom: var(--space-2);
+        }
+        .memo-textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+            padding: var(--space-2);
+            font-size: 1rem;
+            margin-bottom: var(--space-2);
+            resize: vertical;
+        }
+        .save-btn {
+            background: var(--sage-green-500);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-5);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .save-btn:hover {
+            background: var(--sage-green-600);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">📋</div>
+            <div>
+                <div class="header-title">医師相談の質問リスト作成</div>
+                <div class="header-desc">主治医との相談を充実させるため、聞きたいこと・確認したいことを整理しましょう。</div>
+            </div>
+        </div>
+        <section class="question-list-section">
+            <div class="question-list-header">
+                <div class="question-list-title">質問リスト</div>
+                <button class="add-btn">＋ 質問を追加</button>
+            </div>
+            <ul class="question-list">
+                <li class="question-item">
+                    <span class="question-priority">優先</span>
+                    <span class="question-text">治療法の選択肢ごとのメリット・デメリットを教えてください。</span>
+                    <div class="question-actions">
+                        <button class="action-btn">編集</button>
+                        <button class="action-btn">削除</button>
+                        <button class="action-btn">↑</button>
+                        <button class="action-btn">↓</button>
+                    </div>
+                </li>
+                <li class="question-item">
+                    <span class="question-priority">通常</span>
+                    <span class="question-text">副作用や生活への影響について詳しく知りたいです。</span>
+                    <div class="question-actions">
+                        <button class="action-btn">編集</button>
+                        <button class="action-btn">削除</button>
+                        <button class="action-btn">↑</button>
+                        <button class="action-btn">↓</button>
+                    </div>
+                </li>
+                <li class="question-item">
+                    <span class="question-priority">通常</span>
+                    <span class="question-text">治療期間の目安とスケジュールを教えてください。</span>
+                    <div class="question-actions">
+                        <button class="action-btn">編集</button>
+                        <button class="action-btn">削除</button>
+                        <button class="action-btn">↑</button>
+                        <button class="action-btn">↓</button>
+                    </div>
+                </li>
+            </ul>
+        </section>
+        <div class="share-section">
+            <button class="share-btn">共有</button>
+            <button class="print-btn">印刷</button>
+        </div>
+        <section class="memo-section">
+            <div class="memo-title">相談記録・メモ</div>
+            <textarea class="memo-textarea" placeholder="相談時のメモや医師からの回答を記録できます"></textarea>
+            <button class="save-btn">メモを保存</button>
+        </section>
+    </div>
+</body>
+</html> 

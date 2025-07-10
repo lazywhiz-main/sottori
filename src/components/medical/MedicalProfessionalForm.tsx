@@ -179,7 +179,7 @@ const MedicalProfessionalForm: React.FC<MedicalProfessionalFormProps> = ({
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：田中太郎 先生"
                 required
               />
@@ -193,7 +193,7 @@ const MedicalProfessionalForm: React.FC<MedicalProfessionalFormProps> = ({
                 id="role"
                 value={formData.role}
                 onChange={(e) => handleInputChange('role', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 required
               >
                 {PROFESSIONAL_ROLES.map(role => (
@@ -216,7 +216,7 @@ const MedicalProfessionalForm: React.FC<MedicalProfessionalFormProps> = ({
                 type="text"
                 value={formData.specialization || ''}
                 onChange={(e) => handleInputChange('specialization', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：乳がん、肺がん、消化器がんなど"
               />
             </div>
@@ -229,7 +229,7 @@ const MedicalProfessionalForm: React.FC<MedicalProfessionalFormProps> = ({
                 id="institution_id"
                 value={formData.institution_id || ''}
                 onChange={(e) => handleInputChange('institution_id', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               >
                 <option value="">選択してください</option>
                 {institutions.map(institution => (
@@ -257,7 +257,7 @@ const MedicalProfessionalForm: React.FC<MedicalProfessionalFormProps> = ({
                 type="tel"
                 value={formData.phone || ''}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：03-1234-5678"
               />
             </div>
@@ -271,7 +271,7 @@ const MedicalProfessionalForm: React.FC<MedicalProfessionalFormProps> = ({
                 type="email"
                 value={formData.email || ''}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：doctor@example.com"
               />
             </div>
@@ -287,7 +287,7 @@ const MedicalProfessionalForm: React.FC<MedicalProfessionalFormProps> = ({
               value={formData.notes || ''}
               onChange={(e) => handleInputChange('notes', e.target.value)}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               placeholder="診療時間、特記事項、相談した内容などを記録できます。"
             />
           </div>

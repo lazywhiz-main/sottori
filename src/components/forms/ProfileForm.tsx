@@ -159,7 +159,7 @@ const ProfileForm: React.FC = () => {
                 type="text"
                 value={formData.full_name}
                 onChange={(e) => handleInputChange('full_name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="お名前を入力してください"
                 required
               />
@@ -174,7 +174,7 @@ const ProfileForm: React.FC = () => {
                 type="date"
                 value={formData.date_of_birth}
                 onChange={(e) => handleInputChange('date_of_birth', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               />
             </div>
           </div>
@@ -188,7 +188,7 @@ const ProfileForm: React.FC = () => {
               type="tel"
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               placeholder="090-1234-5678"
             />
           </div>
@@ -206,7 +206,7 @@ const ProfileForm: React.FC = () => {
                   type="text"
                   value={formData.emergency_contact_name}
                   onChange={(e) => handleInputChange('emergency_contact_name', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                   placeholder="緊急連絡先のお名前"
                 />
               </div>
@@ -220,7 +220,7 @@ const ProfileForm: React.FC = () => {
                   type="tel"
                   value={formData.emergency_contact_phone}
                   onChange={(e) => handleInputChange('emergency_contact_phone', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                   placeholder="090-1234-5678"
                 />
               </div>
@@ -236,7 +236,7 @@ const ProfileForm: React.FC = () => {
                 type="text"
                 value={newCondition}
                 onChange={(e) => setNewCondition(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：薬物アレルギー、高血圧、糖尿病など"
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addMedicalCondition())}
               />

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>治療の流れカード群＋お助けツールサンプル</title>
+  <style>
+    body {
+      background: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      padding: 40px;
+    }
+    .flow-cards {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .step-card {
+      background: #fff7f0;
+      border-radius: 16px;
+      border: 1.5px solid #fde4cf;
+      width: 340px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 22px 18px 22px;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .step-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #22223b;
+      margin-bottom: 6px;
+    }
+    .step-desc {
+      font-size: 14px;
+      color: #5c5c6a;
+      margin-bottom: 14px;
+    }
+    .step-summary-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .step-summary-list li {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      color: #3b3b4f;
+      gap: 7px;
+    }
+    .summary-icon {
+      font-size: 17px;
+      width: 22px;
+      text-align: center;
+      opacity: 0.85;
+    }
+    .tools-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin: 12px 0 4px 0;
+      letter-spacing: 0.04em;
+    }
+    .tools-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 8px 0;
+      display: flex;
+      gap: 14px;
+    }
+    .tools-list li {
+      display: flex;
+      align-items: center;
+    }
+    .tool-link {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+      color: #475569;
+      font-size: 14px;
+      padding: 3px 0;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tool-link:hover {
+      background: #f1f5f9;
+      color: #2563eb;
+      text-decoration: underline;
+    }
+    .tool-icon {
+      font-size: 15px;
+      width: 18px;
+      text-align: center;
+      opacity: 0.85;
+    }
+    .step-detail-btn {
+      position: absolute;
+      left: 22px;
+      bottom: 16px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 22px;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(37,99,235,0.07);
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .step-detail-btn:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <div class="flow-cards">
+    <!-- ステップ1 -->
+    <div class="step-card">
+      <div>
+        <div class="step-title">診断</div>
+        <div class="step-desc">検査結果をもとに、病名や状態を確認します。</div>
+        <ul class="step-summary-list">
+          <li><span class="summary-icon">🔬</span> 血液・画像検査の実施</li>
+          <li><span class="summary-icon">📄</span> 診断結果の説明</li>
+          <li><span class="summary-icon">💡</span> 疑問点の整理</li>
+        </ul>
+        <div class="tools-title">お助けツール</div>
+        <ul class="tools-list">
+          <li>
+            <a href="/roadmap-detail/action/question-list" class="tool-link">
+              <span class="tool-icon">📝</span>
+              質問リスト
+            </a>
+          </li>
+        </ul>
+      </div>
+      <a href="/roadmap-detail/step/diagnosis" class="step-detail-btn">詳細を見る</a>
+    </div>
+    <!-- ステップ2 -->
+    <div class="step-card">
+      <div>
+        <div class="step-title">治療方針の決定</div>
+        <div class="step-desc">主治医と相談して、最適な治療法を決める段階です。</div>
+        <ul class="step-summary-list">
+          <li><span class="summary-icon">📅</span> 来週火曜日：主治医との相談</li>
+          <li><span class="summary-icon">💭</span> 家族との相談が必要</li>
+          <li><span class="summary-icon">📋</span> 治療選択肢の整理</li>
+        </ul>
+        <div class="tools-title">お助けツール</div>
+        <ul class="tools-list">
+          <li>
+            <a href="/roadmap-detail/action/question-list" class="tool-link">
+              <span class="tool-icon">📝</span>
+              質問リスト
+            </a>
+          </li>
+          <li>
+            <a href="/roadmap-detail/action/family-share" class="tool-link">
+              <span class="tool-icon">👪</span>
+              家族へ共有
+            </a>
+          </li>
+        </ul>
+      </div>
+      <a href="/roadmap-detail/step/treatment-decision" class="step-detail-btn">詳細を見る</a>
+    </div>
+    <!-- ステップ3 -->
+    <div class="step-card">
+      <div>
+        <div class="step-title">治療開始</div>
+        <div class="step-desc">決定した治療を開始し、経過を観察します。</div>
+        <ul class="step-summary-list">
+          <li><span class="summary-icon">💊</span> 薬の説明・服薬開始</li>
+          <li><span class="summary-icon">📆</span> 治療スケジュールの確認</li>
+          <li><span class="summary-icon">📝</span> 副作用・体調の記録</li>
+        </ul>
+        <div class="tools-title">お助けツール</div>
+        <ul class="tools-list">
+          <li>
+            <a href="/roadmap-detail/action/notes" class="tool-link">
+              <span class="tool-icon">🗒️</span>
+              メモ
+            </a>
+          </li>
+        </ul>
+      </div>
+      <a href="/roadmap-detail/step/treatment-start" class="step-detail-btn">詳細を見る</a>
+    </div>
+  </div>
+</body>
+</html> 

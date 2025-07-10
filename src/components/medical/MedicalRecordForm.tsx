@@ -160,7 +160,7 @@ const MedicalRecordForm: React.FC<MedicalRecordFormProps> = ({
                 id="record_type"
                 value={formData.record_type}
                 onChange={(e) => handleInputChange('record_type', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 required
               >
                 {RECORD_TYPES.map(type => (
@@ -180,7 +180,7 @@ const MedicalRecordForm: React.FC<MedicalRecordFormProps> = ({
                 type="date"
                 value={formData.record_date}
                 onChange={(e) => handleInputChange('record_date', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 required
               />
             </div>
@@ -196,7 +196,7 @@ const MedicalRecordForm: React.FC<MedicalRecordFormProps> = ({
               type="text"
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               placeholder="例：定期検診、血液検査結果、診断内容など"
               required
             />
@@ -212,7 +212,7 @@ const MedicalRecordForm: React.FC<MedicalRecordFormProps> = ({
               value={formData.content}
               onChange={(e) => handleInputChange('content', e.target.value)}
               rows={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               placeholder="診断内容、治療方法、薬剤情報、検査結果、医師からのアドバイスなど、詳細な情報を記録してください。"
             />
           </div>
@@ -228,7 +228,7 @@ const MedicalRecordForm: React.FC<MedicalRecordFormProps> = ({
                 type="text"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 placeholder="例：高血圧、定期検診、薬物療法など"
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
               />

@@ -46,6 +46,9 @@ export default function MedicalTeamPage() {
   useEffect(() => {
     if (!loading && !user) {
       router.push('/auth')
+    } else if (!loading && user) {
+      // 企画意図から逸脱したページのため、ダッシュボードにリダイレクト
+      router.push('/dashboard')
     }
   }, [user, loading, router])
 

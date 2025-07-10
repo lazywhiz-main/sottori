@@ -142,7 +142,7 @@ const MedicalRecordsList: React.FC<MedicalRecordsListProps> = ({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="タイトル、内容、タグで検索..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
               />
             </div>
 
@@ -156,7 +156,7 @@ const MedicalRecordsList: React.FC<MedicalRecordsListProps> = ({
                   id="type-filter"
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-blue-500 focus:border-deep-blue-500"
                 >
                   <option value="all">すべて</option>
                   {Object.entries(RECORD_TYPE_LABELS).map(([value, label]) => (

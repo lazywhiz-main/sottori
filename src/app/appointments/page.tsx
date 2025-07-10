@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AppointmentForm } from '@/components/medical/AppointmentForm'
 import { AppointmentsList } from '@/components/medical/AppointmentsList'
 import Button from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 interface AppointmentWithDetails {
   id: string
@@ -24,9 +25,20 @@ interface AppointmentWithDetails {
 }
 
 export default function AppointmentsPage() {
+  const { user, loading } = useAuth()
+  const router = useRouter()
   const [showForm, setShowForm] = useState(false)
   const [editingAppointment, setEditingAppointment] = useState<AppointmentWithDetails | undefined>()
   const [refreshKey, setRefreshKey] = useState(0)
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth')
+    } else if (!loading && user) {
+      // 企画意図から逸脱したページのため、ダッシュボードにリダイレクト
+      router.push('/dashboard')
+    }
+  }, [user, loading, router])
 
   const handleAddNew = () => {
     setEditingAppointment(undefined)
@@ -47,6 +59,17 @@ export default function AppointmentsPage() {
   const handleCancel = () => {
     setShowForm(false)
     setEditingAppointment(undefined)
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-deep-blue-50 via-white to-soft-peach-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-deep-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">読み込み中...</p>
+        </div>
+      </div>
+    )
   }
 
   if (showForm) {

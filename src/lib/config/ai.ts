@@ -11,23 +11,15 @@ export const AI_CONFIG = {
   // OpenAI設定
   OPENAI: {
     API_KEY: process.env.OPENAI_API_KEY,
-    MODEL: process.env.OPENAI_MODEL || 'gpt-4',
-    MAX_TOKENS: parseInt(process.env.OPENAI_MAX_TOKENS || '2000'),
-    TEMPERATURE: parseFloat(process.env.OPENAI_TEMPERATURE || '0.7'),
+    MODEL: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+    MAX_TOKENS: parseInt(process.env.OPENAI_MAX_TOKENS || '1000'),
+    TEMPERATURE: parseFloat(process.env.OPENAI_TEMPERATURE || '0.3'),
   },
   
   // AI Prompt設定
   PROMPTS: {
-    SYSTEM_ROLE: `あなたは経験豊富ながん患者サポート専門家です。
-    医療の専門知識と心理的サポートの両方に精通しており、
-    患者の不安を和らげ、適切な情報提供を行うことができます。
-    
-    重要な原則：
-    1. 医療行為は行わず、あくまで情報提供とサポートに徹する
-    2. 「今すぐ決めなくても大丈夫」という安心感を提供
-    3. 必ず主治医との相談を促す
-    4. 患者の感情状態に配慮した表現を使用
-    5. 希望を失わせない、前向きな表現を心がける`,
+    SYSTEM_ROLE: `がん患者サポート専門家として、安心感のある情報提供を行います。
+原則：医療診断はせず情報提供のみ、主治医相談を推奨、前向きな表現を使用。`,
     
     SAFETY_GUIDELINES: [
       '医療診断や治療の推奨は行わない',
