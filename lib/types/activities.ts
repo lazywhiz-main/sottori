@@ -77,14 +77,14 @@ export interface UserActivityPreferences {
   updated_at: string;
 }
 
-// AIお薦めアクティビティ
+// AIおすすめアクティビティ
 export interface ActivityRecommendation {
   id: string;
   type: ActivityType;
   content: string;
   description?: string;
   priority: ActivityPriority;
-  reason: string; // お薦め理由
+  reason: string; // おすすめ理由
   confidence_score?: number; // AIの信頼度
   estimated_impact?: string; // 期待される効果
   template_id?: string; // 元になったテンプレートID
@@ -131,7 +131,7 @@ export interface GetActivitiesResponse {
   current_step: number;
 }
 
-// お薦め生成リクエスト
+// おすすめ生成リクエスト
 export interface GenerateRecommendationsRequest {
   step_id: number;
   user_context: {
@@ -144,13 +144,13 @@ export interface GenerateRecommendationsRequest {
   };
 }
 
-// お薦め生成レスポンス
+// おすすめ生成レスポンス
 export interface GenerateRecommendationsResponse {
   recommendations: ActivityRecommendation[];
   generated_at: string;
 }
 
-// ユーザーコンテキスト（AIお薦め用）
+// ユーザーコンテキスト（AIおすすめ用）
 export interface UserContext {
   cancer_type: string;
   stage: string;

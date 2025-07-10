@@ -21,9 +21,9 @@ export async function POST(request: NextRequest) {
       generated_at: new Date().toISOString()
     });
   } catch (error) {
-    console.error('お薦め生成エラー:', error);
+    console.error('おすすめ生成エラー:', error);
     return NextResponse.json(
-      { error: 'お薦めの生成に失敗しました' },
+      { error: 'おすすめの生成に失敗しました' },
       { status: 500 }
     );
   }

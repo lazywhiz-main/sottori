@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIお薦めアクティビティ + 個別追加サンプル</title>
+  <title>AIおすすめアクティビティ + 個別追加サンプル</title>
   <style>
     :root {
       --deep-blue-500: #556AAB;
@@ -217,7 +217,7 @@
       font-size: 1.1rem;
       font-weight: bold;
     }
-    /* お薦めセクション */
+    /* おすすめセクション */
     .recommendations-section {
       margin-top: 12px;
     }
@@ -528,11 +528,11 @@
             </button>
           </div>
           
-          <!-- お薦めアクティビティセクション -->
+          <!-- おすすめアクティビティセクション -->
           <div class="dotted-section recommendations-section">
             <div class="recommendations-header">
               <span class="recommendations-badge">おすすめ</span>
-              <span>AIお薦めアクティビティ</span>
+              <span>AIおすすめアクティビティ</span>
             </div>
             <ul class="recommendation-list">
               <li class="recommendation-item">
@@ -591,11 +591,11 @@
             </button>
           </div>
           
-          <!-- お薦めアクティビティセクション -->
+          <!-- おすすめアクティビティセクション -->
           <div class="dotted-section recommendations-section">
             <div class="recommendations-header">
               <span class="recommendations-badge">おすすめ</span>
-              <span>AIお薦めアクティビティ</span>
+              <span>AIおすすめアクティビティ</span>
             </div>
             <ul class="recommendation-list">
               <li class="recommendation-item">
@@ -672,11 +672,11 @@
             </button>
           </div>
           
-          <!-- お薦めアクティビティセクション -->
+          <!-- おすすめアクティビティセクション -->
           <div class="dotted-section recommendations-section">
             <div class="recommendations-header">
               <span class="recommendations-badge">おすすめ</span>
-              <span>AIお薦めアクティビティ</span>
+              <span>AIおすすめアクティビティ</span>
             </div>
             <ul class="recommendation-list">
               <li class="recommendation-item">
@@ -753,11 +753,11 @@
             </button>
           </div>
           
-          <!-- お薦めアクティビティセクション -->
+          <!-- おすすめアクティビティセクション -->
           <div class="dotted-section recommendations-section">
             <div class="recommendations-header">
               <span class="recommendations-badge">おすすめ</span>
-              <span>AIお薦めアクティビティ</span>
+              <span>AIおすすめアクティビティ</span>
             </div>
             <ul class="recommendation-list">
               <li class="recommendation-item">
@@ -834,11 +834,11 @@
             </button>
           </div>
           
-          <!-- お薦めアクティビティセクション -->
+          <!-- おすすめアクティビティセクション -->
           <div class="dotted-section recommendations-section">
             <div class="recommendations-header">
               <span class="recommendations-badge">おすすめ</span>
-              <span>AIお薦めアクティビティ</span>
+              <span>AIおすすめアクティビティ</span>
             </div>
             <ul class="recommendation-list">
               <li class="recommendation-item">
@@ -969,7 +969,7 @@
       document.getElementById('activity-form').reset();
     }
     
-    // AIお薦めの追加
+    // AIおすすめの追加
     function addRecommendation(stepId, type, content) {
       const ul = document.getElementById('activities-step-' + stepId);
       const li = document.createElement('li');
@@ -982,7 +982,7 @@
         <span class="activity-type ${typeClass}">${type}</span>
         <span class="activity-content">${content}</span>
         <span class="activity-date">今日</span>
-        <span class="activity-status status-upcoming">AIお薦め</span>
+        <span class="activity-status status-upcoming">AIおすすめ</span>
       `;
       ul.appendChild(li);
       
@@ -994,12 +994,12 @@
       // 成功メッセージを表示
       showSuccessMessage(stepId, type);
       
-      // お薦めアイテムを削除
+      // おすすめアイテムを削除
       const recommendationItem = event.target.closest('.recommendation-item');
       recommendationItem.remove();
     }
     
-    // お薦めのスキップ
+    // おすすめのスキップ
     function skipRecommendation(button) {
       const recommendationItem = button.closest('.recommendation-item');
       recommendationItem.style.opacity = '0.5';

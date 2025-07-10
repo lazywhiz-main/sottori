@@ -104,7 +104,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
       
       {activity.is_ai_recommended && (
         <span className="text-xs px-2 py-1 rounded-md bg-yellow-100 text-yellow-700 flex-shrink-0">
-          AIお薦め
+          AIおすすめ
         </span>
       )}
       

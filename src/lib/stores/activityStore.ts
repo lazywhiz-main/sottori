@@ -57,7 +57,7 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
     }
   },
 
-  // お薦めアクティビティを取得
+  // おすすめアクティビティを取得
   fetchRecommendations: async (userId: string, stepId: number) => {
     set({ isLoading: true, error: null });
     try {
@@ -71,7 +71,7 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
       }));
     } catch (error) {
       set({ 
-        error: error instanceof Error ? error.message : 'お薦めの取得に失敗しました',
+        error: error instanceof Error ? error.message : 'おすすめの取得に失敗しました',
         isLoading: false 
       });
     }
@@ -144,23 +144,26 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
     }
   },
 
-  // お薦めからアクティビティを追加
+  // おすすめからアクティビティを追加
   addFromRecommendation: async (templateId: string, userId: string, stepId: number) => {
     set({ isLoading: true, error: null });
     try {
       const newActivity = await ActivityService.addFromTemplate(templateId, userId, stepId);
       set(state => ({
         activities: [newActivity, ...state.activities],
-        recommendations: state.recommendations.map(rec => 
-          rec.template.id === templateId 
-            ? { ...rec, is_already_added: true }
-            : rec
-        ),
+        recommendations: {
+          ...state.recommendations,
+          [stepId]: (state.recommendations[stepId] || []).map(rec =>
+            rec.template.id === templateId
+              ? { ...rec, is_already_added: true }
+              : rec
+          )
+        },
         isLoading: false
       }));
     } catch (error) {
       set({ 
-        error: error instanceof Error ? error.message : 'お薦めからの追加に失敗しました',
+        error: error instanceof Error ? error.message : 'おすすめからの追加に失敗しました',
         isLoading: false 
       });
     }

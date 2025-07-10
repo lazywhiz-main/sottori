@@ -60,7 +60,7 @@ export class ActivityService {
         throw error;
       }
 
-      // AIお薦めの取得
+      // AIおすすめの取得
       let recommendations: ActivityRecommendation[] = [];
       if (request.include_recommendations && request.step_id) {
         const userContext = await this.getUserContext(user.id);
@@ -185,7 +185,7 @@ export class ActivityService {
     }
   }
 
-  // AIお薦めの生成
+  // AIおすすめの生成
   async generateRecommendations(request: GenerateRecommendationsRequest): Promise<ActivityRecommendation[]> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -193,7 +193,7 @@ export class ActivityService {
         throw new Error('ユーザーが認証されていません');
       }
 
-      // 1. テンプレートベースのお薦めを取得
+      // 1. テンプレートベースのおすすめを取得
       const templateRecommendations = await this.getTemplateRecommendations(request.step_id, request.user_context);
 
       // 2. 既存アクティビティとの重複チェック
@@ -216,12 +216,12 @@ export class ActivityService {
 
       return finalRecommendations.slice(0, preferences?.max_recommendations_per_step || 5);
     } catch (error) {
-      console.error('お薦め生成エラー:', error);
+      console.error('おすすめ生成エラー:', error);
       throw error;
     }
   }
 
-  // テンプレートベースのお薦め取得
+  // テンプレートベースのおすすめ取得
   private async getTemplateRecommendations(stepId: number, userContext: any): Promise<ActivityRecommendation[]> {
     const { data: templates, error } = await supabase
       .from('activity_templates')
@@ -293,7 +293,7 @@ export class ActivityService {
     return 'low';
   }
 
-  // お薦め理由の生成
+  // おすすめ理由の生成
   private generateRecommendationReason(template: ActivityTemplate, userContext: any): string {
     const reasonTemplates = {
       '診察': {
@@ -391,7 +391,7 @@ export class ActivityService {
     });
   }
 
-  // お薦めの受け入れ
+  // おすすめの受け入れ
   async acceptRecommendation(recommendation: ActivityRecommendation, stepId: number): Promise<UserActivity> {
     const createRequest: CreateActivityRequest = {
       type: recommendation.type,
@@ -404,7 +404,7 @@ export class ActivityService {
 
     const activity = await this.createActivity(createRequest);
     
-    // AIお薦めフラグを設定
+    // AIおすすめフラグを設定
     await this.updateActivity(activity.id, {
       is_ai_recommended: true,
       source: 'ai_recommended'

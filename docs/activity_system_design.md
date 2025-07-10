@@ -111,7 +111,7 @@ interface GetActivitiesRequest {
   step_id?: number; // 特定ステップのみ取得
   type?: string; // 特定種別のみ取得
   status?: string; // 特定ステータスのみ取得
-  include_recommendations?: boolean; // AIお薦めを含むか
+  include_recommendations?: boolean; // AIおすすめを含むか
   limit?: number;
   offset?: number;
 }
@@ -137,7 +137,7 @@ interface GetActivitiesResponse {
     content: string;
     description?: string;
     priority: string;
-    reason: string; // お薦め理由
+    reason: string; // おすすめ理由
   }>;
   total_count: number;
   current_step: number;
@@ -179,7 +179,7 @@ interface UpdateActivityRequest {
 }
 ```
 
-### 2.2 AIお薦め生成API
+### 2.2 AIおすすめ生成API
 
 #### `POST /api/activities/recommendations/generate`
 ```typescript
@@ -271,9 +271,9 @@ interface ActivityStore {
 }
 ```
 
-## 4. AIお薦めロジック
+## 4. AIおすすめロジック
 
-### 4.1 お薦め生成アルゴリズム
+### 4.1 おすすめ生成アルゴリズム
 
 #### 基本ロジック
 ```typescript
@@ -283,7 +283,7 @@ class ActivityRecommendationEngine {
     userContext: UserContext
   ): Promise<Recommendation[]> {
     
-    // 1. テンプレートベースのお薦め
+    // 1. テンプレートベースのおすすめ
     const templateRecommendations = await this.getTemplateRecommendations(stepId, userContext);
     
     // 2. ユーザー状況に基づく動的生成
@@ -322,7 +322,7 @@ class ActivityRecommendationEngine {
 }
 ```
 
-### 4.2 お薦め理由の生成
+### 4.2 おすすめ理由の生成
 
 #### 理由テンプレート
 ```typescript
@@ -353,10 +353,10 @@ const REASON_TEMPLATES = {
 3. フロントエンド表示機能
 4. 手動アクティビティ追加
 
-### Phase 2: AIお薦め機能（2-3週間）
-1. テンプレートベースのお薦め
+### Phase 2: AIおすすめ機能（2-3週間）
+1. テンプレートベースのおすすめ
 2. 基本的なAI生成ロジック
-3. お薦めの受け入れ・スキップ機能
+3. おすすめの受け入れ・スキップ機能
 4. 重複チェック機能
 
 ### Phase 3: 高度な機能（3-4週間）
@@ -395,6 +395,6 @@ const REASON_TEMPLATES = {
 ### AI倫理
 - 医療アドバイスの免責事項
 - ユーザーの意思決定支援（決定の代行ではない）
-- 透明性のあるお薦め理由
+- 透明性のあるおすすめ理由
 
-この設計により、ユーザーは段階を意識せずに自然にアクティビティを追加でき、AIが状況に応じた適切なお薦めを提供する体験が実現できます。 
+この設計により、ユーザーは段階を意識せずに自然にアクティビティを追加でき、AIが状況に応じた適切なおすすめを提供する体験が実現できます。 

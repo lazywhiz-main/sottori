@@ -10,6 +10,7 @@ import {
   ActivityStatus,
   ActivityPriority
 } from '../types/personalization';
+import { supabase } from '@/lib/supabase';
 
 export class ActivityService {
   // =============================================================================
@@ -196,11 +197,11 @@ export class ActivityService {
   }
 
   // =============================================================================
-  // お薦めアクティビティ生成
+  // おすすめアクティビティ生成
   // =============================================================================
 
   /**
-   * ユーザーにお薦めのアクティビティを生成
+   * ユーザーにおすすめのアクティビティを生成
    */
   static async generateRecommendations(
     userId: string,
@@ -257,7 +258,7 @@ export class ActivityService {
   }
 
   /**
-   * お薦め理由を生成
+   * おすすめ理由を生成
    */
   private static generateRecommendationReason(template: ActivityTemplate, userProfile?: any): string {
     const reasons = [];
@@ -290,10 +291,15 @@ export class ActivityService {
     stepId: number
   ): Promise<UserActivity> {
     try {
+      // Supabaseのアクセストークンを取得
+      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = session?.access_token;
+
       const response = await fetch('/api/activities/recommendations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
         },
         body: JSON.stringify({ templateId, stepId }),
       });

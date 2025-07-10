@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/ui/Header';
-import QuestionListModal from '@/components/question-list/QuestionListModal';
+import { useActivityStore } from '@/lib/stores/activityStore';
 import { ActivityModal } from '@/components/activities/ActivityModal';
 import { ActivityCard } from '@/components/activities/ActivityCard';
 import { RecommendationCard } from '@/components/activities/RecommendationCard';
-import { useActivityStore } from '@/lib/stores/activityStore';
-import { UserActivityInsert, UserActivityUpdate, UserActivity, ActivityRecommendation } from '@/lib/types/personalization';
+import { UserActivity, ActivityRecommendation } from '@/lib/types/personalization';
+import { TreatmentStepWithProgress } from '@/lib/types/database';
+import { RoadmapService } from '@/lib/services/roadmapService';
 
 // サイドバーコンポーネント
 const Sidebar = () => {
@@ -47,7 +48,7 @@ const Sidebar = () => {
           <p className="text-xs text-gray-600 mb-3 leading-relaxed">
             診断から1週間が経ちました。家族と相談は進んでいますか？
           </p>
-          <button 
+          <button
             onClick={handleStatusUpdate}
             className="w-full bg-warm-coral-500 text-white border-none py-2 px-3 rounded-md text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-warm-coral-600"
           >
@@ -82,90 +83,9 @@ const Sidebar = () => {
   );
 };
 
-// 治療段階の型定義
-type TreatmentStep = {
-  id: number;
-  title: string;
-  description: string;
-  status: 'completed' | 'current' | 'upcoming';
-  details: Array<{
-    icon: string;
-    text: string;
-  }>;
-  actions: Array<{
-    text: string;
-    type: 'primary' | 'secondary';
-    href?: string;
-  }>;
-};
-
-// 治療段階データ
-const treatmentSteps: TreatmentStep[] = [
-  {
-    id: 1,
-    title: '診断・検査',
-    description: 'がんの種類と進行度を詳しく調べる段階です。',
-    status: 'completed',
-    details: [
-      { icon: '✓', text: '乳がんの診断完了' },
-      { icon: '✓', text: '病理検査完了' },
-      { icon: '✓', text: 'ステージ判定完了' }
-    ],
-    actions: []
-  },
-  {
-    id: 2,
-    title: '治療方針の決定',
-    description: '主治医と相談して、最適な治療法を決める段階です。',
-    status: 'current',
-    details: [
-      { icon: '📅', text: '来週火曜日：主治医との相談' },
-      { icon: '💭', text: '家族との相談が必要' },
-      { icon: '📋', text: '治療選択肢の整理' }
-    ],
-    actions: []
-  },
-  {
-    id: 3,
-    title: '手術・治療',
-    description: '決めた治療法に基づいて、実際の治療を始める段階です。',
-    status: 'upcoming',
-    details: [
-      { icon: '🏥', text: '手術・化学療法・放射線治療' },
-      { icon: '📅', text: '治療スケジュールの調整' },
-      { icon: '👨‍👩‍👧‍👦', text: '家族のサポート体制' }
-    ],
-    actions: []
-  },
-  {
-    id: 4,
-    title: '術後ケア',
-    description: '治療後の体調管理と、再発予防のための定期検査です。',
-    status: 'upcoming',
-    details: [
-      { icon: '💊', text: '薬物療法の継続' },
-      { icon: '🏥', text: '定期検査・診察' },
-      { icon: '💪', text: 'リハビリ・運動' }
-    ],
-    actions: []
-  },
-  {
-    id: 5,
-    title: 'フォローアップ',
-    description: '治療を終えて、元の生活に戻る段階です。',
-    status: 'upcoming',
-    details: [
-      { icon: '💼', text: '仕事への復帰' },
-      { icon: '👨‍👩‍👧‍👦', text: '家族との関係調整' },
-      { icon: '🌸', text: '新しい生活の構築' }
-    ],
-    actions: []
-  }
-];
-
 // 治療段階コンポーネント
 const TreatmentStep = ({ step, onOpenQuestionList, onAddActivity }: { 
-  step: TreatmentStep, 
+  step: TreatmentStepWithProgress, 
   onOpenQuestionList: () => void,
   onAddActivity: (stepId: number) => void 
 }) => {
@@ -181,14 +101,14 @@ const TreatmentStep = ({ step, onOpenQuestionList, onAddActivity }: {
     addFromRecommendation
   } = useActivityStore();
 
-  // コンポーネントマウント時にアクティビティとお薦めを取得
+  // コンポーネントマウント時にアクティビティとおすすめを取得
   useEffect(() => {
     const userId = 'test-user-id'; // 仮のユーザーID
     fetchActivities(userId);
     fetchRecommendations(userId, step.id);
   }, [step.id, fetchActivities, fetchRecommendations]);
 
-  // ステップ別のアクティビティとお薦めをフィルタリング
+  // ステップ別のアクティビティとおすすめをフィルタリング
   const stepActivities = activities.filter(activity => activity.roadmap_step_id === step.id);
   const stepRecommendations = (recommendations[step.id] ?? []);
 
@@ -248,14 +168,26 @@ const TreatmentStep = ({ step, onOpenQuestionList, onAddActivity }: {
     updateActivity(id, { status: status as any });
   };
 
-  const handleAcceptRecommendation = (templateId: string) => {
-    const userId = 'test-user-id'; // 仮のユーザーID
-    addFromRecommendation(templateId, userId, step.id);
+  const handleAcceptRecommendation = async (templateId: string) => {
+    try {
+      const userId = 'test-user-id'; // 仮のユーザーID
+      await addFromRecommendation(templateId, userId, step.id);
+      // 成功時のフィードバック（将来的にはトースト通知など）
+      console.log('おすすめアクティビティを追加しました:', templateId);
+    } catch (error) {
+      console.error('おすすめ追加エラー:', error);
+    }
   };
 
-  const handleSkipRecommendation = (templateId: string) => {
-    // スキップ処理（将来的にはデータベースに記録）
-    console.log('スキップ:', templateId);
+  const handleSkipRecommendation = async (templateId: string) => {
+    try {
+      // スキップ処理（将来的にはデータベースに記録）
+      console.log('おすすめをスキップしました:', templateId);
+      // スキップしたおすすめを非表示にする（将来的にはデータベースに記録）
+      // 現在は一時的にコンソールログのみ
+    } catch (error) {
+      console.error('スキップ処理エラー:', error);
+    }
   };
 
   return (
@@ -294,24 +226,13 @@ const TreatmentStep = ({ step, onOpenQuestionList, onAddActivity }: {
             </div>
           </div>
         )}
-        
-        {/* ＋アクティビティ追加セクション */}
-        <div 
-          className="border-2 border-dashed border-gray-300 rounded-md p-3 mb-3 bg-white/70 hover:border-deep-blue-300 hover:bg-blue-50/30 transition-all duration-250 cursor-pointer"
-          onClick={() => onAddActivity(step.id)}
-        >
-          <button className="w-full flex items-center justify-center gap-2 text-deep-blue-500 text-sm font-medium">
-            <span className="text-lg font-bold">＋</span>
-            <span>アクティビティ追加</span>
-          </button>
-        </div>
-        
-        {/* お薦めアクティビティセクション */}
+
+        {/* おすすめアクティビティセクション */}
         {stepRecommendations.length > 0 && (
           <div className="border-2 border-dashed border-gray-300 rounded-md p-3 mb-3 bg-white/70">
             <div className="flex items-center gap-2 mb-3">
               <span className="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700">おすすめ</span>
-              <span className="text-sm font-medium text-gray-700">AIお薦めアクティビティ</span>
+              <span className="text-sm font-medium text-gray-700">AIおすすめアクティビティ</span>
             </div>
             <div className="space-y-2">
               {stepRecommendations.map((recommendation: ActivityRecommendation) => (
@@ -325,23 +246,18 @@ const TreatmentStep = ({ step, onOpenQuestionList, onAddActivity }: {
             </div>
           </div>
         )}
-        
-        <div className="flex gap-2 flex-wrap">
-          {step.actions.map((action, index) => (
-            <button
-              key={index}
-              onClick={() => handleAction(action)}
-              className={`px-3 py-2 rounded-md text-xs font-medium cursor-pointer transition-all duration-150 ${
-                action.type === 'primary'
-                  ? 'bg-deep-blue-500 text-white hover:bg-deep-blue-600 hover:-translate-y-px'
-                  : 'bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-              }`}
-            >
-              {action.text}
-            </button>
-          ))}
+
+        {/* ＋アクティビティ追加セクション */}
+        <div 
+          className="border-2 border-dashed border-gray-300 rounded-md p-3 mb-3 bg-white/70 hover:border-deep-blue-300 hover:bg-blue-50/30 transition-all duration-250 cursor-pointer"
+          onClick={() => onAddActivity(step.id)}
+        >
+          <button className="w-full flex items-center justify-center gap-2 text-deep-blue-500 text-sm font-medium">
+            <span className="text-lg font-bold">＋</span>
+            <span>アクティビティ追加</span>
+          </button>
         </div>
-        
+
         {/* お助けツール: currentステップのみ例として表示 */}
         {step.status === 'current' && (
           <div className="mt-3">
@@ -375,6 +291,66 @@ const MainContent = ({ onOpenQuestionList, onAddActivity }: {
   onOpenQuestionList: () => void,
   onAddActivity: (stepId: number) => void 
 }) => {
+  const [roadmapData, setRoadmapData] = useState<TreatmentStepWithProgress[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRoadmapData = async () => {
+      try {
+        setIsLoading(true);
+        const userId = 'test-user-id'; // 仮のユーザーID
+        
+        // APIからデータを取得（失敗時はダミーデータを使用）
+        let data;
+        try {
+          data = await RoadmapService.getUserRoadmap(userId);
+        } catch (apiError) {
+          console.warn('API取得に失敗、ダミーデータを使用:', apiError);
+          data = RoadmapService.getDummyRoadmap();
+        }
+        
+        setRoadmapData(data);
+        setError(null);
+      } catch (error) {
+        console.error('ロードマップデータ取得エラー:', error);
+        setError('データの取得に失敗しました');
+        // エラー時もダミーデータを表示
+        setRoadmapData(RoadmapService.getDummyRoadmap());
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRoadmapData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <main className="main-content">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/3 mb-8"></div>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex items-start gap-4 mb-8">
+              <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+              <div className="flex-1 bg-gray-200 rounded-lg p-4 h-32"></div>
+            </div>
+          ))}
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="main-content">
+        <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-8">
+          <p className="text-red-700">{error}</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="main-content">
       {/* Content Header */}
@@ -398,10 +374,10 @@ const MainContent = ({ onOpenQuestionList, onAddActivity }: {
         <div className="relative py-6">
           <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-gray-200 z-0"></div>
           <div className="relative z-10">
-            {treatmentSteps.map((step) => (
-              <TreatmentStep 
-                key={step.id} 
-                step={step} 
+            {roadmapData.map((step) => (
+              <TreatmentStep
+                key={step.id}
+                step={step}
                 onOpenQuestionList={onOpenQuestionList}
                 onAddActivity={onAddActivity}
               />
@@ -418,7 +394,7 @@ const MainContent = ({ onOpenQuestionList, onAddActivity }: {
           </div>
           <h2 className="text-lg font-semibold text-gray-900">今、大切なこと</h2>
         </div>
-        
+
         <div className="bg-warm-coral-50 rounded-lg p-4 mb-4">
           <p className="text-sm text-gray-700 leading-relaxed mb-3">
             現在は治療方針を決める段階です。焦らずに、家族とよく相談して決めましょう。
@@ -474,89 +450,42 @@ const MainContent = ({ onOpenQuestionList, onAddActivity }: {
   );
 };
 
+// メインページコンポーネント
 export default function RoadmapDetailPage() {
   const [isQuestionListOpen, setIsQuestionListOpen] = useState(false);
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [selectedStepId, setSelectedStepId] = useState<number | null>(null);
-  const [editingActivity, setEditingActivity] = useState<UserActivity | null>(null);
-  const { 
-    activities, 
-    recommendations, 
-    preferences, 
-    modalData, 
-    isLoading, 
-    error,
-    fetchActivities, 
-    fetchRecommendations, 
-    fetchPreferences,
-    addActivity, 
-    updateActivity, 
-    deleteActivity,
-    addFromRecommendation,
-    openModal, 
-    closeModal, 
-    setError 
-  } = useActivityStore();
-
-  // ユーザーIDを取得（実際の実装では認証から取得）
-  const userId = 'test-user-id'; // 仮のユーザーID
-
-  useEffect(() => {
-    // 初期データの読み込み
-    fetchPreferences(userId);
-  }, [fetchPreferences, userId]);
+  const [editingActivity, setEditingActivity] = useState<any>(null);
 
   const handleAddActivity = (stepId: number) => {
-    openModal('create', stepId);
+    setSelectedStepId(stepId);
+    setEditingActivity(null);
+    setIsActivityModalOpen(true);
   };
 
   const handleEditActivity = (activity: UserActivity) => {
-    openModal('edit', activity.roadmap_step_id, activity);
+    setSelectedStepId(activity.roadmap_step_id);
+    setEditingActivity(activity);
+    setIsActivityModalOpen(true);
   };
 
-  const handleActivitySubmit = async (data: UserActivityInsert | UserActivityUpdate) => {
+  const handleActivitySubmit = async (data: any) => {
     try {
-      if (modalData.mode === 'edit' && modalData.activity) {
+      if (editingActivity) {
         // 編集
-        await updateActivity(modalData.activity.id, data as UserActivityUpdate);
-      } else if (modalData.mode === 'create' && modalData.step_id) {
+        console.log('アクティビティ編集:', data);
+      } else {
         // 新規作成
-        await addActivity(data as UserActivityInsert);
+        console.log('新規アクティビティ作成:', data);
       }
-      closeModal();
+      setIsActivityModalOpen(false);
     } catch (error) {
-      console.error('アクティビティ操作エラー:', error);
-      setError('アクティビティの操作に失敗しました');
+      console.error('アクティビティ保存エラー:', error);
     }
   };
 
-  const handleDeleteActivity = async (id: string) => {
-    try {
-      await deleteActivity(id);
-    } catch (error) {
-      console.error('アクティビティ削除エラー:', error);
-      setError('アクティビティの削除に失敗しました');
-    }
-  };
-
-  const handleStatusChange = async (id: string, status: string) => {
-    try {
-      await updateActivity(id, { status: status as any });
-    } catch (error) {
-      console.error('ステータス更新エラー:', error);
-      setError('ステータスの更新に失敗しました');
-    }
-  };
-
-  const handleAddFromRecommendation = async (templateId: string) => {
-    try {
-      if (modalData.step_id) {
-        await addFromRecommendation(templateId, userId, modalData.step_id);
-      }
-    } catch (error) {
-      console.error('お薦め追加エラー:', error);
-      setError('お薦めからの追加に失敗しました');
-    }
+  const handleOpenQuestionList = () => {
+    setIsQuestionListOpen(true);
   };
 
   return (
@@ -564,49 +493,30 @@ export default function RoadmapDetailPage() {
       <Header />
       <div className="dashboard-inner">
         <Sidebar />
-        <MainContent onOpenQuestionList={() => setIsQuestionListOpen(true)} onAddActivity={handleAddActivity} />
+        <MainContent 
+          onOpenQuestionList={handleOpenQuestionList}
+          onAddActivity={handleAddActivity}
+        />
       </div>
       
       {/* フローティングアクションボタン */}
       <div 
         className="fixed right-8 bottom-8 bg-deep-blue-500 text-white rounded-lg shadow-lg cursor-pointer z-50 transition-all duration-250 hover:bg-deep-blue-600 hover:-translate-y-1 hover:shadow-xl flex items-center gap-2 px-4 py-3 text-sm font-medium"
-        onClick={() => openModal('create')}
+        onClick={() => setIsActivityModalOpen(true)}
       >
         <span className="text-lg font-bold">＋</span>
         <span>アクティビティ追加</span>
       </div>
       
-      <QuestionListModal 
-        isOpen={isQuestionListOpen} 
-        onClose={() => setIsQuestionListOpen(false)} 
-      />
-      
-      {/* アクティビティ追加・編集モーダル */}
+      {/* アクティビティモーダル */}
       <ActivityModal
-        isOpen={modalData.isOpen}
-        mode={modalData.mode}
-        stepId={modalData.step_id}
-        activity={modalData.activity}
-        onClose={closeModal}
+        isOpen={isActivityModalOpen}
+        onClose={() => setIsActivityModalOpen(false)}
+        mode={editingActivity ? 'edit' : 'create'}
+        stepId={selectedStepId || undefined}
+        activity={editingActivity}
         onSubmit={handleActivitySubmit}
       />
-
-      {/* エラー表示 */}
-      {error && (
-        <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
-          {error}
-        </div>
-      )}
-
-      {/* ローディング表示 */}
-      {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-deep-blue-500 mx-auto"></div>
-            <p className="text-sm text-gray-600 mt-2">処理中...</p>
-          </div>
-        </div>
-      )}
     </>
   );
 } 

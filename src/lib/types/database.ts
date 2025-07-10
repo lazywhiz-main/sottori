@@ -260,6 +260,74 @@ export interface WeeklySuggestionUpdate {
 }
 
 // =============================================================================
+// 5. 治療ロードマップ関連
+// =============================================================================
+
+export interface RoadmapStep {
+  id: number
+  title: string
+  description: string
+  order_index: number
+  cancer_type: string[]
+  stage: string[]
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface RoadmapStepDetail {
+  id: number
+  step_id: number
+  icon: string
+  text: string
+  order_index: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface UserRoadmapProgress {
+  id: string
+  user_id: string
+  step_id: number
+  status: 'completed' | 'current' | 'upcoming'
+  started_at?: string
+  completed_at?: string
+  notes?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface UserRoadmapProgressInsert {
+  user_id: string
+  step_id: number
+  status?: 'completed' | 'current' | 'upcoming'
+  started_at?: string
+  completed_at?: string
+  notes?: string
+}
+
+export interface UserRoadmapProgressUpdate {
+  status?: 'completed' | 'current' | 'upcoming'
+  started_at?: string
+  completed_at?: string
+  notes?: string
+}
+
+// フロントエンド用の統合型
+export interface TreatmentStepWithProgress {
+  id: number
+  title: string
+  description: string
+  status: 'completed' | 'current' | 'upcoming'
+  details: Array<{
+    icon: string
+    text: string
+  }>
+  progress?: UserRoadmapProgress
+}
+
+// =============================================================================
 // 6. ダッシュボード用の統合型
 // =============================================================================
 
@@ -334,6 +402,21 @@ export interface Database {
         Row: WeeklySuggestion
         Insert: WeeklySuggestionInsert
         Update: WeeklySuggestionUpdate
+      }
+      roadmap_steps: {
+        Row: RoadmapStep
+        Insert: RoadmapStep
+        Update: RoadmapStep
+      }
+      roadmap_step_details: {
+        Row: RoadmapStepDetail
+        Insert: RoadmapStepDetail
+        Update: RoadmapStepDetail
+      }
+      user_roadmap_progress: {
+        Row: UserRoadmapProgress
+        Insert: UserRoadmapProgressInsert
+        Update: UserRoadmapProgressUpdate
       }
     }
   }

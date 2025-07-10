@@ -74,7 +74,7 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
     }
   },
 
-  // お薦め取得
+  // おすすめ取得
   fetchRecommendations: async (stepId: number) => {
     try {
       const response = await fetch('/api/activities/recommendations/generate', {
@@ -96,7 +96,7 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
       });
       
       if (!response.ok) {
-        throw new Error('お薦めの取得に失敗しました');
+        throw new Error('おすすめの取得に失敗しました');
       }
       
       const data = await response.json();
@@ -208,7 +208,7 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
     }
   },
 
-  // お薦めの受け入れ
+  // おすすめの受け入れ
   acceptRecommendation: async (recommendation: ActivityRecommendation, stepId: number) => {
     set({ loading: true, error: null });
     try {
@@ -228,10 +228,10 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
       });
       
       if (!response.ok) {
-        throw new Error('お薦めの受け入れに失敗しました');
+        throw new Error('おすすめの受け入れに失敗しました');
       }
       
-      // 該当ステップのアクティビティとお薦めを再取得
+      // 該当ステップのアクティビティとおすすめを再取得
       await get().fetchActivities(stepId);
       
       set({ loading: false });
@@ -243,7 +243,7 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
     }
   },
 
-  // お薦めのスキップ
+  // おすすめのスキップ
   skipRecommendation: async (id: string) => {
     // スキップはローカル状態のみで管理（データベースには保存しない）
     set(state => {
