@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useAuth } from '@/lib/hooks/useAuth'
-import { userVisitService } from '@/lib/services/userVisitService'
+import { useAuth } from '../../lib/hooks/useAuth'
+import { userVisitService } from '../../lib/services/userVisitService'
 
 interface WelcomeMessageProps {
   onDismiss?: () => void

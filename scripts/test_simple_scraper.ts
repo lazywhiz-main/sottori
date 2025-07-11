@@ -1,20 +1,17 @@
 #!/usr/bin/env ts-node
 
 /**
- * シンプルスクレイピング機能テストスクリプト
+ * シンプルスクレイパーのテストスクリプト
  * 
  * 使用方法:
  *   npx ts-node scripts/test_simple_scraper.ts
- *   npx ts-node scripts/test_simple_scraper.ts --urls=3
- *   npx ts-node scripts/test_simple_scraper.ts --test-url=https://example.com
+ *   npx ts-node scripts/test_simple_scraper.ts --urls=5
  */
 
-// 環境変数の読み込み
-require('dotenv').config({ path: '.env.local' })
-
-const { simpleScraper } = require('../src/lib/services/simpleScraper')
-const { TEST_SCRAPING_URLS, MANUAL_ADDITIONAL_URLS, generateMHLWUrls } = require('../src/const/scraping_urls')
-const { InformationPoolService } = require('../src/lib/services/informationPoolService')
+import 'dotenv/config'
+import { SimpleScraper } from '../src/lib/services/simpleScraper'
+import { TEST_SCRAPING_URLS, MANUAL_ADDITIONAL_URLS, generateMHLWUrls } from '../src/const/scraping_urls'
+import { InformationPoolService } from '../src/lib/services/informationPoolService'
 
 // =============================================================================
 // コマンドライン引数解析
@@ -65,7 +62,8 @@ async function testSingleUrl(url: string): Promise<void> {
 
   try {
     const startTime = Date.now()
-    const result = await simpleScraper.scrapeUrl(url)
+    const scraper = new SimpleScraper()
+    const result = await scraper.scrapeUrl(url)
     const endTime = Date.now()
 
     console.log('\n📊 テスト結果:')
@@ -100,7 +98,8 @@ async function testMultipleUrls(urls: string[]): Promise<void> {
 
   try {
     const startTime = Date.now()
-    const result = await simpleScraper.scrapeUrls(urls)
+    const scraper = new SimpleScraper()
+    const result = await scraper.scrapeUrls(urls)
     const endTime = Date.now()
 
     console.log('\n📊 テスト結果サマリー:')
@@ -129,7 +128,7 @@ async function testMultipleUrls(urls: string[]): Promise<void> {
     }
 
     // キャッシュ統計
-    const cacheStats = simpleScraper.getCacheStats()
+    const cacheStats = scraper.getCacheStats()
     console.log('\n💾 キャッシュ統計:')
     console.log(`  - キャッシュ数: ${cacheStats.total}`)
     console.log(`  - 無効URL数: ${cacheStats.invalid}`)
@@ -211,7 +210,8 @@ async function main() {
       // 単一URLテスト
       await testSingleUrl(args.testUrl)
       // 単一保存テスト
-      const result = await simpleScraper.scrapeUrl(args.testUrl)
+      const scraper = new SimpleScraper()
+      const result = await scraper.scrapeUrl(args.testUrl)
       if (result.isValid) scrapedList.push(result)
     } else {
       // 全がん種別のURLを自動生成
@@ -234,7 +234,8 @@ async function main() {
       })
       console.log('')
       
-      const result = await simpleScraper.scrapeUrls(testUrls)
+      const scraper = new SimpleScraper()
+      const result = await scraper.scrapeUrls(testUrls)
       scrapedList = result.success
       await testMultipleUrls(testUrls)
     }

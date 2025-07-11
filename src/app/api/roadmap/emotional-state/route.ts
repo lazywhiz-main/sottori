@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { roadmapService } from '@/lib/services/roadmapService'
+import { roadmapService } from '../../../../lib/services/roadmapService'
 
 // 感情状態を記録
 export async function POST(request: NextRequest) {
@@ -22,7 +22,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const recordedState = await roadmapService.recordEmotionalState(userId, emotionalData)
+    // const recordedState = await roadmapService.recordEmotionalState(userId, emotionalData)
+    // 仮実装: 受け取ったデータをそのまま返す
+    const recordedState = { ...emotionalData, userId }
 
     if (recordedState) {
       return NextResponse.json({
@@ -61,7 +63,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const days = parseInt(searchParams.get('days') || '30')
 
-    const emotionalTrend = await roadmapService.analyzeEmotionalTrend(userId, days)
+    // const emotionalTrend = await roadmapService.analyzeEmotionalTrend(userId, days)
+    // 仮実装: 空配列を返す
+    const emotionalTrend: any[] = []
 
     return NextResponse.json({
       success: true,

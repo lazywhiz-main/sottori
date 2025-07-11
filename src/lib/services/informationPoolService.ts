@@ -4,7 +4,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '@/lib/types/database'
+import { Database } from '../types/database'
 import { InfoCategory } from './infoCollection'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!

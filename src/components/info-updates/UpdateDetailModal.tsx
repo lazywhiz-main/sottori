@@ -1,7 +1,7 @@
 'use client'
 
-import { InfoUpdate } from '@/lib/types/info-updates'
-import Button from '@/components/ui/Button'
+import { InfoUpdate } from '../../lib/types/info-updates'
+import Button from '../ui/Button'
 
 interface UpdateDetailModalProps {
   update: InfoUpdate
@@ -34,9 +34,10 @@ export function UpdateDetailModal({
   const getCategoryIcon = (category: string) => {
     const icons = {
       treatment_options: '🏥',
-      doctors: '👨‍⚕️',
-      side_effects: '💊',
-      clinical_trials: '🔬'
+      diagnosis: '👨‍⚕️',
+      lifestyle: '💊',
+      research_news: '🔬',
+      support_resources: '🤝'
     }
     return icons[category as keyof typeof icons] || '📋'
   }
@@ -44,9 +45,10 @@ export function UpdateDetailModal({
   const getCategoryName = (category: string) => {
     const names = {
       treatment_options: '治療選択肢',
-      doctors: '専門医情報',
-      side_effects: '副作用・対処法',
-      clinical_trials: '治験情報'
+      diagnosis: '診断・検査',
+      lifestyle: '生活・副作用',
+      research_news: '研究・治験',
+      support_resources: 'サポート'
     }
     return names[category as keyof typeof names] || 'その他'
   }

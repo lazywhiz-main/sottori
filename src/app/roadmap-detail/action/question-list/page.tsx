@@ -44,15 +44,15 @@ export default function QuestionListPage() {
     : questionPool.filter(q => q.category === selectedCategory && !myQuestions.some(mq => mq.text === q.text));
 
   // 質問追加
-  const handleAdd = (q) => {
+  const handleAdd = (q: { text: string; category: string }) => {
     setMyQuestions([...myQuestions, { ...q, recommended: false }]);
   };
   // 質問削除
-  const handleRemove = (q) => {
+  const handleRemove = (q: { text: string; category: string }) => {
     setMyQuestions(myQuestions.filter(mq => mq.text !== q.text));
   };
   // カテゴリー選択
-  const handleCategorySelect = (cat) => {
+  const handleCategorySelect = (cat: string) => {
     setSelectedCategory(cat);
   };
 

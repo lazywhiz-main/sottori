@@ -1,9 +1,9 @@
 'use client'
 
-import { InfoUpdateStats, InfoCollectionProgress } from '@/lib/types/info-updates'
+import { InfoUpdateStats, InfoCollectionProgress } from '../../lib/types/info-updates'
 import { Button } from '../ui/Button'
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../../lib/supabase'
 
 interface InfoUpdatesHeaderProps {
   stats: InfoUpdateStats | null
@@ -114,8 +114,8 @@ export default function InfoUpdatesHeader({
   
   const newUpdatesCount = stats?.unread || 0
   const hasTreatmentOptions = (stats?.by_category.treatment_options || 0) > 0
-  const hasDoctors = (stats?.by_category.doctors || 0) > 0
-  const hasTrials = (stats?.by_category.clinical_trials || 0) > 0
+  const hasDiagnosis = (stats?.by_category.diagnosis || 0) > 0
+  const hasTrials = (stats?.by_category.research_news || 0) > 0
 
   const getProgressSummary = () => {
     const completedCategories = progress.filter(p => p.status === 'completed')
@@ -220,11 +220,11 @@ export default function InfoUpdatesHeader({
                   {hasTreatmentOptions && (
                     <span>• 治療選択肢 ({stats?.by_category.treatment_options}件)</span>
                   )}
-                  {hasDoctors && (
-                    <span>• 専門医情報 ({stats?.by_category.doctors}件)</span>
+                  {hasDiagnosis && (
+                    <span>• 専門医情報 ({stats?.by_category.diagnosis}件)</span>
                   )}
                   {hasTrials && (
-                    <span>• 治験情報 ({stats?.by_category.clinical_trials}件)</span>
+                    <span>• 治験情報 ({stats?.by_category.research_news}件)</span>
                   )}
                 </div>
               </div>
@@ -263,9 +263,10 @@ export default function InfoUpdatesHeader({
 function getCategoryLabel(category: string): string {
   const labels = {
     treatment_options: '治療選択肢',
-    doctors: '専門医情報',
-    side_effects: '副作用・対処法',
-    clinical_trials: '治験情報'
+    diagnosis: '診断・検査',
+    lifestyle: '生活・副作用',
+    research_news: '研究・治験',
+    support_resources: 'サポート'
   }
   return labels[category as keyof typeof labels] || 'その他'
 } 

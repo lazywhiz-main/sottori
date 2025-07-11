@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { InfoCollectionService } from '@/lib/services/infoCollection'
+import { InfoCollectionService } from '@/src/lib/services/infoCollection'
 
 // 管理者権限のSupabaseクライアント（RLS回避用）
 const supabaseAdmin = createClient(

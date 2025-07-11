@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '@/components/ui/Header';
-import { useActivityStore } from '@/lib/stores/activityStore';
-import { ActivityModal } from '@/components/activities/ActivityModal';
-import { ActivityCard } from '@/components/activities/ActivityCard';
-import { RecommendationCard } from '@/components/activities/RecommendationCard';
-import { UserActivity, ActivityRecommendation } from '@/lib/types/personalization';
-import { TreatmentStepWithProgress } from '@/lib/types/database';
-import { RoadmapService } from '@/lib/services/roadmapService';
+import Header from '../../components/ui/Header';
+import { useActivityStore } from '../../lib/stores/activityStore';
+import { ActivityModal } from '../../components/activities/ActivityModal';
+import { ActivityCard } from '../../components/activities/ActivityCard';
+import { RecommendationCard } from '../../components/activities/RecommendationCard';
+import { UserActivity, ActivityRecommendation } from '../../lib/types/personalization';
+import { TreatmentStepWithProgress } from '../../lib/types/database';
+import { RoadmapService } from '../../lib/services/roadmapService';
 
 // サイドバーコンポーネント
 const Sidebar = () => {

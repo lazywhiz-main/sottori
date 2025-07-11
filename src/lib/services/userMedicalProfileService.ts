@@ -1,5 +1,5 @@
 // ユーザー医療プロフィール管理サービス（個別化エンジン版）
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../supabase'
 
 export interface UserMedicalProfile {
   id?: string

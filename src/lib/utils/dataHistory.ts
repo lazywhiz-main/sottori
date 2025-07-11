@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../supabase'
 
 // チェック履歴を保存
 export const saveCheckHistory = async (answers: any) => {

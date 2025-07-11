@@ -1,6 +1,6 @@
 'use client'
 
-import { CategoryTabData, InfoUpdateCategory } from '@/lib/types/info-updates'
+import { CategoryTabData, InfoUpdateCategory } from '../../lib/types/info-updates'
 
 interface CategoryTabsProps {
   tabs: CategoryTabData[]

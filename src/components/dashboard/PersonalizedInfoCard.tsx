@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Button from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
-import type { InfoUpdate } from '@/lib/types/info-updates'
+import type { InfoUpdate } from '../../lib/types/info-updates'
 
 interface PersonalizedInfoCardProps {
   urgentUpdates: InfoUpdate[]

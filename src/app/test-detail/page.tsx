@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAuth } from '@/lib/hooks/useAuth'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '../../lib/hooks/useAuth'
+import { supabase } from '../../lib/supabase'
 
 export default function TestDetailPage() {
   const { user, loading } = useAuth()

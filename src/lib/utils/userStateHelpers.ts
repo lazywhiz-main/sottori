@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../supabase'
 
 // ユーザーの状態を定義（正しいフロー）
 export type UserState = 'first-time' | 'has-roadmap' | 'returning'

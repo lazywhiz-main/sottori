@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
-import { useAuth } from '@/lib/hooks/useAuth'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '../../lib/hooks/useAuth'
+import { supabase } from '../../lib/supabase'
 
 interface CollectionProgress {
   concern_type: string

@@ -1,7 +1,7 @@
 'use client'
 
-import { StructuredContent } from '@/lib/types/info-updates'
-import Button from '@/components/ui/Button'
+import { StructuredContent } from '../../lib/types/info-updates'
+import Button from '../ui/Button'
 
 interface UpdatesListProps {
   updates: StructuredContent[]

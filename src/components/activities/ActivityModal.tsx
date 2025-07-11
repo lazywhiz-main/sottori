@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { UserActivity, UserActivityInsert, UserActivityUpdate, ActivityType, ActivityStatus, ActivityPriority } from '@/lib/types/personalization';
-import { Button } from '@/components/ui/Button';
+import { UserActivity, UserActivityInsert, UserActivityUpdate, ActivityType, ActivityStatus, ActivityPriority } from '../../lib/types/personalization';
+import { Button } from '../ui/Button';
 
 interface ActivityModalProps {
   isOpen: boolean;

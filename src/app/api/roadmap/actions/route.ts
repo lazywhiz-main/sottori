@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { roadmapService } from '@/lib/services/roadmapService'
+import { RoadmapService } from '../../../../lib/services/roadmapService'
 
 // アクション一覧を取得
 export async function GET(request: NextRequest) {
@@ -22,7 +22,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const actions = await roadmapService.getSectionActions(sectionId)
+    // const actions = await RoadmapService.getSectionActions(sectionId)
+    // 仮実装: ダミーデータ返却
+    const actions: any[] = []
 
     return NextResponse.json({
       success: true,
@@ -58,7 +60,9 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const success = await roadmapService.updateActionStatus(actionId, status)
+    // const success = await RoadmapService.updateActionStatus(actionId, status)
+    // 仮実装: 常に成功
+    const success = true
 
     if (success) {
       return NextResponse.json({

@@ -5,7 +5,7 @@
  * 詳細なログ出力とエラーハンドリングを含む
  */
 
-const { JSDOM } = require('jsdom')
+import { JSDOM } from 'jsdom'
 
 export interface ScrapedData {
   url: string

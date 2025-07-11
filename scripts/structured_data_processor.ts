@@ -3,19 +3,14 @@
 /**
  * 構造化データ処理スクリプト
  * 
- * 既に収集されたローデータから構造化データを作成し、個人化処理に適した形式に変換します。
- * 
  * 使用方法:
  *   npx ts-node scripts/structured_data_processor.ts
- *   npx ts-node scripts/structured_data_processor.ts --limit=50
- *   npx ts-node scripts/structured_data_processor.ts --cancer-type=breast_cancer
+ *   npx ts-node scripts/structured_data_processor.ts --dry-run
  */
 
-// 環境変数の読み込み
-require('dotenv').config({ path: '.env.local' })
-
-const { createClient } = require('@supabase/supabase-js')
-const { InformationPoolService } = require('../src/lib/services/informationPoolService')
+import 'dotenv/config'
+import { createClient } from '@supabase/supabase-js'
+import { InformationPoolService } from '../src/lib/services/informationPoolService'
 
 // =============================================================================
 // コマンドライン引数解析

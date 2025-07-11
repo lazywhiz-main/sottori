@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/lib/hooks/useAuth'
-import Button from '@/components/ui/Button'
-import { ChatMessage } from '@/components/check/ChatMessage'
-import { ChoiceButtons } from '@/components/check/ChoiceButtons'
+import { useAuth } from '../../lib/hooks/useAuth'
+import Button from '../../components/ui/Button'
+import { ChatMessage } from '../../components/check/ChatMessage'
+import { ChoiceButtons } from '../../components/check/ChoiceButtons'
 
 interface PreviousCheckData {
   id: string
@@ -53,7 +53,7 @@ export default function StatusUpdatePage() {
   const loadPreviousData = async () => {
     try {
       // 前回のチェック履歴を取得
-      const { getCheckHistories } = await import('@/lib/utils/dataHistory')
+      const { getCheckHistories } = await import('../../lib/utils/dataHistory')
       const histories = await getCheckHistories(1) // 最新1件
       
       if (histories.length > 0) {

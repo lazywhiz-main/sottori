@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../supabase'
 
 // 認証ヘッダーからユーザーIDを取得
 export async function getUserIdFromAuthHeader(request: NextRequest): Promise<string | null> {

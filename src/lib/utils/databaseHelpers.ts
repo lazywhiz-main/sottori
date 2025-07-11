@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../supabase'
 import type {
   CancerProfile,
   CancerProfileInsert,
@@ -17,7 +17,7 @@ import type {
   WeeklySuggestionInsert,
   WeeklySuggestionUpdate,
   DashboardData
-} from '@/lib/types/database'
+} from '../types/database'
 
 // =============================================================================
 // 1. がん治療プロフィール関連

@@ -2,7 +2,7 @@
 // Phase 1: 基盤構築 - ユーザー登録時の個別化プロフィール作成
 
 import { NextRequest, NextResponse } from 'next/server'
-import { initializePersonalizationForUser } from '@/lib/services/personalizationEngine'
+import { initializePersonalizationForUser } from '../../../../lib/services/personalizationEngine'
 
 export async function POST(request: NextRequest) {
   try {

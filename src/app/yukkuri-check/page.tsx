@@ -663,7 +663,7 @@ export default function YukkuriCheckPage() {
                       // データベースにチェック履歴を保存し、そのIDを取得
                       let checkHistoryId = null
                       try {
-                        const { saveCheckHistory } = await import('@/lib/utils/dataHistory')
+                        const { saveCheckHistory } = await import('../../lib/utils/dataHistory')
                         const checkHistory = await saveCheckHistory(selectedAnswers)
                         checkHistoryId = checkHistory.id
                         

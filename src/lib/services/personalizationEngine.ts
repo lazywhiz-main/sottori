@@ -33,7 +33,7 @@ import type {
   UserSegmentRecord,
   UserCategoryEngagement,
   UserCurrentConcern
-} from '@/lib/types/personalization'
+} from '../types/personalization'
 
 // =============================================================================
 // 1. 設定とデフォルト値

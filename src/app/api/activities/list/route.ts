@@ -1,27 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { activityService } from '../../../../lib/services/activityService';
-import { GetActivitiesRequest } from '../../../../lib/types/activities';
+import { ActivityService } from '@/lib/services/activityService';
 
 export async function GET(request: NextRequest) {
   try {
+    // クエリパラメータ取得
     const { searchParams } = new URL(request.url);
-    
-    const params: GetActivitiesRequest = {
-      step_id: searchParams.get('step_id') ? parseInt(searchParams.get('step_id')!) : undefined,
-      type: searchParams.get('type') as any,
-      status: searchParams.get('status') as any,
-      include_recommendations: searchParams.get('include_recommendations') === 'true',
-      limit: searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : undefined,
-      offset: searchParams.get('offset') ? parseInt(searchParams.get('offset')!) : undefined,
-    };
+    const stepId = searchParams.get('stepId');
+    // 必要に応じて他のパラメータも取得
 
-    const result = await activityService.getActivities(params);
-    
-    return NextResponse.json(result);
+    // アクティビティ取得
+    const service = new ActivityService();
+    const result = await service.getActivities({
+      step_id: stepId ? parseInt(stepId) : undefined,
+      include_recommendations: true
+    });
+    return NextResponse.json({ 
+      activities: result.activities, 
+      recommendations: result.recommendations,
+      success: true 
+    });
   } catch (error) {
-    console.error('アクティビティ取得エラー:', error);
+    console.error('アクティビティ一覧取得エラー:', error);
     return NextResponse.json(
-      { error: 'アクティビティの取得に失敗しました' },
+      { error: 'アクティビティ一覧の取得に失敗しました' },
       { status: 500 }
     );
   }

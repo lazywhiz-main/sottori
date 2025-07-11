@@ -1,25 +1,20 @@
 #!/usr/bin/env ts-node
 
 /**
- * 個人化処理実行スクリプト
- * 
- * 既に収集・構造化された医療情報データを使って個人化処理を実行します。
+ * パーソナライゼーション実行スクリプト
  * 
  * 使用方法:
- *   npx ts-node scripts/run_personalization.ts
- *   npx ts-node scripts/run_personalization.ts --user-id=test-user-1
- *   npx ts-node scripts/run_personalization.ts --all-users
+ *   npx ts-node scripts/run_personalization.ts --userId=test-user-id
+ *   npx ts-node scripts/run_personalization.ts --userId=test-user-id --mode=initialize
  */
 
-// 環境変数の読み込み
-require('dotenv').config({ path: '.env.local' })
-
-const { createClient } = require('@supabase/supabase-js')
-const { 
+import 'dotenv/config'
+import { createClient } from '@supabase/supabase-js'
+import { 
   runPersonalizationEngine, 
   initializePersonalizationForUser,
-  getUnifiedUserProfile 
-} = require('../src/lib/services/personalizationEngine')
+  getUnifiedUserProfile
+} from '../src/lib/services/personalizationEngine'
 
 // =============================================================================
 // コマンドライン引数解析
@@ -139,7 +134,7 @@ async function runPersonalizationForUser(userId: string, dryRun: boolean = false
     return result
   } catch (error) {
     console.error(`❌ 個人化処理エラー: ${error}`)
-    return { success: false, error: error.message }
+    return { success: false, error: String(error) }
   }
 }
 

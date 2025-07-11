@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
-import { useAuth } from '@/lib/hooks/useAuth'
-import { ProfileCompletionService, CancerProfileService, parseSupabaseError } from '@/lib/utils/databaseHelpers'
-import type { ProfileCompletionItem, CompletionStats } from '@/lib/types/database'
+import { useAuth } from '../../lib/hooks/useAuth'
+import { ProfileCompletionService, CancerProfileService, parseSupabaseError } from '../../lib/utils/databaseHelpers'
+import type { ProfileCompletionItem, CompletionStats } from '../../lib/types/database'
 
 export default function BasicInfoManagementArea() {
   const { user } = useAuth()

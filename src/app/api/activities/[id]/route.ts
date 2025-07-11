@@ -3,12 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 // PUT: アクティビティを更新
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const updatedActivity = {
-      id: params.id,
+      id: id,
       user_id: 'test-user-id',
       roadmap_step_id: 1,
       type: '診察',
@@ -39,9 +40,10 @@ export async function PUT(
 // DELETE: アクティビティを削除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting activity:', error);

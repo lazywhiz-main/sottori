@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { UserActivity, ActivityType } from '@/lib/types/personalization';
+import { UserActivity, ActivityType } from '../../lib/types/personalization';
 
 interface ActivityCardProps {
   activity: UserActivity;

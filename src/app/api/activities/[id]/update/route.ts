@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { activityService } from '../../../../../lib/services/activityService';
-import { UpdateActivityRequest } from '../../../../../lib/types/activities';
+import { ActivityService } from '@/lib/services/activityService';
+import { UpdateActivityRequest } from '@/lib/types/activities';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body: UpdateActivityRequest = await request.json();
-    const activity = await activityService.updateActivity(params.id, body);
+    const service = new ActivityService();
+    const activity = await service.updateActivity(id, body);
     
     return NextResponse.json({ 
       activity,

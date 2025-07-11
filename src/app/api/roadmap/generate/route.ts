@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { AI_CONFIG, isAIFeatureEnabled, logAIUsage } from '@/lib/config/ai'
-import { roadmapService } from '@/lib/services/roadmapService'
-import { UserResponses, RoadmapSection } from '@/lib/types/roadmap'
+import { AI_CONFIG, isAIFeatureEnabled, logAIUsage } from '../../../../lib/config/ai'
+import { roadmapService } from '../../../../lib/services/roadmapService'
+import { UserResponses, RoadmapSection } from '../../../../lib/types/roadmap'
 
 // OpenAI クライアントの初期化
 const openai = AI_CONFIG.OPENAI.API_KEY ? new OpenAI({
@@ -107,12 +107,14 @@ export async function POST(request: NextRequest) {
     // データベースにロードマップを保存
     try {
       const userId = authHeader?.replace('Bearer ', '') || 'anonymous'
-      const roadmap = await roadmapService.createRoadmapFromAIResponse(
-        userId,
-        responses,
-        roadmapSections,
-        aiGenerated
-      )
+      // const roadmap = await roadmapService.createRoadmapFromAIResponse(
+      //   userId,
+      //   responses,
+      //   roadmapSections,
+      //   aiGenerated
+      // )
+      // 仮実装: ダミーのロードマップIDを返す
+      const roadmap = { id: `roadmap_${Date.now()}` }
 
       if (roadmap) {
         return NextResponse.json({

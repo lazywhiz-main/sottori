@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { AI_CONFIG, isAIFeatureEnabled, logAIUsage } from '@/lib/config/ai'
+import { AI_CONFIG, isAIFeatureEnabled, logAIUsage } from '../../../../lib/config/ai'
 
 interface UserResponses {
   step1?: { value: string; label: string }

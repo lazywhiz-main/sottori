@@ -3,7 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { runPersonalizationEngine } from '@/lib/services/personalizationEngine'
+import { runPersonalizationEngine } from '../../../../lib/services/personalizationEngine'
 
 // サービスロールキーを使用したSupabaseクライアント
 const supabaseAdmin = createClient(

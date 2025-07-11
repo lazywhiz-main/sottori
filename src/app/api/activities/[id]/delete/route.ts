@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { activityService } from '../../../../../lib/services/activityService';
+import { ActivityService } from '@/lib/services/activityService';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await activityService.deleteActivity(params.id);
+    const { id } = await params;
+    const service = new ActivityService();
+    await service.deleteActivity(id);
     
     return NextResponse.json({ 
       success: true 

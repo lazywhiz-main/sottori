@@ -2,18 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useAuth } from '@/lib/hooks/useAuth'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '../../../lib/hooks/useAuth'
+import { supabase } from '../../../lib/supabase'
 import Header from '@/components/ui/Header'
 import { Button } from '@/components/ui/Button'
-import { StructuredContent } from '@/lib/types/info-updates'
-import { InfoRelevanceScore } from '@/lib/types/personalization'
+import { StructuredContent } from '../../../lib/types/info-updates'
+import { InfoRelevanceScore } from '../../../lib/types/personalization'
 import { 
   CANCER_TYPE_LABELS, 
   STAGE_LABELS, 
   AGE_GROUP_LABELS, 
   REGION_LABELS 
-} from '@/lib/constants/labels'
+} from '../../../lib/constants/labels'
 
 export default function InfoUpdateDetail() {
   const params = useParams()

@@ -1,22 +1,17 @@
 #!/usr/bin/env ts-node
 
 /**
- * 包括的医療情報スクレイピングスクリプト
- * 
- * 全がん種別の医療情報を自動的にスクレイピングし、データベースに保存します。
+ * 包括的スクレイピングスクリプト
  * 
  * 使用方法:
- *   npx ts-node scripts/comprehensive_scraper.ts
- *   npx ts-node scripts/comprehensive_scraper.ts --cancer-type=breast_cancer
- *   npx ts-node scripts/comprehensive_scraper.ts --all-cancers
+ *   npx ts-node scripts/comprehensive_scraper.ts --cancerType=colon
+ *   npx ts-node scripts/comprehensive_scraper.ts --cancerType=breast --maxUrls=10
  */
 
-// 環境変数の読み込み
-require('dotenv').config({ path: '.env.local' })
-
-const { simpleScraper } = require('../src/lib/services/simpleScraper')
-const { generateMHLWUrls, MANUAL_ADDITIONAL_URLS } = require('../src/const/scraping_urls')
-const { InformationPoolService } = require('../src/lib/services/informationPoolService')
+import 'dotenv/config'
+import { SimpleScraper } from '../src/lib/services/simpleScraper'
+import { generateMHLWUrls, MANUAL_ADDITIONAL_URLS } from '../src/const/scraping_urls'
+import { InformationPoolService } from '../src/lib/services/informationPoolService'
 
 // =============================================================================
 // コマンドライン引数解析
@@ -120,7 +115,8 @@ async function scrapeUrls(urls: string[], maxUrls: number, dryRun: boolean = fal
     return { success: [], failed: [], totalProcessed: targetUrls.length, totalSuccess: 0 }
   }
   
-  const result = await simpleScraper.scrapeUrls(targetUrls)
+  const scraper = new SimpleScraper()
+  const result = await scraper.scrapeUrls(targetUrls)
   
   console.log('\n📊 スクレイピング結果:')
   console.log(`  - 総処理数: ${result.totalProcessed}件`)

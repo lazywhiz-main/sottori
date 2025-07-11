@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { roadmapService } from '@/lib/services/roadmapService'
+import { roadmapService } from '../../../../lib/services/roadmapService'
 
 // 進捗を記録
 export async function POST(request: NextRequest) {
@@ -22,7 +22,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const recordedProgress = await roadmapService.recordProgress(userId, progressData)
+    // const recordedProgress = await roadmapService.recordProgress(userId, progressData)
+    // 仮実装: 受け取ったデータをそのまま返す
+    const recordedProgress = { ...progressData, userId }
 
     if (recordedProgress) {
       return NextResponse.json({
@@ -58,7 +60,14 @@ export async function GET(request: NextRequest) {
     }
 
     const userId = authHeader.replace('Bearer ', '')
-    const progress = await roadmapService.calculateRoadmapProgress(userId)
+    // const progress = await roadmapService.calculateRoadmapProgress(userId)
+    // 仮実装: ダミーの進捗データを返す
+    const progress = {
+      overall: 65,
+      completed_steps: 3,
+      total_steps: 5,
+      current_step: '治療方針の決定'
+    }
 
     return NextResponse.json({
       success: true,

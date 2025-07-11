@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useAuth } from '@/lib/hooks/useAuth'
+import { useAuth } from '../../lib/hooks/useAuth'
 import Button from '@/components/ui/Button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
-import { CancerProfileService, parseSupabaseError } from '@/lib/utils/databaseHelpers'
-import type { CancerProfile } from '@/lib/types/database'
+import { CancerProfileService, parseSupabaseError } from '../../lib/utils/databaseHelpers'
+import type { CancerProfile } from '../../lib/types/database'
 
 // ステップ定義
 const profileSteps = [

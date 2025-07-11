@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/lib/hooks/useAuth'
+import { useAuth } from '../../lib/hooks/useAuth'
 import WelcomeMessage from './WelcomeMessage'
 
 export default function UnifiedDashboard() {

@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/lib/hooks/useAuth'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '../../lib/hooks/useAuth'
+import { supabase } from '../../lib/supabase'
 import Header from '@/components/ui/Header'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
@@ -18,8 +18,9 @@ import {
   InfoUpdateStats, 
   InfoUpdateCategory, 
   CategoryTabData,
-  InfoUpdatesResponse 
-} from '@/lib/types/info-updates'
+  InfoUpdatesResponse,
+  InfoUpdatePriority
+} from '../../lib/types/info-updates'
 
 export default function InfoUpdatesPage() {
   const { user, loading } = useAuth()
@@ -40,12 +41,12 @@ export default function InfoUpdatesPage() {
   const [displayMode, setDisplayMode] = useState<'list' | 'hierarchical'>('hierarchical')
 
   const sectionRefs = {
-    treatment: useRef<HTMLDivElement>(null),
-    guidelines: useRef<HTMLDivElement>(null),
-    support: useRef<HTMLDivElement>(null),
-    sideEffects: useRef<HTMLDivElement>(null),
-    clinicalTrials: useRef<HTMLDivElement>(null),
-    other: useRef<HTMLDivElement>(null)
+    treatment: useRef<HTMLDivElement>(undefined!),
+    diagnosis: useRef<HTMLDivElement>(undefined!),
+    support: useRef<HTMLDivElement>(undefined!),
+    lifestyle: useRef<HTMLDivElement>(undefined!),
+    research: useRef<HTMLDivElement>(undefined!),
+    other: useRef<HTMLDivElement>(undefined!)
   }
 
   // 認証チェック
@@ -210,9 +211,46 @@ export default function InfoUpdatesPage() {
         (b.relevance_score || 0) - (a.relevance_score || 0)
       )
       
-      setUpdates(sortedUpdates)
-      setStats(data.stats)
-      setProgress(data.progress)
+      // StructuredContent[]からInfoUpdate[]への変換
+      const convertedUpdates: InfoUpdate[] = sortedUpdates.map(update => ({
+        ...update,
+        priority: 'medium' as InfoUpdatePriority, // デフォルト値
+        is_read: update.user_state?.is_read || false,
+        is_saved: update.user_state?.is_saved || false,
+        metadata: update.structured_data || {}
+      }))
+      
+      setUpdates(convertedUpdates)
+      // 仮実装: ダミーの統計データ
+      setStats({
+        total: convertedUpdates.length,
+        unread: convertedUpdates.filter(u => !u.is_read).length,
+        by_category: {
+          treatment_options: convertedUpdates.filter(u => u.category === 'treatment_options').length,
+          diagnosis: convertedUpdates.filter(u => u.category === 'diagnosis').length,
+          support_resources: convertedUpdates.filter(u => u.category === 'support_resources').length,
+          lifestyle: convertedUpdates.filter(u => u.category === 'lifestyle').length,
+          research_news: convertedUpdates.filter(u => u.category === 'research_news').length
+        },
+        by_priority: {
+          high: convertedUpdates.filter(u => u.priority === 'high').length,
+          medium: convertedUpdates.filter(u => u.priority === 'medium').length,
+          low: convertedUpdates.filter(u => u.priority === 'low').length
+        }
+      })
+      // 仮実装: ダミーの進捗データ
+      setProgress([
+        {
+          id: 'dummy',
+          user_id: 'dummy',
+          category: 'all',
+          progress_percentage: 100,
+          status: 'completed',
+          items_found: convertedUpdates.length,
+          last_updated: new Date().toISOString(),
+          metadata: {}
+        }
+      ])
       
       // 最終更新時刻を取得
       if (data.updates.length > 0) {
@@ -364,16 +402,16 @@ export default function InfoUpdatesPage() {
     if (!stats) return []
     return [
       { key: 'treatment', label: '治療法', count: stats.by_category.treatment_options },
-      { key: 'guidelines', label: 'ガイドライン', count: stats.by_category.guidelines },
+      { key: 'diagnosis', label: '診断・検査', count: stats.by_category.diagnosis },
       { key: 'support', label: 'サポート', count: stats.by_category.support_resources },
-      { key: 'sideEffects', label: '副作用・対処法', count: stats.by_category.side_effects },
-      { key: 'clinicalTrials', label: '治験情報', count: stats.by_category.clinical_trials },
+      { key: 'lifestyle', label: '生活・副作用', count: stats.by_category.lifestyle },
+      { key: 'research', label: '研究・治験', count: stats.by_category.research_news },
       { key: 'other', label: 'その他', count: stats.total - (
         stats.by_category.treatment_options +
-        stats.by_category.guidelines +
+        stats.by_category.diagnosis +
         stats.by_category.support_resources +
-        stats.by_category.side_effects +
-        stats.by_category.clinical_trials
+        stats.by_category.lifestyle +
+        stats.by_category.research_news
       ) }
     ]
   }

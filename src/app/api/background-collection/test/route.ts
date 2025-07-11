@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { BackgroundCollectionService } from '@/lib/services/backgroundCollectionService'
-import { InformationPoolService } from '@/lib/services/informationPoolService'
+import { BackgroundCollectionService } from '../../../../lib/services/backgroundCollectionService'
+import { InformationPoolService } from '../../../../lib/services/informationPoolService'
 
 /**
  * バックグラウンド収集のテスト実行API

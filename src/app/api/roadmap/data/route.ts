@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { roadmapService } from '@/lib/services/roadmapService'
-import { validateAuth } from '@/lib/utils/authHelpers'
+import { RoadmapService } from '../../../../lib/services/roadmapService'
+import { validateAuth } from '../../../../lib/utils/authHelpers'
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const { userId } = authResult
     
     // ユーザーの全ロードマップデータを取得
-    const roadmapData = await roadmapService.getUserRoadmapData(userId)
+    const roadmapData = await RoadmapService.getUserRoadmap(userId)
 
     return NextResponse.json({
       success: true,

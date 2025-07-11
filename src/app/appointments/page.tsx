@@ -5,8 +5,8 @@ import { AppointmentForm } from '@/components/medical/AppointmentForm'
 import { AppointmentsList } from '@/components/medical/AppointmentsList'
 import Button from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
-import { useAuth } from '@/lib/hooks/useAuth'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '../../lib/hooks/useAuth'
+import { supabase } from '../../lib/supabase'
 import { useRouter } from 'next/navigation'
 
 interface AppointmentWithDetails {

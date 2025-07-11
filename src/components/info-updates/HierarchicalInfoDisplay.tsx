@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader } from '@/components/ui/Card'
-import Button from '@/components/ui/Button'
-import { InfoUpdate } from '@/lib/types/info-updates'
-import { InfoSection } from '@/components/ui/InfoSection'
-import { InfoCard, InfoBadge } from '@/components/ui/InfoCard'
+import { Card, CardContent, CardHeader } from '../ui/Card'
+import Button from '../ui/Button'
+import { InfoUpdate } from '../../lib/types/info-updates'
+import { InfoSection } from '../ui/InfoSection'
+import { InfoCard, InfoBadge } from '../ui/InfoCard'
 
 interface HierarchicalInfoDisplayProps {
   updates: InfoUpdate[]
@@ -14,10 +14,10 @@ interface HierarchicalInfoDisplayProps {
   stage?: string
   sectionRefs?: {
     treatment: React.RefObject<HTMLDivElement>
-    guidelines: React.RefObject<HTMLDivElement>
+    diagnosis: React.RefObject<HTMLDivElement>
     support: React.RefObject<HTMLDivElement>
-    sideEffects: React.RefObject<HTMLDivElement>
-    clinicalTrials: React.RefObject<HTMLDivElement>
+    lifestyle: React.RefObject<HTMLDivElement>
+    research: React.RefObject<HTMLDivElement>
     other: React.RefObject<HTMLDivElement>
   }
 }
@@ -64,14 +64,13 @@ export default function HierarchicalInfoDisplay({
   // 情報をカテゴリ別に分類
   const categorizedInfo = React.useMemo(() => {
     const treatment: (TreatmentInfo & { originalUpdate: InfoUpdate })[] = []
-    const guidelines: (GuidelineInfo & { originalUpdate: InfoUpdate })[] = []
+    const diagnosis: InfoUpdate[] = []
     const support: (SupportInfo & { originalUpdate: InfoUpdate })[] = []
-    const sideEffects: InfoUpdate[] = []
-    const clinicalTrials: InfoUpdate[] = []
+    const lifestyle: InfoUpdate[] = []
+    const research: InfoUpdate[] = []
     const other: InfoUpdate[] = []
 
     updates.forEach(update => {
-      // 治療法: categoryがtreatment_optionsなら全て表示
       if (update.category === 'treatment_options') {
         treatment.push({
           name: update.title || '治療法',
@@ -82,25 +81,9 @@ export default function HierarchicalInfoDisplay({
           source: update.source_url || '',
           originalUpdate: update
         })
-      }
-      // ガイドライン: categoryがguidelinesなら全て表示
-      else if (update.category && String(update.category) === 'guidelines') {
-        guidelines.push({
-          title: update.title || 'ガイドライン',
-          recommendations: [
-            {
-              type: 'moderate',
-              content: update.summary || update.content || '',
-              evidence: ''
-            }
-          ],
-          source: update.source_url || '',
-          lastUpdated: update.created_at || '',
-          originalUpdate: update
-        })
-      }
-      // サポート: categoryがsupport_resourcesなら全て表示（現状維持）
-      else if (update.category === 'support_resources') {
+      } else if (update.category === 'diagnosis') {
+        diagnosis.push(update)
+      } else if (update.category === 'support_resources') {
         support.push({
           type: 'financial',
           title: update.title,
@@ -110,16 +93,16 @@ export default function HierarchicalInfoDisplay({
           source: update.source_url || '',
           originalUpdate: update
         })
-      } else if (update.category === 'side_effects') {
-        sideEffects.push(update)
-      } else if (update.category === 'clinical_trials') {
-        clinicalTrials.push(update)
+      } else if (update.category === 'lifestyle') {
+        lifestyle.push(update)
+      } else if (update.category === 'research_news') {
+        research.push(update)
       } else {
         other.push(update)
       }
     })
 
-    return { treatment, guidelines, support, sideEffects, clinicalTrials, other }
+    return { treatment, diagnosis, support, lifestyle, research, other }
   }, [updates])
 
   const toggleSection = (section: string) => {
@@ -196,38 +179,28 @@ export default function HierarchicalInfoDisplay({
         </div>
       )}
 
-      {/* 2. ガイドラインセクション */}
-      {categorizedInfo.guidelines.length > 0 && (
-        <div ref={sectionRefs?.guidelines}>
+      {/* 2. 診断・検査セクション */}
+      {categorizedInfo.diagnosis.length > 0 && (
+        <div ref={sectionRefs?.diagnosis}>
           <InfoSection
-            title="ガイドライン"
-            icon="📋"
+            title="診断・検査"
+            icon="🩺"
             variant="guidelines"
           >
-            {categorizedInfo.guidelines.map((item, index) => (
+            {categorizedInfo.diagnosis.map((item, index) => (
               <InfoCard
                 key={index}
                 title={item.title}
-                subtitle={item.source}
-                badge={<InfoBadge variant="priority-medium">ガイドライン</InfoBadge>}
+                subtitle={item.source_url}
+                badge={<InfoBadge variant="info">診断・検査</InfoBadge>}
               >
                 <div className="space-y-3">
-                  {item.recommendations.map((rec, recIndex) => (
-                    <div key={recIndex} className="p-3 bg-golden-yellow-50 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-medium text-golden-yellow-700">
-                          {rec.type === 'strong' ? '強く推奨' : 
-                           rec.type === 'moderate' ? '推奨' : '弱い推奨'}
-                        </span>
-                      </div>
-                      <p className="text-gray-700">{rec.content}</p>
-                    </div>
-                  ))}
+                  <p className="text-gray-700">{item.summary || item.content}</p>
                   <div className="flex justify-end">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleReadMore(item.originalUpdate)}
+                      onClick={() => handleReadMore(item)}
                     >
                       詳細を見る
                     </Button>
@@ -239,11 +212,11 @@ export default function HierarchicalInfoDisplay({
         </div>
       )}
 
-      {/* 3. サポート情報セクション */}
+      {/* 3. サポートセクション（現状維持） */}
       {categorizedInfo.support.length > 0 && (
         <div ref={sectionRefs?.support}>
           <InfoSection
-            title="サポート情報"
+            title="サポート"
             icon="🤝"
             variant="support"
           >
@@ -252,16 +225,10 @@ export default function HierarchicalInfoDisplay({
                 key={index}
                 title={item.title}
                 subtitle={item.source}
-                badge={<InfoBadge variant="priority-low">サポート</InfoBadge>}
+                badge={<InfoBadge variant="info">サポート</InfoBadge>}
               >
                 <div className="space-y-3">
                   <p className="text-gray-700">{item.description}</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <span className="font-medium text-gray-900">連絡先:</span>
-                      <p className="text-gray-600">{item.contact}</p>
-                    </div>
-                  </div>
                   <div className="flex justify-end">
                     <Button
                       variant="outline"
@@ -278,30 +245,28 @@ export default function HierarchicalInfoDisplay({
         </div>
       )}
 
-      {/* 4. 副作用・対処法セクション */}
-      {categorizedInfo.sideEffects.length > 0 && (
-        <div ref={sectionRefs?.sideEffects}>
+      {/* 4. 生活・副作用セクション */}
+      {categorizedInfo.lifestyle.length > 0 && (
+        <div ref={sectionRefs?.lifestyle}>
           <InfoSection
-            title="副作用・対処法"
-            icon="💊"
+            title="生活・副作用"
+            icon="🍀"
             variant="side-effects"
           >
-            {categorizedInfo.sideEffects.map((update, index) => (
+            {categorizedInfo.lifestyle.map((item, index) => (
               <InfoCard
-                key={update.id || index}
-                title={update.title}
-                subtitle={update.source_url}
-                badge={<InfoBadge variant="priority-high">副作用</InfoBadge>}
+                key={index}
+                title={item.title}
+                subtitle={item.source_url}
+                badge={<InfoBadge variant="info">生活・副作用</InfoBadge>}
               >
                 <div className="space-y-3">
-                  <p className="text-gray-700 line-clamp-3">
-                    {update.summary || update.content}
-                  </p>
+                  <p className="text-gray-700">{item.summary || item.content}</p>
                   <div className="flex justify-end">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleReadMore(update)}
+                      onClick={() => handleReadMore(item)}
                     >
                       詳細を見る
                     </Button>
@@ -313,30 +278,28 @@ export default function HierarchicalInfoDisplay({
         </div>
       )}
 
-      {/* 5. 治験情報セクション */}
-      {categorizedInfo.clinicalTrials.length > 0 && (
-        <div ref={sectionRefs?.clinicalTrials}>
+      {/* 5. 研究・治験セクション */}
+      {categorizedInfo.research.length > 0 && (
+        <div ref={sectionRefs?.research}>
           <InfoSection
-            title="治験情報"
+            title="研究・治験"
             icon="🔬"
             variant="clinical-trials"
           >
-            {categorizedInfo.clinicalTrials.map((update, index) => (
+            {categorizedInfo.research.map((item, index) => (
               <InfoCard
-                key={update.id || index}
-                title={update.title}
-                subtitle={update.source_url}
-                badge={<InfoBadge variant="new">治験</InfoBadge>}
+                key={index}
+                title={item.title}
+                subtitle={item.source_url}
+                badge={<InfoBadge variant="info">研究・治験</InfoBadge>}
               >
                 <div className="space-y-3">
-                  <p className="text-gray-700 line-clamp-3">
-                    {update.summary || update.content}
-                  </p>
+                  <p className="text-gray-700">{item.summary || item.content}</p>
                   <div className="flex justify-end">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleReadMore(update)}
+                      onClick={() => handleReadMore(item)}
                     >
                       詳細を見る
                     </Button>

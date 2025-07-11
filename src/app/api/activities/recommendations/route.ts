@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import { getUserIdFromAuthHeader } from '@/lib/utils/authHelpers';
 import { createClient } from '@supabase/supabase-js';
+import { getUserIdFromAuthHeader } from '../../../../../src/lib/utils/authHelpers';
 
 // GET: おすすめアクティビティを取得
 export async function GET(request: NextRequest) {

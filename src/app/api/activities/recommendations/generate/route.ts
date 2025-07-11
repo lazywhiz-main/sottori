@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { activityService } from '../../../../../lib/services/activityService';
-import { GenerateRecommendationsRequest } from '../../../../../lib/types/activities';
+import { ActivityService } from '@/lib/services/activityService';
+import { GenerateRecommendationsRequest } from '@/lib/types/activities';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +14,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const recommendations = await activityService.generateRecommendations(body);
+    const service = new ActivityService();
+    const recommendations = await service.generateRecommendations(body);
     
     return NextResponse.json({ 
       recommendations,

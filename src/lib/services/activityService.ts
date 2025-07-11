@@ -10,7 +10,7 @@ import {
   ActivityStatus,
   ActivityPriority
 } from '../types/personalization';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../supabase';
 
 export class ActivityService {
   // =============================================================================
@@ -411,3 +411,6 @@ export class ActivityService {
     }
   }
 } 
+
+// インスタンスをエクスポート
+export const activityService = new ActivityService(); 

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ActivityRecommendation, ActivityType } from '@/lib/types/personalization';
+import { ActivityRecommendation, ActivityType } from '../../lib/types/personalization';
 
 interface RecommendationCardProps {
   recommendation: ActivityRecommendation;

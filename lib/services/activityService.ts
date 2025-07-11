@@ -1,7 +1,7 @@
 // アクティビティ機能のバックエンドサービス
 // 既存のデザインを維持しながら、アクティビティ機能を追加
 
-import { supabase } from '../supabase';
+import { supabase } from '../../src/lib/supabase';
 import {
   UserActivity,
   ActivityTemplate,

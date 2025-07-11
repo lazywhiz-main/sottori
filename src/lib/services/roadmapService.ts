@@ -1,4 +1,4 @@
-import { TreatmentStepWithProgress, UserRoadmapProgressUpdate } from '@/lib/types/database';
+import { TreatmentStepWithProgress, UserRoadmapProgressUpdate } from '../types/database';
 
 export class RoadmapService {
   /**
@@ -119,4 +119,7 @@ export class RoadmapService {
       }
     ];
   }
-} 
+}
+
+// インスタンスをエクスポート
+export const roadmapService = new RoadmapService(); 

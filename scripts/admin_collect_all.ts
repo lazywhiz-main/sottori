@@ -9,9 +9,9 @@
  *   npx ts-node scripts/admin_collect_all.ts --mode=all --cancerType=colon
  */
 
-const { RealDataCollectionService } = require('../src/lib/services/realDataCollectors')
-const { InformationPoolService } = require('../src/lib/services/informationPoolService')
-const { TEST_SCRAPING_URLS, generateMHLWUrls, MANUAL_ADDITIONAL_URLS } = require('../src/const/scraping_urls')
+import { RealDataCollectionService } from '../src/lib/services/realDataCollectors'
+import { InformationPoolService } from '../src/lib/services/informationPoolService'
+import { TEST_SCRAPING_URLS, generateMHLWUrls, MANUAL_ADDITIONAL_URLS } from '../src/const/scraping_urls'
 
 // =============================================================================
 // コマンドライン引数解析

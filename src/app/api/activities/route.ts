@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ActivityService } from '@/lib/services/activityService';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 
 // GET: ユーザーのアクティビティ一覧を取得
 export async function GET(request: NextRequest) {

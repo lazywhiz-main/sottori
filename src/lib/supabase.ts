@@ -10,10 +10,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // 型定義（後で拡張）
-export type Database = { // 型定義は後で追加
+export type Database = {
   public: {
-    Tables: {
-      // テーブル定義
-    }
+    Tables: Record<string, unknown>
   }
 } 

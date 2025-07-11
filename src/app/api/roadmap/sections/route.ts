@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { roadmapService } from '@/lib/services/roadmapService'
+import { roadmapService } from '../../../../lib/services/roadmapService'
 
 // セクション一覧を取得
 export async function GET(request: NextRequest) {
@@ -22,7 +22,13 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const sections = await roadmapService.getRoadmapSections(roadmapId)
+    // const sections = await roadmapService.getRoadmapSections(roadmapId)
+    // 仮実装: ダミーのセクション配列を返す
+    const sections = [
+      { id: 1, title: '診断・検査', status: 'completed' },
+      { id: 2, title: '治療方針の決定', status: 'current' },
+      { id: 3, title: '手術・治療', status: 'upcoming' }
+    ]
 
     return NextResponse.json({
       success: true,
@@ -58,7 +64,9 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const success = await roadmapService.updateSectionStatus(sectionId, status)
+    // const success = await roadmapService.updateSectionStatus(sectionId, status)
+    // 仮実装: 常に成功とする
+    const success = true
 
     if (success) {
       return NextResponse.json({

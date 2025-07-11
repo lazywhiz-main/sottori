@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { BackgroundCollectionService } from '@/lib/services/backgroundCollectionService'
-import { InformationPoolService } from '@/lib/services/informationPoolService'
+import { BackgroundCollectionService } from '../../../../lib/services/backgroundCollectionService'
+import { InformationPoolService } from '../../../../lib/services/informationPoolService'
 
 /**
  * スクレイピング機能検証API
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
           concernAreas: ['treatment_options', 'support_resources']
         }
         
-        const { RealDataCollectionService } = await import('@/lib/services/realDataCollectors')
+        const { RealDataCollectionService } = await import('../../../../lib/services/realDataCollectors')
         const collectionService = new RealDataCollectionService()
         
         const collectedData = await collectionService.collectTestSiteData(testQuery)
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
       case 'real_data_collection':
         log('🏥 実データ収集テスト開始')
 
-        const { generateMHLWUrls } = await import('@/const/scraping_urls')
+        const { generateMHLWUrls } = await import('../../../../const/scraping_urls')
         const urls = generateMHLWUrls(cancerType).slice(0, maxUrls || 10)
         const urlResults = []
 
@@ -202,7 +202,7 @@ export async function POST(request: NextRequest) {
         // 複数URLの一括テスト
         log('🔗 複数URL一括テスト開始')
         
-        const { generateMHLWUrls: generateBatchUrls, MANUAL_ADDITIONAL_URLS } = await import('@/const/scraping_urls')
+        const { generateMHLWUrls: generateBatchUrls, MANUAL_ADDITIONAL_URLS } = await import('../../../../const/scraping_urls')
         const targetUrls = generateBatchUrls(cancerType).slice(0, maxUrls)
         
         log(`📋 テスト対象URL: ${targetUrls.length}件`)

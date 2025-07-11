@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Button from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
-import { getUserState, type UserStateInfo } from '@/lib/utils/userStateHelpers'
+import { getUserState, type UserStateInfo } from '../../lib/utils/userStateHelpers'
 
 interface SimpleDashboardProps {
   userId: string
@@ -41,7 +41,7 @@ export default function SimpleDashboard({ userId, userName }: SimpleDashboardPro
 
   const loadRoadmapInfo = async () => {
     try {
-      const { getRoadmapHistories } = await import('@/lib/utils/dataHistory')
+      const { getRoadmapHistories } = await import('../../lib/utils/dataHistory')
       const roadmaps = await getRoadmapHistories(1)
       if (roadmaps && roadmaps.length > 0) {
         setRoadmapInfo(roadmaps[0])

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
-import { runPersonalizationEngine } from '@/lib/services/personalizationEngine'
+import { supabase } from '../../../lib/supabase'
+import { runPersonalizationEngine } from '../../../lib/services/personalizationEngine'
 
 export async function GET() {
   try {

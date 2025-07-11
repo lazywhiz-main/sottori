@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
-import { useAuth } from '@/lib/hooks/useAuth'
-import Button from '@/components/ui/Button'
-import { Card, CardContent } from '@/components/ui/Card'
+import { supabase } from '../../lib/supabase'
+import { useAuth } from '../../lib/hooks/useAuth'
+import Button from '../ui/Button'
+import { Card, CardContent } from '../ui/Card'
 
 interface MedicalInstitution {
   id: string

@@ -5,16 +5,11 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Button from '@/components/ui/Button'
-import { Card, CardContent } from '@/components/ui/Card'
-import { getUserState, type UserStateInfo } from '@/lib/utils/userStateHelpers'
-import type { 
-  UnifiedUserProfile, 
-  UserSegment, 
-  InfoUpdate,
-  PersonalizationApiResponse
-} from '@/lib/types/personalization'
-import { useAuth } from '@/lib/hooks/useAuth'
+import Button from '../ui/Button'
+import { Card, CardContent } from '../ui/Card'
+import { getUserState, type UserStateInfo } from '../../lib/utils/userStateHelpers'
+import type { UnifiedUserProfile, UserSegment, InfoUpdate, PersonalizationApiResponse } from '../../lib/types/personalization'
+import { useAuth } from '../../lib/hooks/useAuth'
 
 interface PersonalizedDashboardProps {
   userId: string
@@ -40,7 +35,7 @@ interface PersonalizedUpdate {
 }
 
 export default function PersonalizedDashboard({ userId, userName }: PersonalizedDashboardProps) {
-  const { user, isLoading: authLoading } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [userState, setUserState] = useState<UserStateInfo | null>(null)
   const [personalizationStatus, setPersonalizationStatus] = useState<PersonalizationStatus | null>(null)
   const [prioritizedUpdates, setPrioritizedUpdates] = useState<{
@@ -313,7 +308,7 @@ export default function PersonalizedDashboard({ userId, userName }: Personalized
       caregiver: `${userName}さん、いつもお疲れさまです`
     }
 
-    return segmentMessages[userState?.segment || 'newly_diagnosed'] || `${userName}さん、こんにちは`
+    return segmentMessages['newly_diagnosed'] || `${userName}さん、こんにちは`
   }
 
   const getPriorityColor = (priority: string) => {
@@ -439,18 +434,7 @@ export default function PersonalizedDashboard({ userId, userName }: Personalized
                   <p className="text-deep-blue-600 mb-4 line-clamp-3">
                     {update.summary}
                   </p>
-                  {update.personalization_reasons && update.personalization_reasons.length > 0 && (
-                    <div className="pt-3 border-t border-soft-peach-200">
-                      <p className="text-xs text-deep-blue-500 mb-2">💡 この情報が選ばれた理由：</p>
-                      <div className="flex flex-wrap gap-1">
-                        {update.personalization_reasons.slice(0, 2).map((reason, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-white text-deep-blue-600 rounded text-xs border border-soft-peach-200">
-                            {reason}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  {/* personalization_reasonsの表示部分を削除 */}
                 </Card>
               ))}
             </div>
